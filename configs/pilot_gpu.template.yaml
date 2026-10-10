@@ -1,0 +1,52 @@
+# TEMPLATE - deliberately NOT a valid config until edited. GPU pilot with a larger generator.
+# Requires (1) your written authorisation naming the model, (2) the model added to
+# configs/models.yaml with a pinned revision and verified parameter count (stage: full),
+# (3) WSH_COMPUTE_AUTHORIZED=1 and --authorized-compute on every command.
+# Same frozen questions, protocol and conditions as configs/pilot.yaml; only the generator differs.
+stage: full
+name: pilot-gpu-v1
+seed: 0
+datasets:
+  - {name: musique, split: dev, qids_file: configs/question_sets/pilot_v1.json}
+  - {name: 2wikimultihopqa, split: dev, qids_file: configs/question_sets/pilot_v1.json}
+  - {name: hotpotqa, split: dev, qids_file: configs/question_sets/pilot_v1.json}
+  - {name: hover, split: dev, qids_file: configs/question_sets/pilot_v1.json}
+  - {name: fever, split: dev, qids_file: configs/question_sets/pilot_v1.json}
+model:
+  model_id: REPLACE_WITH_AUTHORISED_MODEL_ID     # e.g. an entry you add to configs/models.yaml
+  revision: REPLACE_WITH_PINNED_REVISION
+  device: cuda
+  dtype: bfloat16
+  max_new_tokens: 64
+  max_input_tokens: 4096
+  max_time_s: 60
+retrieval: {method: bm25, top_k: 4, rerank_pool: 10, corpus_prefilter: 50}
+extraction: {method: llm, on_empty: drop, min_lexical_support: 0.6, max_new_tokens: 96}
+egrag: {token_budget: 450, max_claims: 12, selector: greedy_connected}
+verified_annotations: null
+exp1:
+  representations: [R0, R1, R2, R3, R4, R4P, R5]
+  evidence_source: gold
+  evidence_scope: gold_passages
+  protocols: [A, B]
+  budgets: ["content:1.0", "content:0.5"]   # two points of the accuracy-cost curve
+  selection: [relevance]
+  budget_policies: [shared, per_representation]
+  shuffle_seeds: [0, 1, 2]
+exp2:
+  base_representations: [R1, R4]
+  seeds: [0]
+  perturbations:
+    - {name: P1, rates: [0.0, 0.2, 0.4]}
+    - {name: P2, rates: [0.0, 0.2, 0.4]}
+    - {name: P3, rates: [0.0, 0.2, 0.4]}
+    - {name: P4, rates: [0.0, 0.2, 0.4], params: {mode: hard}}
+    - {name: P5, rates: [0.0, 0.4], params: {mode: strip}}
+    - {name: P6, rates: [0.0, 0.4], params: {op: negation}}
+    - {name: P6, rates: [0.0, 0.4], params: {op: entity}}
+    - {name: P7, rates: [0.0, 0.4]}
+exp3:
+  conditions: [oracle, C1, C2, C3, C4]
+  accepted_statuses: [human_verified]
+  representation: R4
+max_generations: 100000

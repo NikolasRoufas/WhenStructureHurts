@@ -1,0 +1,167 @@
+{
+  "experiment": "exp1",
+  "run_id": "20261010-125634_2390c640",
+  "stage": "smoke",
+  "config_name": "smoke-v1",
+  "config_hash": "2390c640fd8ef100b713b6417e293584dd2941c0678053e1a60dbf7d16770074",
+  "git_commit": null,
+  "source_tree_sha256": "2a186c4f24aacedd180992659b6624f609d56df44dd529baf3b81b1f1a7e7b60",
+  "started_at": "2026-10-10T12:56:34+0300",
+  "argv": [
+    ".venv/bin/wsh",
+    "run",
+    "exp1",
+    "--config",
+    "configs/smoke.yaml"
+  ],
+  "seed": 0,
+  "environment": {
+    "python": "3.14.3",
+    "platform": "macOS-15.5-arm64-arm-64bit-Mach-O",
+    "machine": "arm64",
+    "processor": "arm",
+    "cpu_count": 8,
+    "packages": {
+      "torch": "2.12.0",
+      "transformers": "5.12.1",
+      "sentence-transformers": "5.5.1",
+      "numpy": "2.4.6",
+      "pydantic": "2.13.4",
+      "rank-bm25": "0.2.2",
+      "pandas": "3.0.3",
+      "huggingface-hub": "1.19.0",
+      "tokenizers": "0.22.2"
+    },
+    "torch_devices": {
+      "cuda": false,
+      "mps": true
+    },
+    "total_mem_bytes": 17179869184
+  },
+  "status": "completed",
+  "model": {
+    "model_id": "Qwen/Qwen2.5-0.5B-Instruct",
+    "revision": "7ae557604adf67be50417f59c2c2f167def9a775"
+  },
+  "datasets": {
+    "musique": {
+      "split": "dev",
+      "qids": [
+        "2hop__219456_87295",
+        "2hop__802991_443552",
+        "4hop1__58323_375563_161848_53331"
+      ],
+      "source": {
+        "bytes": 30439728,
+        "fetched_at": "2026-10-10T12:24:39+0300",
+        "file": "bdsaglam__musique/musique_ans_v1.0_dev.jsonl",
+        "license": "CC BY 4.0 (per official repository; verify before redistribution)",
+        "official_split": "MuSiQue-Ans v1.0 dev (2,417 q)",
+        "sha256": "15fa63794d18a94ce12411aca6e2327e65b6e83b0b1490efab3f1962e48abf3b",
+        "source": {
+          "kind": "hf_dataset",
+          "repo": "bdsaglam/musique",
+          "revision": "22873a405dd809893b22ada0b499299fb612d2df"
+        }
+      }
+    },
+    "2wikimultihopqa": {
+      "split": "dev",
+      "qids": [
+        "3733d61a0bde11eba7f7acde48001122",
+        "cd791c8a0bdd11eba7f7acde48001122",
+        "676d16800bb011ebab90acde48001122"
+      ],
+      "source": {
+        "bytes": 29505064,
+        "fetched_at": "2026-10-10T12:24:39+0300",
+        "file": "framolfese__2WikiMultihopQA/data/validation-00000-of-00001.parquet",
+        "license": "Apache-2.0 (per official repository)",
+        "official_split": "dev (12,576 q)",
+        "sha256": "408e2dbb28edc6c8b9ca3ba0c94d4fc7bf17ffb923766593a3a7f546ab4cba59",
+        "source": {
+          "kind": "hf_dataset",
+          "repo": "framolfese/2WikiMultihopQA",
+          "revision": "fe713bfbd1afbca1a65246741a75890405d56a3a"
+        }
+      }
+    },
+    "hotpotqa": {
+      "split": "dev",
+      "qids": [
+        "5abf63f15542997ec76fd3ea",
+        "5a7555215542996c70cfaee1",
+        "5a8595a85542992a431d1b48"
+      ],
+      "source": {
+        "bytes": 27452575,
+        "fetched_at": "2026-10-10T12:24:39+0300",
+        "file": "hotpotqa__hotpot_qa/distractor/validation-00000-of-00001.parquet",
+        "license": "CC BY-SA 4.0",
+        "official_split": "dev distractor (7,405 q)",
+        "sha256": "c20b638ca82b21d04fe12e14ff417ad05153d4d215a65de54497fca4e972f7c6",
+        "source": {
+          "kind": "hf_dataset",
+          "repo": "hotpotqa/hotpot_qa",
+          "revision": "1908d6afbbead072334abe2965f91bd2709910ab"
+        }
+      }
+    },
+    "hover": {
+      "split": "dev",
+      "qids": [
+        "1fde776f-f5e1-45d1-a48a-b2929ebedf39",
+        "984928b7-6d4b-412a-9265-d04ed8738a64",
+        "9a6c72f4-024b-406e-aa1e-575ab2be55f3"
+      ],
+      "source": {
+        "bytes": 2153439,
+        "fetched_at": "2026-10-10T12:24:39+0300",
+        "file": "hover-nlp__hover/hover_dev_release_v1.1.json",
+        "license": "CC BY-SA 4.0",
+        "official_split": "dev v1.1 (4,000 claims)",
+        "sha256": "67c14858f2d7fcdb96b6fe3d538ffcd6f76e3ba594aa2c0cd4359f601101e89d",
+        "source": {
+          "kind": "url",
+          "local_dir": "hover-nlp__hover",
+          "revision": "39b84697f196308f398a251a7aea9b82ae0f0562",
+          "url": "https://raw.githubusercontent.com/hover-nlp/hover/39b84697f196308f398a251a7aea9b82ae0f0562/data/hover/hover_dev_release_v1.1.json"
+        }
+      }
+    },
+    "fever": {
+      "split": "dev",
+      "qids": [
+        "bfc5009bd295d44758b6393a23e07820",
+        "5e6341966910fa8a0d09cd89c8005201",
+        "1e1e148d1e1c89c5c9e959fddec7b792"
+      ],
+      "source": {
+        "bytes": 6471611,
+        "fetched_at": "2026-10-10T12:24:39+0300",
+        "file": "copenlu__fever_gold_evidence/valid.jsonl",
+        "license": "CC BY-SA 3.0 / GPL-3.0 (per HF card)",
+        "official_split": "copenlu 'valid' (15,935 claims) derived from FEVER; not the official 19,998-claim shared-task dev",
+        "sha256": "5da0ccc0ccf77f974611de13f8aac6f78c6bba6293912835099eb6029baa85d9",
+        "source": {
+          "kind": "hf_dataset",
+          "repo": "copenlu/fever_gold_evidence",
+          "revision": "a6b8d891d393e97a4efac791afffb2d7de5e57c6"
+        }
+      }
+    }
+  },
+  "finished_at": "2026-10-10T12:58:34+0300",
+  "wall_clock_s": 113.79,
+  "n_generated_uncached": 119,
+  "n_model_calls_uncached_incl_extraction": 119,
+  "n_records_written": 210,
+  "n_records_skipped_already_done": 0,
+  "loaded_models": {
+    "nli_relations": "cross-encoder/nli-deberta-v3-xsmall@a1508764",
+    "generator": "Qwen/Qwen2.5-0.5B-Instruct@7ae557604adf67be50417f59c2c2f167def9a775 (494032768 params, cpu)",
+    "nli_grounding": "cross-encoder/nli-deberta-v3-small@fa280487"
+  },
+  "cache_hits": 67,
+  "cache_misses": 684
+}

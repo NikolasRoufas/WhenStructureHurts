@@ -1,0 +1,39 @@
+{
+  "package_version": "verification-v1",
+  "created_at": "2026-10-10T23:54:24+0300",
+  "n_questions": 50,
+  "n_edges": 64,
+  "n_claim_items": 178,
+  "by_dataset": {
+    "2wikimultihopqa": 15,
+    "hotpotqa": 15,
+    "musique": 20
+  },
+  "edges_by_stratum": {
+    "B_derived_exact_anchor": 42,
+    "C_derived_fallback_anchor": 22
+  },
+  "selection": {
+    "source_question_set": "configs/question_sets/pilot_v1.json",
+    "source_question_set_sha256": "67e815648caf9bbcacd3928904b84205097f84df0e475d5a4b591ccb4b786f58",
+    "quotas": {
+      "musique": 20,
+      "2wikimultihopqa": 15,
+      "hotpotqa": 15
+    },
+    "seed": 0,
+    "balanced_by": {
+      "musique": "hop_count",
+      "2wikimultihopqa": "question_type",
+      "hotpotqa": "question_type"
+    },
+    "also_balanced_by": "edge category (has_fallback / exact_only / no_edges)"
+  },
+  "files_sha256": {
+    "package.jsonl": "5c9d8fc459929bf78681f50bcbf8b5412aa9852d72c8dd212e9be122eea0a083",
+    "paths.csv": "290b6052d715c0e64c2b54570722c17f13d181e845498e915a911cd15e47a719",
+    "edges.csv": "2f9d099b15475c2842ca0c5f8abaf8cbcae1cfa82d768de2af24a6a326ae014f",
+    "claims.csv": "7bf30d4325c7bb095a89ef1654efaeb3a0c4d48b2551dc7db0771a2efe2c0a11"
+  },
+  "note": "Verification fields are blank by construction. This package is for verifying annotations, not for statistical conclusions."
+}

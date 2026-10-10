@@ -1,0 +1,70 @@
+# Dataset registry. Every source is pinned to an exact revision; file hashes are
+# recorded in data/raw/MANIFEST.json by `wsh data fetch` and copied into every run manifest.
+# Only development splits are used for smoke/pilot work. Test splits are not loaded.
+
+datasets:
+  musique:
+    role: primary
+    task: qa
+    official_source: "https://github.com/StonyBrookNLP/musique (MuSiQue-Ans v1.0)"
+    license: "CC BY 4.0 (per official repository; verify before redistribution)"
+    mirror_note: "Third-party HF mirror of the official v1.0 jsonl files; compare sha256 with the official release when available."
+    source: {kind: hf_dataset, repo: bdsaglam/musique, revision: 22873a405dd809893b22ada0b499299fb612d2df}
+    splits:
+      dev: {file: musique_ans_v1.0_dev.jsonl, official_split: "MuSiQue-Ans v1.0 dev (2,417 q)"}
+      train: {file: musique_ans_v1.0_train.jsonl, official_split: "MuSiQue-Ans v1.0 train"}
+    test_labels: "unavailable (official test answers are hidden)"
+
+  2wikimultihopqa:
+    role: primary
+    task: qa
+    official_source: "https://github.com/Alab-NII/2wikimultihop"
+    license: "Apache-2.0 (per official repository)"
+    mirror_note: "Third-party HF parquet mirror; validation = official dev (12,576 q)."
+    source: {kind: hf_dataset, repo: framolfese/2WikiMultihopQA, revision: fe713bfbd1afbca1a65246741a75890405d56a3a}
+    splits:
+      dev: {file: data/validation-00000-of-00001.parquet, official_split: "dev (12,576 q)"}
+      train: {file: data/train-00000-of-00002.parquet, official_split: "train shard 0 of 2"}
+    test_labels: "official test answers are not public; do not use test split"
+
+  hotpotqa:
+    role: secondary
+    task: qa
+    official_source: "https://hotpotqa.github.io (distractor setting)"
+    license: "CC BY-SA 4.0"
+    source: {kind: hf_dataset, repo: hotpotqa/hotpot_qa, revision: 1908d6afbbead072334abe2965f91bd2709910ab}
+    splits:
+      dev: {file: distractor/validation-00000-of-00001.parquet, official_split: "dev distractor (7,405 q)"}
+    test_labels: "unavailable"
+
+  hover:
+    role: secondary
+    task: verification
+    official_source: "https://github.com/hover-nlp/hover"
+    license: "CC BY-SA 4.0"
+    source: {kind: url, url: "https://raw.githubusercontent.com/hover-nlp/hover/39b84697f196308f398a251a7aea9b82ae0f0562/data/hover/hover_dev_release_v1.1.json", revision: 39b84697f196308f398a251a7aea9b82ae0f0562, local_dir: hover-nlp__hover}
+    splits:
+      dev: {file: hover_dev_release_v1.1.json, official_split: "dev v1.1 (4,000 claims)"}
+    requires: [hotpotqa]
+    note: >-
+      HoVer ships only (title, sentence-id) supporting facts, not text. Text is recovered
+      deterministically from the HotpotQA distractor-dev context of the linked hpqa_id
+      (same 2017 Wikipedia abstract dump). Only claims whose supporting titles all occur in
+      that context are loadable (908/4,000; biased toward 2-3 hops). The full Wikipedia
+      dump is needed for the rest (see docs/COMPUTE_HANDOFF.md).
+    test_labels: "unavailable"
+
+  fever:
+    role: secondary
+    task: verification
+    official_source: "FEVER (Thorne et al., 2018) as packaged by Atanasova et al. (2020), copenlu/fever-adversarial-attacks"
+    license: "CC BY-SA 3.0 / GPL-3.0 (per HF card)"
+    source: {kind: hf_dataset, repo: copenlu/fever_gold_evidence, revision: a6b8d891d393e97a4efac791afffb2d7de5e57c6}
+    splits:
+      dev: {file: valid.jsonl, official_split: "copenlu 'valid' (15,935 claims) derived from FEVER; not the official 19,998-claim shared-task dev"}
+    note: >-
+      Evidence for SUPPORTS/REFUTES is human-annotated FEVER evidence. Evidence for NOT ENOUGH
+      INFO was retrieved by a system (card: machine-generated) and is NOT gold; it is
+      recorded as model_predicted. Retrieval uses the split-wide pool of evidence sentences,
+      a closed corpus much smaller than full Wikipedia.
+    test_labels: "unavailable"

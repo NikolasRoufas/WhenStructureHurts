@@ -1,0 +1,55 @@
+# FULL / CONFIRMATORY (requires explicit authorisation: WSH_COMPUTE_AUTHORIZED=1 AND
+# --authorized-compute). DO NOT RUN until the primary hypotheses, metrics and contrasts in
+# docs/EXPERIMENT_SPEC.md are frozen and the sample size is set from the pilot power analysis.
+# The n values below are placeholders pending that analysis. Fresh sample_seed (2) so the
+# confirmatory sample is drawn independently of the pilot sample. Runs are refused until the
+# question set is frozen (`wsh questions freeze`, then datasets[*].qids_file) and the pilot's
+# questions are added to configs/excluded_questions.json.
+stage: full
+name: full-v1
+seed: 0
+datasets:
+  - {name: musique, split: dev, n_examples: 1000, sample_seed: 2, stratify_by: hop_count}
+  - {name: 2wikimultihopqa, split: dev, n_examples: 1000, sample_seed: 2, stratify_by: question_type}
+  - {name: hotpotqa, split: dev, n_examples: 500, sample_seed: 2, stratify_by: question_type}
+  - {name: hover, split: dev, n_examples: 500, sample_seed: 2, stratify_by: hop_count}
+  - {name: fever, split: dev, n_examples: 500, sample_seed: 2, stratify_by: question_type}
+model:
+  model_id: Qwen/Qwen2.5-7B-Instruct
+  revision: a09a35458c702b33eeacc393d103063234e8bc28
+  device: cuda
+  dtype: bfloat16
+  max_new_tokens: 64
+  max_input_tokens: 4096
+  max_time_s: 60
+retrieval: {method: bm25, top_k: 4, rerank_pool: 10, corpus_prefilter: 50}
+extraction: {method: llm, on_empty: drop, min_lexical_support: 0.6, max_new_tokens: 96}
+egrag: {token_budget: 450, max_claims: 12, selector: greedy_connected}
+exp1:
+  representations: [R0, R1, R2, R3, R4, R4P, R5]
+  evidence_source: gold
+  evidence_scope: gold_passages
+  protocols: [A, B]               # A information-controlled, B budget-controlled (never pooled)
+  budgets: ["content:0.75"]       # Protocol B budget: 0.75 x content tokens of the full fact set
+  selection: [relevance]          # gold-free fact ranking
+  budget_policies: [shared]
+  shuffle_seeds: [0, 1, 2]
+exp2:
+  base_representations: [R0, R1, R3, R4]
+  seeds: [0, 1]
+  perturbations:
+    - {name: P1, rates: [0.0, 0.1, 0.2, 0.4]}
+    - {name: P2, rates: [0.0, 0.1, 0.2, 0.4]}
+    - {name: P2, rates: [0.0, 0.4], params: {mode: flip}}
+    - {name: P3, rates: [0.0, 0.1, 0.2, 0.4]}
+    - {name: P4, rates: [0.0, 0.1, 0.2, 0.4], params: {mode: hard}}
+    - {name: P4, rates: [0.0, 0.4], params: {mode: random}}
+    - {name: P5, rates: [0.0, 0.4], params: {mode: strip}}
+    - {name: P5, rates: [0.0, 0.4], params: {mode: duplicate}}
+    - {name: P6, rates: [0.0, 0.1, 0.2, 0.4], params: {op: negation}}
+    - {name: P6, rates: [0.0, 0.1, 0.2, 0.4], params: {op: qualifier}}
+    - {name: P6, rates: [0.0, 0.1, 0.2, 0.4], params: {op: entity}}
+    - {name: P6, rates: [0.0, 0.1, 0.2, 0.4], params: {op: temporal}}
+    - {name: P7, rates: [0.0, 0.4]}
+exp3: {conditions: [oracle, C1, C2, C3, C4]}
+max_generations: 5000000

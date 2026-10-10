@@ -1,0 +1,12 @@
+# Frozen pilot question set (docs/PILOT_PROTOCOL.md section 3). Eligibility rules are fixed in
+# src/wsh/data/question_sets.py (ELIGIBILITY). Produce with:
+#   wsh questions freeze --spec configs/question_sets/pilot_v1.spec.yaml --out configs/question_sets/pilot_v1.json
+seed: 1
+split: dev
+excluded: configs/excluded_questions.json
+datasets:
+  musique: {n: 100, stratify_by: hop_count}            # primary
+  2wikimultihopqa: {n: 100, stratify_by: question_type} # primary
+  hotpotqa: {n: 50, stratify_by: question_type}         # secondary
+  hover: {n: 50, stratify_by: hop_count}                # secondary (verification)
+  fever: {n: 50, stratify_by: question_type}            # secondary (verification baseline)

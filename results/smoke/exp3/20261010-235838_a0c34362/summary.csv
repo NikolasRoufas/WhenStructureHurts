@@ -1,0 +1,26 @@
+group,n_records,n_unavailable,n_questions,coverage,em,f1,verdict_acc,citation_validity,citation_recall,support_coverage,content_recall,evidence_sufficient,grounded_nli,input_tokens_mean,output_tokens_mean,evidence_tokens_mean,latency_s_mean
+"2wikimultihopqa | component_condition=C1,representation=R4",3,0,3,1.0,0.0,0.16666666666666666,,,0.0,1.0,0.9198412698412698,0.6666666666666666,0.0,826.0,4.333333333333333,684.6666666666666,2.147079625322173
+"2wikimultihopqa | component_condition=C2,representation=R4",3,0,3,1.0,0.3333333333333333,0.5,,,0.0,1.0,1.0,0.6666666666666666,0.0,551.0,4.333333333333333,409.6666666666667,0.6928782916705435
+"2wikimultihopqa | component_condition=C3,representation=R4",3,0,3,1.0,0.0,0.0,,,0.0,0.6666666666666666,0.7802197802197801,0.0,0.0,579.0,8.0,438.0,1.2867732223045703
+"2wikimultihopqa | component_condition=C4,representation=R4",3,0,3,1.0,0.0,0.13333333333333336,,,0.0,0.6666666666666666,0.6417277167277167,0.0,0.0,632.0,7.333333333333333,490.6666666666667,1.480637013640565
+"2wikimultihopqa | component_condition=oracle,representation=R4",3,0,3,1.0,0.3333333333333333,0.411764705882353,,,0.0,1.0,1.0,0.6666666666666666,0.0,534.0,10.666666666666666,392.6666666666667,0.910213652648963
+"fever | component_condition=C1,representation=R4",3,3,0,,,,,,,,,,,,,,
+"fever | component_condition=C2,representation=R4",3,3,0,,,,,,,,,,,,,,
+"fever | component_condition=C3,representation=R4",3,3,0,,,,,,,,,,,,,,
+"fever | component_condition=C4,representation=R4",3,3,0,,,,,,,,,,,,,,
+"fever | component_condition=oracle,representation=R4",3,3,0,,,,,,,,,,,,,,
+"hotpotqa | component_condition=C1,representation=R4",3,1,2,1.0,0.5,0.5,,,0.0,1.0,0.6474089635854342,1.0,0.0,907.5,5.0,759.0,1.6830254165106453
+"hotpotqa | component_condition=C2,representation=R4",3,1,2,1.0,0.5,0.5,,,0.0,1.0,1.0,1.0,0.0,646.5,5.5,498.0,0.826272603997495
+"hotpotqa | component_condition=C3,representation=R4",3,1,2,1.0,0.5,0.5,,,0.0,1.0,1.0,1.0,0.0,612.0,4.5,463.5,1.0126931664999574
+"hotpotqa | component_condition=C4,representation=R4",3,1,2,1.0,0.5,0.5,,,0.0,0.75,0.48301059554256487,0.5,0.0,553.0,5.0,404.5,1.1148424164857715
+"hotpotqa | component_condition=oracle,representation=R4",3,1,2,1.0,0.5,0.5,,,0.0,1.0,1.0,1.0,0.0,633.0,4.5,484.5,0.7670008124550804
+"hover | component_condition=C1,representation=R4",3,3,0,,,,,,,,,,,,,,
+"hover | component_condition=C2,representation=R4",3,3,0,,,,,,,,,,,,,,
+"hover | component_condition=C3,representation=R4",3,3,0,,,,,,,,,,,,,,
+"hover | component_condition=C4,representation=R4",3,3,0,,,,,,,,,,,,,,
+"hover | component_condition=oracle,representation=R4",3,3,0,,,,,,,,,,,,,,
+"musique | component_condition=C1,representation=R4",3,0,3,1.0,0.3333333333333333,0.3333333333333333,,,0.0,1.0,0.7491914299599248,1.0,0.0,831.3333333333334,4.333333333333333,685.0,1.3591378336617101
+"musique | component_condition=C2,representation=R4",3,0,3,1.0,0.3333333333333333,0.3333333333333333,,,0.0,1.0,1.0,1.0,0.0,561.3333333333334,5.0,415.0,0.7284714443376288
+"musique | component_condition=C3,representation=R4",3,0,3,1.0,0.0,0.0,,,0.0,0.8333333333333334,0.4861660524276774,0.0,0.0,569.3333333333334,11.0,424.0,1.0464242913682635
+"musique | component_condition=C4,representation=R4",3,0,3,1.0,0.0,0.0,,,0.0,0.6666666666666666,0.3887010815685213,0.3333333333333333,0.0,504.0,6.0,357.6666666666667,1.4045127362866576
+"musique | component_condition=oracle,representation=R4",3,0,3,1.0,0.3333333333333333,0.3333333333333333,,,0.0,1.0,1.0,1.0,0.0,544.6666666666666,5.0,398.3333333333333,0.713477527955547

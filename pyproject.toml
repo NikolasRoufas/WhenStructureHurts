@@ -1,0 +1,37 @@
+[build-system]
+requires = ["setuptools>=68"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "when-structure-hurts"
+version = "0.1.0"
+description = "Experimental framework: evidence transformations and evidence loss in retrieval-augmented reasoning"
+requires-python = ">=3.11"
+license = { text = "Apache-2.0" }
+dependencies = [
+    "numpy>=1.26",
+    "pandas>=2.0",
+    "pyarrow>=14",
+    "pyyaml>=6",
+    "pydantic>=2.5",
+    "rank-bm25>=0.2.2",
+    "huggingface_hub>=0.23",
+    "torch>=2.2",
+    "transformers>=4.45",
+    "sentence-transformers>=3.0",
+]
+
+[project.optional-dependencies]
+dev = ["pytest>=8"]
+
+[project.scripts]
+wsh = "wsh.cli:main"
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+markers = [
+    "slow: requires downloaded models (skipped unless WSH_RUN_SLOW=1)",
+]

@@ -1,0 +1,50 @@
+# environments
+.venv/
+venv/
+__pycache__/
+*.py[cod]
+*.egg-info/
+.pytest_cache/
+.ruff_cache/
+.mypy_cache/
+
+# downloaded datasets (re-fetch with `wsh data fetch`; hashes are pinned in data/raw/MANIFEST.json)
+data/raw/*
+!data/raw/MANIFEST.json
+
+# model weights / HF caches (never committed; revisions are pinned in configs/models.yaml)
+models/
+hf_cache/
+.cache/
+*.safetensors
+*.bin
+*.gguf
+
+# output/embedding caches
+cache/
+*.sqlite
+*.sqlite-journal
+
+# temporary logs
+logs/
+*.log
+
+# large experiment outputs: per-record predictions stay on disk / archive storage, not in git.
+# Manifests, resolved configs, reports, summaries and INVALID/SUPERSEDED notes ARE committed.
+results/**/predictions.jsonl
+results/**/*.tmp
+results/**/exp4_*.json
+
+# credentials and secrets
+.env
+.env.*
+*.key
+*.pem
+.hf_token
+.netrc
+secrets/
+
+# OS / editor
+.DS_Store
+.idea/
+.vscode/

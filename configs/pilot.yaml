@@ -1,0 +1,54 @@
+# PILOT (exploratory) - frozen design, docs/PILOT_PROTOCOL.md. NOT run on the development laptop.
+# Questions come ONLY from the frozen set configs/question_sets/pilot_v1.json (sha256 recorded in
+# PILOT_PROTOCOL.md); smoke questions are excluded and the exclusion is enforced at run time.
+# Generator: the policy-compliant 0.5B model (no authorisation needed). A larger authorised
+# generator uses configs/pilot_gpu.template.yaml (stage 'full', explicit authorisation).
+stage: pilot
+name: pilot-v1
+seed: 0
+datasets:
+  - {name: musique, split: dev, qids_file: configs/question_sets/pilot_v1.json}
+  - {name: 2wikimultihopqa, split: dev, qids_file: configs/question_sets/pilot_v1.json}
+  - {name: hotpotqa, split: dev, qids_file: configs/question_sets/pilot_v1.json}
+  - {name: hover, split: dev, qids_file: configs/question_sets/pilot_v1.json}
+  - {name: fever, split: dev, qids_file: configs/question_sets/pilot_v1.json}
+model:
+  model_id: Qwen/Qwen2.5-0.5B-Instruct
+  revision: 7ae557604adf67be50417f59c2c2f167def9a775
+  device: auto
+  dtype: float32
+  max_new_tokens: 64
+  max_input_tokens: 4096
+  max_time_s: 60
+retrieval: {method: bm25, top_k: 4, rerank_pool: 10, corpus_prefilter: 50}
+extraction: {method: llm, on_empty: drop, min_lexical_support: 0.6, max_new_tokens: 96}
+egrag: {token_budget: 450, max_claims: 12, selector: greedy_connected}
+verified_annotations: null   # set to annotations/verified/verification_v1.jsonl once imported
+exp1:
+  representations: [R0, R1, R2, R3, R4, R4P, R5]
+  evidence_source: gold
+  evidence_scope: gold_passages
+  protocols: [A, B]
+  budgets: ["content:1.0", "content:0.5"]   # two points of the accuracy-cost curve
+  selection: [relevance]
+  budget_policies: [shared, per_representation]
+  shuffle_seeds: [0, 1, 2]
+exp2:
+  base_representations: [R1, R4]
+  seeds: [0]
+  perturbations:
+    - {name: P1, rates: [0.0, 0.2, 0.4]}
+    - {name: P2, rates: [0.0, 0.2, 0.4]}
+    - {name: P3, rates: [0.0, 0.2, 0.4]}
+    - {name: P4, rates: [0.0, 0.2, 0.4], params: {mode: hard}}
+    - {name: P5, rates: [0.0, 0.4], params: {mode: strip}}
+    - {name: P6, rates: [0.0, 0.4], params: {op: negation}}
+    - {name: P6, rates: [0.0, 0.4], params: {op: entity}}
+    - {name: P7, rates: [0.0, 0.4]}
+exp3:
+  conditions: [oracle, C1, C2, C3, C4]
+  # Only human-verified structure counts as ground truth for the pilot's Exp3; without an
+  # imported verification file every question is reported unavailable (by design).
+  accepted_statuses: [human_verified]
+  representation: R4
+max_generations: 100000

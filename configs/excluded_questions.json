@@ -1,0 +1,65 @@
+{
+  "description": "Questions that must never appear in a pilot or full run. Enforced by wsh.data.question_sets.assert_no_excluded (stages pilot/full) and by `wsh questions freeze`.",
+  "excluded": [
+    {
+      "uid": "musique/2hop__219456_87295",
+      "reason": "smoke-test question (configs/smoke.yaml, sample_seed 0); seen during prompt revision qa-v1 -> qa-v2 and relation-threshold inspection"
+    },
+    {
+      "uid": "musique/2hop__802991_443552",
+      "reason": "smoke-test question (configs/smoke.yaml, sample_seed 0); seen during prompt revision qa-v1 -> qa-v2 and relation-threshold inspection"
+    },
+    {
+      "uid": "musique/4hop1__58323_375563_161848_53331",
+      "reason": "smoke-test question (configs/smoke.yaml, sample_seed 0); seen during prompt revision qa-v1 -> qa-v2 and relation-threshold inspection"
+    },
+    {
+      "uid": "2wikimultihopqa/3733d61a0bde11eba7f7acde48001122",
+      "reason": "smoke-test question (configs/smoke.yaml, sample_seed 0); seen during prompt revision qa-v1 -> qa-v2 and relation-threshold inspection"
+    },
+    {
+      "uid": "2wikimultihopqa/cd791c8a0bdd11eba7f7acde48001122",
+      "reason": "smoke-test question (configs/smoke.yaml, sample_seed 0); seen during prompt revision qa-v1 -> qa-v2 and relation-threshold inspection"
+    },
+    {
+      "uid": "2wikimultihopqa/676d16800bb011ebab90acde48001122",
+      "reason": "smoke-test question (configs/smoke.yaml, sample_seed 0); seen during prompt revision qa-v1 -> qa-v2 and relation-threshold inspection"
+    },
+    {
+      "uid": "hotpotqa/5abf63f15542997ec76fd3ea",
+      "reason": "smoke-test question (configs/smoke.yaml, sample_seed 0); seen during prompt revision qa-v1 -> qa-v2 and relation-threshold inspection"
+    },
+    {
+      "uid": "hotpotqa/5a7555215542996c70cfaee1",
+      "reason": "smoke-test question (configs/smoke.yaml, sample_seed 0); seen during prompt revision qa-v1 -> qa-v2 and relation-threshold inspection"
+    },
+    {
+      "uid": "hotpotqa/5a8595a85542992a431d1b48",
+      "reason": "smoke-test question (configs/smoke.yaml, sample_seed 0); seen during prompt revision qa-v1 -> qa-v2 and relation-threshold inspection"
+    },
+    {
+      "uid": "hover/1fde776f-f5e1-45d1-a48a-b2929ebedf39",
+      "reason": "smoke-test question (configs/smoke.yaml, sample_seed 0); seen during prompt revision qa-v1 -> qa-v2 and relation-threshold inspection"
+    },
+    {
+      "uid": "hover/984928b7-6d4b-412a-9265-d04ed8738a64",
+      "reason": "smoke-test question (configs/smoke.yaml, sample_seed 0); seen during prompt revision qa-v1 -> qa-v2 and relation-threshold inspection"
+    },
+    {
+      "uid": "hover/9a6c72f4-024b-406e-aa1e-575ab2be55f3",
+      "reason": "smoke-test question (configs/smoke.yaml, sample_seed 0); seen during prompt revision qa-v1 -> qa-v2 and relation-threshold inspection"
+    },
+    {
+      "uid": "fever/bfc5009bd295d44758b6393a23e07820",
+      "reason": "smoke-test question (configs/smoke.yaml, sample_seed 0); seen during prompt revision qa-v1 -> qa-v2 and relation-threshold inspection"
+    },
+    {
+      "uid": "fever/5e6341966910fa8a0d09cd89c8005201",
+      "reason": "smoke-test question (configs/smoke.yaml, sample_seed 0); seen during prompt revision qa-v1 -> qa-v2 and relation-threshold inspection"
+    },
+    {
+      "uid": "fever/1e1e148d1e1c89c5c9e959fddec7b792",
+      "reason": "smoke-test question (configs/smoke.yaml, sample_seed 0); seen during prompt revision qa-v1 -> qa-v2 and relation-threshold inspection"
+    }
+  ]
+}

@@ -1,0 +1,213 @@
+stage: smoke
+name: smoke-v1
+seed: 0
+datasets:
+- name: musique
+  split: dev
+  n_examples: 3
+  sample_seed: 0
+  qids: null
+  stratify_by: null
+- name: 2wikimultihopqa
+  split: dev
+  n_examples: 3
+  sample_seed: 0
+  qids: null
+  stratify_by: null
+- name: hotpotqa
+  split: dev
+  n_examples: 3
+  sample_seed: 0
+  qids: null
+  stratify_by: null
+- name: hover
+  split: dev
+  n_examples: 3
+  sample_seed: 0
+  qids: null
+  stratify_by: null
+- name: fever
+  split: dev
+  n_examples: 3
+  sample_seed: 0
+  qids: null
+  stratify_by: null
+model:
+  model_id: Qwen/Qwen2.5-0.5B-Instruct
+  revision: 7ae557604adf67be50417f59c2c2f167def9a775
+  device: cpu
+  dtype: float32
+  max_new_tokens: 48
+  max_input_tokens: 3072
+  max_time_s: 60.0
+  do_sample: false
+retrieval:
+  method: bm25
+  top_k: 4
+  fusion: weighted
+  lambda_sparse: 0.5
+  lambda_dense: 0.5
+  rerank_pool: 10
+  corpus_prefilter: 50
+  dense:
+    model_id: BAAI/bge-small-en-v1.5
+    revision: 5c38ec7c405ec4b44b94cc5a9bb96e735b38267a
+  reranker:
+    model_id: cross-encoder/ms-marco-MiniLM-L6-v2
+    revision: 233902d25c440f23af6f7d6e94d2946bac0bee0a
+extraction:
+  method: llm
+  on_empty: drop
+  min_lexical_support: 0.6
+  max_new_tokens: 96
+  max_claims_per_sentence: 6
+relations:
+  nli:
+    model_id: cross-encoder/nli-deberta-v3-xsmall
+    revision: a150876415327c80daeff35ca6f68f5ed8cf5c24
+  prune_min_jaccard: 0.15
+  entail_threshold: 0.7
+  contradict_threshold: 0.9
+  contradiction_requires_shared_entity: true
+  duplicate_jaccard: 0.8
+  max_pairs: 400
+  year_supersession_threshold: 0.7
+egrag:
+  theta:
+  - -1.0
+  - 0.5
+  - 1.0
+  - 1.5
+  - 0.5
+  - 0.5
+  eta:
+  - 1.0
+  - 0.5
+  - 0.5
+  propagate: true
+  mu: 1.0
+  alpha: 1.0
+  beta: 1.0
+  gamma: 1.0
+  eps: 0.0001
+  max_iter: 50
+  conflict_margin: 0.1
+  selector: greedy_connected
+  token_budget: 450
+  omega:
+    b: 1.0
+    u: 1.0
+    c: 0.5
+    p: 0.2
+    r: 0.5
+    x: 0.5
+    l: 0.3
+  max_claims: 12
+grounding:
+  enabled: true
+  nli:
+    model_id: cross-encoder/nli-deberta-v3-small
+    revision: fa2804872c3b4bd748f38c0185cc85775361e735
+  entail_threshold: 0.5
+exp0:
+  systems:
+  - B0
+  - B1
+  - B2
+  - B3
+  - B4
+exp1:
+  representations:
+  - R0
+  - R1
+  - R2
+  - R3
+  - R4
+  - R4P
+  - R5
+  evidence_source: gold
+  evidence_scope: gold_passages
+  budget_modes:
+  - none
+  - min_matched
+  shuffle_seeds:
+  - 0
+exp2:
+  base_representations:
+  - R1
+  - R4
+  perturbations:
+  - name: P1
+    rates:
+    - 0.0
+    - 0.4
+    params: {}
+  - name: P2
+    rates:
+    - 0.0
+    - 0.4
+    params: {}
+  - name: P3
+    rates:
+    - 0.0
+    - 0.4
+    params: {}
+  - name: P4
+    rates:
+    - 0.0
+    - 0.4
+    params:
+      mode: hard
+  - name: P5
+    rates:
+    - 0.0
+    - 0.4
+    params:
+      mode: strip
+  - name: P6
+    rates:
+    - 0.0
+    - 0.4
+    params:
+      op: negation
+  - name: P6
+    rates:
+    - 0.0
+    - 0.4
+    params:
+      op: temporal
+  - name: P7
+    rates:
+    - 0.0
+    - 0.4
+    params: {}
+  seeds:
+  - 0
+  temporal_spec_path: null
+exp3:
+  conditions:
+  - oracle
+  - C1
+  - C2
+  - C3
+  - C4
+  accepted_statuses:
+  - dataset_supplied
+  - deterministic_derived
+  - human_verified
+  representation: R4
+exp4:
+  enabled: false
+  source_run: null
+  selectors:
+  - fixed:R0
+  - fixed:R1
+  - rule
+  - logistic
+  - oracle
+  train_fraction: 0.5
+  split_seed: 0
+results_root: results
+cache_path: cache/wsh_cache.sqlite
+max_generations: 1500
+max_wall_clock_s: 5400.0

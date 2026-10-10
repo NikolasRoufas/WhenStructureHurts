@@ -1,0 +1,17 @@
+# Exact versions of the development/smoke environment (Apple M3, Python 3.14.3, 2026-10-10).
+# On a CUDA server install torch for the server's CUDA version FIRST (see docs/SERVER_SETUP.md),
+# then: pip install -r requirements-pinned.txt && pip install -e .
+# Any version difference is recorded automatically in every run manifest (environment.packages).
+transformers==5.12.1
+sentence-transformers==5.5.1
+tokenizers==0.22.2
+huggingface-hub==1.19.0
+safetensors==0.8.0
+numpy==2.4.6
+pandas==3.0.3
+pyarrow==24.0.0
+pyyaml==6.0.3
+pydantic==2.13.4
+rank-bm25==0.2.2
+pytest==9.1.0
+# torch==2.12.0  (dev machine, CPU/MPS build) - install the CUDA build matching the server instead
