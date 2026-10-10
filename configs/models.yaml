@@ -1,22 +1,27 @@
 # Model registry and execution policy. Revisions and parameter counts were read from the
-# Hugging Face Hub API (safetensors metadata) on 2026-10-10.
+# Hugging Face Hub API (safetensors metadata): small models on 2026-10-10, the GPU models
+# (Qwen2.5-3B/7B-Instruct, Qwen3.5-9B) re-verified on 2026-10-11. GPU-model weights have NOT
+# been downloaded or executed.
 # Enforced programmatically by wsh.models.policy:
 #   * a model must be listed here with a pinned revision and a parameter count;
-#   * smoke and pilot stages accept only models with n_params <= 1e9;
-#   * names matching a forbidden pattern are rejected in every stage below `full`;
-#   * the `full` stage additionally requires WSH_COMPUTE_AUTHORIZED=1 in the environment
-#     AND the --authorized-compute CLI flag (to be set only after explicit user authorisation);
+#   * smoke and pilot stages accept only models with n_params <= 1e9 and no forbidden size
+#     pattern in the name (these are the local-development stages);
+#   * gpu_pilot (exploratory GPU pilot on the frozen pilot questions) and full (confirmatory)
+#     accept larger models ONLY with WSH_COMPUTE_AUTHORIZED=1 in the environment AND the
+#     --authorized-compute CLI flag. Authorisation never launches anything by itself;
+#   * a generator must list the stage in `stages`;
 #   * parameter counts are re-checked after loading; a mismatch aborts the run.
 
 policy:
   stages:
-    smoke: {max_params: 1.0e9, requires_authorization: false}
-    pilot: {max_params: 1.0e9, requires_authorization: false}
-    full:  {max_params: 1.0e11, requires_authorization: true}
-  forbidden_name_patterns_below_full:
+    smoke:     {max_params: 1.0e9, requires_authorization: false}
+    pilot:     {max_params: 1.0e9, requires_authorization: false}
+    gpu_pilot: {max_params: 1.0e11, requires_authorization: true}
+    full:      {max_params: 1.0e11, requires_authorization: true}
+  forbidden_name_patterns_unauthorized_stages:
     - "(?i)(^|[^0-9.])(1\\.5|3|4|7|8|9|13|14|32|70|72)b"
   safety_margin_disk_gb: 2.0
-  ram_multiplier: 2.5          # required free RAM >= multiplier * weight bytes
+  ram_multiplier: 2.5          # required free RAM >= multiplier * weight bytes (CPU loading)
 
 generators:
   Qwen/Qwen2.5-0.5B-Instruct:
@@ -31,17 +36,39 @@ generators:
     weight_bytes: 723674912
     license: apache-2.0
     stages: [smoke, pilot]
-  # Listed for the future compute environment. Blocked by policy until authorised.
+  # GPU models. Blocked by policy unless explicitly authorised (stages gpu_pilot / full).
   Qwen/Qwen2.5-7B-Instruct:
     revision: a09a35458c702b33eeacc393d103063234e8bc28
     n_params: 7615616512
+    weight_bytes: 15231233024      # bf16
+    precision: bfloat16
     license: apache-2.0
-    stages: [full]
+    architecture: Qwen2ForCausalLM (qwen2; supported by transformers 5.12.1 AutoModelForCausalLM)
+    stages: [gpu_pilot, full]
   Qwen/Qwen2.5-3B-Instruct:
     revision: aa8e72537993ba99e69dfaafa59ed015b17504d1
     n_params: 3085938688
-    license: other (Qwen research license)
-    stages: [full]
+    weight_bytes: 6171877376       # bf16
+    precision: bfloat16
+    license: other - Qwen RESEARCH license (non-commercial use; check terms before publishing artefacts)
+    architecture: Qwen2ForCausalLM (qwen2; supported by transformers 5.12.1 AutoModelForCausalLM)
+    stages: [gpu_pilot, full]
+  Qwen/Qwen3.5-9B:
+    # Hub repo is a natively multimodal checkpoint (Qwen3_5ForConditionalGeneration,
+    # image-text-to-text); there is no "-Instruct" repo. n_params is the Hub total incl. the
+    # vision tower; AutoModelForCausalLM maps qwen3_5 -> Qwen3_5ForCausalLM, which ignores the
+    # model.visual.* and mtp.* weights and remaps the language_model prefix (transformers
+    # 5.12.1 conversion_mapping) - text-only loading is expected but NOT yet verified by loading.
+    # Hybrid attention (Gated DeltaNet linear + full attention): batched vs unbatched equality
+    # must be checked on the server (`wsh preflight --batch-check`) before batch_size > 1.
+    revision: c202236235762e1c871ad0ccb60c8ee5ba337b9a
+    n_params: 9653104368
+    weight_bytes: 19306208736      # bf16, whole checkpoint (text-only load is smaller)
+    precision: bfloat16
+    license: apache-2.0
+    architecture: qwen3_5 (Qwen3_5ForConditionalGeneration checkpoint, loaded as Qwen3_5ForCausalLM)
+    chat_template_kwargs: {enable_thinking: false}   # default template opens a <think> block
+    stages: [gpu_pilot, full]
 
 encoders:   # auxiliary models (retrieval, reranking, NLI); also capped at 1e9 params
   BAAI/bge-small-en-v1.5:

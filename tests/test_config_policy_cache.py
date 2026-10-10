@@ -99,3 +99,64 @@ def test_realign_and_finite_guard():
     assert_finite([0.1, 2.0], "ok")
     with pytest.raises(NonFiniteOutputError):
         assert_finite([float("nan")], "reranker")
+
+
+GPU_MODELS = ["Qwen/Qwen2.5-3B-Instruct", "Qwen/Qwen2.5-7B-Instruct", "Qwen/Qwen3.5-9B"]
+
+
+@pytest.mark.parametrize("mid", GPU_MODELS)
+def test_gpu_models_blocked_in_development_stages(mid, monkeypatch):
+    monkeypatch.setenv(AUTH_ENV, "1")  # even with the env var set, local stages refuse them
+    for stage in ("smoke", "pilot"):
+        with pytest.raises(PolicyViolation):
+            check_model(mid, None, stage, authorized_flag=True)
+
+
+@pytest.mark.parametrize("mid", GPU_MODELS)
+@pytest.mark.parametrize("stage", ["gpu_pilot", "full"])
+def test_gpu_models_need_env_and_flag(mid, stage, monkeypatch):
+    monkeypatch.delenv(AUTH_ENV, raising=False)
+    with pytest.raises(PolicyViolation):
+        check_model(mid, None, stage, authorized_flag=True)
+    monkeypatch.setenv(AUTH_ENV, "1")
+    with pytest.raises(PolicyViolation):
+        check_model(mid, None, stage, authorized_flag=False)
+    assert check_model(mid, None, stage, authorized_flag=True).n_params > 1e9
+
+
+def test_gpu_pilot_config_pinned_and_gated(monkeypatch):
+    from wsh.models.policy import load_model_registry
+
+    _, reg = load_model_registry()
+    cfg = load_config("configs/gpu_pilot.yaml")
+    assert cfg.stage == "gpu_pilot" and cfg.model.revision == reg["Qwen/Qwen2.5-7B-Instruct"].revision
+    for mid in GPU_MODELS:  # switching the generator resolves its pinned revision
+        c = load_config("configs/gpu_pilot.yaml", {"model.model_id": mid})
+        assert c.model.revision == reg[mid].revision
+    monkeypatch.delenv(AUTH_ENV, raising=False)
+    with pytest.raises(PolicyViolation):
+        cfg.enforce_model_policy(authorized_flag=True)
+    monkeypatch.setenv(AUTH_ENV, "1")
+    cfg.enforce_model_policy(authorized_flag=True)  # validation only: nothing is loaded or launched
+    pilot = load_config("configs/pilot.yaml")
+    assert [d.qids for d in cfg.datasets] == [d.qids for d in pilot.datasets]  # same frozen questions
+    assert cfg.exp1 == pilot.exp1 and cfg.exp2 == pilot.exp2 and cfg.exp3 == pilot.exp3
+
+
+def test_qwen35_disables_thinking_in_chat_template():
+    from wsh.models.policy import load_model_registry
+
+    entry = load_model_registry()[1]["Qwen/Qwen3.5-9B"]
+    assert entry.raw["chat_template_kwargs"] == {"enable_thinking": False}
+
+
+def test_full_stage_refuses_pilot_questions(toy_question):
+    from wsh.data.question_sets import ExcludedQuestionError, assert_no_excluded, pilot_question_uids
+
+    pilot = pilot_question_uids()
+    assert len(pilot) == 350
+    uid = next(iter(pilot))
+    q = toy_question.model_copy(update={"uid": uid})
+    assert_no_excluded({"x": [q]}, {}, "gpu_pilot")  # pilots may use their own questions
+    with pytest.raises(ExcludedQuestionError):
+        assert_no_excluded({"x": [q]}, {}, "full")

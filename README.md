@@ -2,7 +2,7 @@
 
 Research framework for studying how evidence transformations (passages → atomic claims → reasoning paths → evidence graphs) affect retrieval-augmented reasoning, and when the errors they introduce outweigh their benefits.
 
-**Status (2026-10-11, pre-GPU preflight complete):** 133/133 tests passing. Exp1 redesigned into Protocol A (information-controlled) and Protocol B (budget-controlled). Pilot design frozen ([docs/PILOT_PROTOCOL.md](docs/PILOT_PROTOCOL.md)). Frozen pilot question set; human-verification package prepared, not yet annotated. Corrected pipeline smoke-tested on the 0.5B model. **No scientific results yet**: smoke scores are pipeline checks, not evidence for any hypothesis. Readiness verdict: [docs/PRE_GPU_READINESS.md](docs/PRE_GPU_READINESS.md).
+**Status (2026-10-11, pre-GPU preflight complete):** 156/156 tests passing. Exp1 redesigned into Protocol A (information-controlled) and Protocol B (budget-controlled). Pilot design frozen ([docs/PILOT_PROTOCOL.md](docs/PILOT_PROTOCOL.md)). Frozen pilot question set; human-verification package prepared, not yet annotated. Corrected pipeline smoke-tested on the 0.5B model. **No scientific results yet**: smoke scores are pipeline checks, not evidence for any hypothesis. Readiness verdict: [docs/FINAL_SERVER_HANDOFF.md](docs/FINAL_SERVER_HANDOFF.md) (2026-10-11 final audit; supersedes PRE_GPU_READINESS.md). Batched generation and an authorised exploratory `gpu_pilot` stage (Qwen2.5-3B/7B, Qwen3.5-9B) are prepared; no GPU run has happened.
 
 ## Documents
 
@@ -15,7 +15,8 @@ Research framework for studying how evidence transformations (passages → atomi
 | [docs/PILOT_PROTOCOL.md](docs/PILOT_PROTOCOL.md) | frozen pilot design: primary question, comparisons, metric, statistics, expansion rules |
 | [docs/METHODOLOGICAL_AUDIT.md](docs/METHODOLOGICAL_AUDIT.md) | every validity risk: fixed / controlled / needs human verification / needs stronger model / unresolved |
 | [docs/SERVER_SETUP.md](docs/SERVER_SETUP.md) | GPU server installation, preflight, pilot command templates, resumption, artefacts |
-| [docs/PRE_GPU_READINESS.md](docs/PRE_GPU_READINESS.md) | readiness gate and verdict |
+| [docs/FINAL_SERVER_HANDOFF.md](docs/FINAL_SERVER_HANDOFF.md) | **final audit, verdict, model status, server execution plan** |
+| [docs/PRE_GPU_READINESS.md](docs/PRE_GPU_READINESS.md) | earlier readiness gate (superseded) |
 | [annotations/verification_v1/GUIDE.md](annotations/verification_v1/GUIDE.md) | human verification package (50 questions) and annotation guide |
 | [docs/REPRODUCIBILITY.md](docs/REPRODUCIBILITY.md) | versions, seeds, commands, artefacts |
 | [docs/COMPUTE_HANDOFF.md](docs/COMPUTE_HANDOFF.md) | what is needed for pilot/full runs and the prepared commands |
@@ -36,7 +37,7 @@ src/wsh/
   systems.py       B0-B4; artifacts.py run dirs/manifests/resume; cache.py; config.py; cli.py; preflight.py
 configs/           smoke / pilot / full configs; question_sets/ (frozen samples); excluded_questions.json; models.yaml (allowlist + policy)
 annotations/       human verification package(s); src/wsh/annotations.py exports/imports/applies them
-tests/             133 unit/integration tests (the mock generator lives only here)
+tests/             156 unit/integration tests (the mock generator lives only here)
 scripts/run_smoke.sh
 results/<stage>/<exp>/<run_id>/   per-run artefacts (never overwritten)
 ```

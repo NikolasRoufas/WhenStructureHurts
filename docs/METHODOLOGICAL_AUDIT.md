@@ -1,4 +1,4 @@
-# Methodological audit (pre-GPU preflight, 2026-10-10)
+# Methodological audit (pre-GPU preflight 2026-10-10; final readiness audit 2026-10-11)
 
 Each item is in exactly one category:
 
@@ -27,6 +27,10 @@ Tests are in `tests/`; the guards are named so they can be found with grep.
 | F11 | The primary QA metric was F1 | Exact match (frozen protocol) | reporting / `primary_metric` |
 | F12 | Machine-specific paths entered the config hash, so a run could not resume on another mount point | Paths excluded from the hash; env vars `WSH_RESULTS_ROOT`, `WSH_CACHE_PATH`, `WSH_DATA_ROOT` | — |
 | F13 | Contrasts did not show how many pairs had identical evidence (e.g. R5 = R1 when the graph order equals the context order) | `n_identical_evidence` in every contrast | `test_exp1_records_keep_protocols_separate` |
+| F14 | Generation was unbatched | Batched generation implemented and tested (§6 below) | `tests/test_batching.py` (12 cases) |
+| F15 | Qwen3.5's default chat template opens a `<think>` block, so answers would follow free-form reasoning and break the answer format, unlike the Qwen2.5 conditions | `chat_template_kwargs: {enable_thinking: false}` in the registry, passed to the template and recorded in the decoding settings | `test_qwen35_disables_thinking_in_chat_template`, `test_chat_template_kwargs_reach_the_template` |
+| F16 | A larger-model pilot could only run as stage `full` (the confirmatory stage) | New stage `gpu_pilot`: authorisation required, frozen pilot questions, exploratory labels. `full` refuses every pilot question. | `test_gpu_pilot_config_pinned_and_gated`, `test_full_stage_refuses_pilot_questions`, `test_gpu_models_*` |
+| F17 | The smoke script needed `/usr/bin/time` (often missing on Linux) and a fixed venv path | Bash `time`; `WSH` can point at any install | — |
 | (earlier) | Reranker NaN; order-dependent coverage; report column shift; budget counter; prompt v1 | See EXPERIMENT_LOG §4 | — |
 
 ## 2. Controlled by experimental design
@@ -46,7 +50,9 @@ Tests are in `tests/`; the guards are named so they can be found with grep.
 | Unavailable conditions | Recorded with a reason, counted in reports, excluded from denominators, never imputed. |
 | Length confound in Exp2 (P1 removes text, P4 adds it) | `evidence_tokens` is on every record; perturbation effects should be read alongside it. |
 | Same-question selection bias | The frozen sample is drawn by seeded stratified round-robin from a rule-filtered pool. Eligibility counts are recorded in the frozen file. |
-| Cache serving stale outputs | The key includes model, revision, the full rendered prompt (template + evidence), `max_new_tokens` and all decoding settings, including device and dtype. |
+| Identical prompts across conditions | On the frozen set R5 = R1 byte-identically for 25/100 MuSiQue, 56/100 2Wiki and 36/50 HotpotQA questions; R4 = R5 for 29/100 2Wiki and 25/50 HotpotQA (no edges). These pairs contribute a true zero. Every contrast reports `n_identical_evidence` and, as a pre-specified secondary estimate, the contrast on informative pairs only. |
+| Generation failures driving accuracy differences | Every contrast reports the paired coverage difference next to the EM difference |
+| Cache serving stale outputs | The key includes model, revision, the full rendered prompt (template + evidence), `max_new_tokens` and all decoding settings, including device, dtype and batch size. |
 
 ## 3. Requires human verification
 
@@ -83,5 +89,19 @@ Tests are in `tests/`; the guards are named so they can be found with grep.
 | U8 | HoVer: only 904 of about 4,000 dev claims are recoverable without the 2017 Wikipedia dump | Secondary dataset |
 | U9 | Exp0 B4 is a *reconstruction* of EG-RAG; features and weights are our choices | Labelled everywhere; never compared with the original paper's numbers |
 | U10 | GPU determinism is best effort (`warn_only`), so GPU and CPU outputs differ | Device in the cache key and manifest; runs never mix devices |
-| U11 | Generation is unbatched, so throughput on a GPU is far below the hardware's capacity | Engineering item before a large pilot (SERVER_SETUP §11) |
+| U11 | Batched = unbatched is verified only for Qwen2.5-0.5B on CPU fp32 (30/30 prompts; 186/186 Exp1 records end to end) and MPS (16/16). It is **not verified on CUDA/bf16 or for any GPU model**, and batching was slower than unbatched on CPU and MPS. | `wsh preflight --batch-check` per model on the server; use batch_size 1 if it fails |
+| U13 | Qwen3.5-9B: loading the multimodal checkpoint as text-only `Qwen3_5ForCausalLM` is supported by transformers 5.12.1 by design (it ignores the visual and mtp weights and remaps the prefix) but has **never been executed**. Its hybrid linear attention makes the batching check essential. | `wsh preflight --tiny-generation --batch-check` before any Qwen3.5 run |
+| U14 | Graph contrasts have reduced power: the informative pairs for R1−R5 are 75 (MuSiQue) and 44 (2Wiki) of 100. 33% of MuSiQue and 25% of 2Wiki pilot questions have fallback-anchored edges (stratum C). | Reported; pilot SDs feed the full-study sample size |
 | U12 | Old smoke runs carry superseded per-record metrics | `SUPERSEDED.md` in each run directory; raw predictions kept |
+
+## 6. Batched generation: what is verified
+
+| property | evidence |
+|---|---|
+| batched = unbatched outputs (mixed lengths, two `max_new_tokens` groups, batch sizes 2/4/16) | tiny randomly initialised Qwen2 (padding errors would change its outputs): exact equality of text, output tokens, input tokens and finish reasons |
+| real model | Qwen2.5-0.5B on 30 real smoke prompts (R0/R2/R4): 30/30 identical on CPU fp32. Frozen pilot prompts on MPS: 16/16. End-to-end batched Exp1 smoke run vs the earlier unbatched run: 210/210 record keys, 186/186 identical outputs and evaluations. |
+| left padding, attention mask, cut at first EOS, request-order association | `test_batched_is_deterministic_and_left_padded`, `test_rows_are_cut_at_first_eos`, `test_runner_batched_equals_unbatched_records` (answers depend on the prompt, so any mix-up shows) |
+| out-of-memory handling | `test_oom_splits_batch_and_keeps_every_result` (halving down to 1; a single prompt that still fails is an error record) |
+| caching | `test_cache_works_with_batching_and_is_batch_size_specific`; identical prompts are generated once and served as cache hits, as a sequential run would |
+| resume after interruption, no duplicates or losses | `test_interrupted_batched_run_resumes_without_loss_or_duplication`; budget caps count queued records (`test_budget_cap_counts_queued_records`) |
+| not verified | CUDA, bf16, the 3B/7B/9B models, throughput on a GPU |

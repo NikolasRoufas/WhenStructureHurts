@@ -191,8 +191,10 @@ def test_exp1_records_keep_protocols_separate(tmp_path, toy_question):
         assert "protocol=A" in c["stratum"] or "protocol=B" in c["stratum"]
         assert not c["confirmatory"]  # smoke stage is never confirmatory
         assert 0 <= c["n_identical_evidence"] <= c["n_paired"]
+        assert "delta" in c["coverage_delta"]
     r1r5 = [c for c in contrasts(recs, "exp1") if (c["a"], c["b"]) == ("R1", "R5") and c["edge_stratum"] == "all"
             and "protocol=A" in c["stratum"]]
     # toy graph order (DeepMind -> Google) equals the context order, so R5 shows exactly R1's
     # evidence: the pair can only contribute a zero difference and is counted as such
     assert r1r5 and r1r5[0]["n_identical_evidence"] == 1
+    assert r1r5[0]["informative_pairs"]["n_paired"] == 0  # the only pair is uninformative

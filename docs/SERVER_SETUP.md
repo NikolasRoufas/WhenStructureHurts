@@ -20,7 +20,7 @@ python3.12 -m venv .venv && source .venv/bin/activate
 pip install torch --index-url https://download.pytorch.org/whl/<cuXXX>
 # 2) everything else at the dev-machine versions, then the package
 pip install -r requirements-pinned.txt && pip install -e .
-python -m pytest -q          # must report: 133 passed (see docs/PRE_GPU_READINESS.md)
+python -m pytest -q          # must report: 156 passed (1 opt-in real-model test skipped) (see docs/PRE_GPU_READINESS.md)
 ```
 
 Package versions are recorded in every run manifest (`environment.packages`), so any difference from the dev machine stays visible.
@@ -48,9 +48,7 @@ for m in Qwen/Qwen2.5-0.5B-Instruct cross-encoder/ms-marco-MiniLM-L6-v2 cross-en
 
 All models load with `local_files_only=True` at the pinned revision; the parameter count is checked again after loading.
 
-**Larger generators (authorisation required, do not run without it):**
-1. Add the model to `configs/models.yaml` with `stages: [full]`, the pinned revision and the Hub-verified parameter count.
-2. Fetch it with `WSH_COMPUTE_AUTHORIZED=1 wsh models fetch <id> --stage full --authorized-compute`.
+**Larger generators** (authorisation required; do not run without it). Qwen2.5-3B-Instruct, Qwen2.5-7B-Instruct and Qwen3.5-9B are already in `configs/models.yaml` with Hub-verified pinned revisions, parameter counts and licences (stages `gpu_pilot`, `full`). See §7 for fetching. Note: the Qwen2.5-3B licence is the non-commercial Qwen Research License.
 
 ## 5. CUDA verification
 
@@ -106,15 +104,19 @@ wsh run exp0 --config configs/pilot.yaml      # secondary (baselines)
 wsh run exp3 --config configs/pilot.yaml      # all questions unavailable until verified annotations are imported
 ```
 
-**Larger authorised generator** (template; requires your written authorisation naming the model):
+**Larger authorised generator: exploratory GPU pilot, stage `gpu_pilot`.** This needs your written authorisation naming the model. Authorisation only unlocks the policy; nothing launches by itself.
 
 ```bash
-cp configs/pilot_gpu.template.yaml configs/pilot_gpu.yaml   # then fill model_id + revision (must be in models.yaml)
 export WSH_COMPUTE_AUTHORIZED=1
-wsh validate-config configs/pilot_gpu.yaml --authorized-compute
-wsh preflight --config configs/pilot_gpu.yaml --authorized-compute --tiny-generation
-for e in exp1 exp2 exp0; do wsh run $e --config configs/pilot_gpu.yaml --authorized-compute; done
+M=Qwen/Qwen2.5-7B-Instruct            # or Qwen/Qwen2.5-3B-Instruct, Qwen/Qwen3.5-9B (revisions are pinned)
+wsh models fetch $M --stage gpu_pilot --authorized-compute          # disk/RAM preflight first
+wsh validate-config configs/gpu_pilot.yaml --authorized-compute --set model.model_id=$M
+wsh preflight --config configs/gpu_pilot.yaml --authorized-compute --tiny-generation --batch-check 16 --set model.model_id=$M
+# only if batch-check passed (otherwise add: --set model.batch_size=1)
+wsh run exp1 --config configs/gpu_pilot.yaml --authorized-compute --set model.model_id=$M
 ```
+
+`gpu_pilot` uses the frozen pilot questions, writes to `results/gpu_pilot/…`, and labels everything exploratory. The confirmatory stage `full` refuses every pilot question.
 
 **After human verification** (enables stratum A and Exp3):
 
@@ -162,7 +164,14 @@ wsh run exp3 --config configs/pilot.yaml --set verified_annotations=annotations/
 5. Whether outbound internet access exists (for dataset and model fetching), or whether files must be staged.
 6. The GPU-hour budget and the generator(s) you authorise, in writing.
 
-## 11. Known engineering limits before a large pilot
+## 11. Batching, memory and known limits
 
-- Generation is **unbatched**, one prompt at a time, so GPU utilisation will be low. Measure throughput with a short run first. Batching (left-padded) or a vLLM backend behind the `Generator` protocol is the main speed-up; it is not implemented yet.
-- Encoders run on the generator's device (`model.device`).
+- **Batched generation** (`model.batch_size`, default 8 in the pilot configs):
+  - left padding with attention masks, length-sorted chunks, and identical prompts generated once;
+  - results come back in request order;
+  - out of memory: the batch is split in half and retried, down to one prompt; a prompt that still does not fit is recorded as an error, never dropped.
+- **Batched output must equal unbatched output** for each model, device and dtype. Verified so far: Qwen2.5-0.5B, 30/30 on CPU fp32 and 16/16 on MPS. **Not verified on CUDA bf16, or for any GPU model.** Qwen3.5-9B uses linear-attention layers, so `--batch-check` is essential there.
+- **Throughput is not guaranteed.** On MPS, batching was slower than unbatched for the 0.5B model (52 s vs 27 s for 16 prompts). Measure it with `--batch-check` and choose the batch size from the measurement.
+- **Claim extraction** (Exp0/Exp3 LLM extraction) is still one prompt at a time.
+- **Memory monitoring:** each run manifest records `generator_stats`: peak and reserved GPU memory (CUDA), driver memory (MPS), batches, out-of-memory splits and failures. Tokens and latency are recorded per record (`generation.input_tokens/output_tokens/latency_s/batch_size/latency_per_item_s`). With batching, `latency_s` is the wall time of the whole batch.
+- **Encoders** run on the generator's device (`model.device`).

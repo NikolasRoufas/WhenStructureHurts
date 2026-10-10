@@ -196,13 +196,19 @@ class Runner:
         self.t0 = time.time()
         self.n_written = 0
         self.n_skipped_done = 0
+        # batched generation: prepared records wait here until a full batch can be generated.
+        # They are written only after generation, so an interruption loses at most the queue,
+        # which a resumed run rebuilds (records are keyed; nothing is duplicated or dropped).
+        self.batch_size = cfg.model.batch_size
+        self.queue_limit = cfg.model.batch_size * 4  # a few batches, so chunks are length-sorted
+        self._pending: list[dict] = []
 
     def _model_calls(self) -> int:
         gen = getattr(self.res, "_gen", None)
         return max(self.n_generated, getattr(gen, "n_uncached", 0) or 0)
 
     def _check_budget(self) -> None:
-        if self.cfg.max_generations is not None and self._model_calls() >= self.cfg.max_generations:
+        if self.cfg.max_generations is not None and self._model_calls() + len(self._pending) >= self.cfg.max_generations:
             raise BudgetExceeded(f"generation cap {self.cfg.max_generations} reached")
         if self.cfg.max_wall_clock_s is not None and time.time() - self.t0 > self.cfg.max_wall_clock_s:
             raise BudgetExceeded(f"wall-clock cap {self.cfg.max_wall_clock_s}s reached")
@@ -215,7 +221,7 @@ class Runner:
         """``build`` returns (bundle, layout-or-serialized, info). Exceptions inside ``build``
         are recorded as pipeline_error records (they stay in the denominator)."""
         key = self.key(q, condition)
-        if self.ctx.is_done(key):
+        if self.ctx.is_done(key) or any(p["key"] == key for p in self._pending):
             self.n_skipped_done += 1
             return None
         self._check_budget()
@@ -247,7 +253,29 @@ class Runner:
         assert_prompt_composition(q, req, ser.text)
         gen = self.res.generator
         overhead = gen.prompt_tokens(build_request(q, "", self.cfg.model.max_new_tokens))
-        res = gen.generate(req)
+        item = {"key": key, "q": q, "base": base, "info": info, "bundle": bundle, "ser": ser, "req": req,
+                "overhead": overhead}
+        if self.batch_size > 1 and hasattr(gen, "generate_batch"):
+            self._pending.append(item)
+            if len(self._pending) >= self.queue_limit:
+                self.flush()
+            return None
+        return self._finish(item, gen.generate(req))
+
+    def flush(self) -> None:
+        """Generate every queued record (in batches) and write them in queue order."""
+        if not self._pending:
+            return
+        items, self._pending = self._pending, []
+        results = self.res.generator.generate_batch([it["req"] for it in items])
+        if len(results) != len(items):
+            raise RuntimeError(f"generate_batch returned {len(results)} results for {len(items)} requests")
+        for it, res in zip(items, results):
+            self._finish(it, res)
+
+    def _finish(self, item: dict, res) -> dict:
+        q, base, info, bundle, ser, req, overhead = (item[k] for k in ("q", "base", "info", "bundle", "ser", "req", "overhead"))
+        gen = self.res.generator
         self.n_generated += int(not res.cached)
         ev = evaluate(q, res.text, res.finish_reason, ser, bundle, self.res.nli_grounding, self.cfg.grounding.entail_threshold)
         rec = {
@@ -265,7 +293,8 @@ class Runner:
             "prompt": {"system": req.system, "user": req.user, "overhead_tokens": overhead},
             "generation": {"text": res.text, "finish_reason": res.finish_reason, "input_tokens": res.input_tokens,
                            "output_tokens": res.output_tokens, "latency_s": res.latency_s, "cached": res.cached,
-                           "error": res.error, "decoding": res.decoding},
+                           "error": res.error, "decoding": res.decoding, "batch_size": getattr(res, "batch_size", 1),
+                           "latency_per_item_s": res.latency_s / max(1, getattr(res, "batch_size", 1))},
             **ev,
         }
         self.ctx.write(rec)
@@ -291,7 +320,9 @@ def run_experiment(cfg: ExperimentConfig, experiment: str, body: Callable[[Runne
     status = "completed"
     try:
         body(runner, questions)
+        runner.flush()
     except BudgetExceeded as e:
+        runner.flush()  # queued records were admitted under the cap: generate and write them
         status = f"stopped: {e}"
         log.warning(status)
     except KeyboardInterrupt:
@@ -303,7 +334,9 @@ def run_experiment(cfg: ExperimentConfig, experiment: str, body: Callable[[Runne
                             n_model_calls_uncached_incl_extraction=runner._model_calls(),
                             n_records_written=runner.n_written, n_records_skipped_already_done=runner.n_skipped_done,
                             loaded_models=res.loaded, cache_hits=res.cache.hits, cache_misses=res.cache.misses,
-                            determinism=getattr(res._gen, "determinism", None), device=res.device)
+                            determinism=getattr(res._gen, "determinism", None), device=res.device,
+                            generation_batch_size=cfg.model.batch_size, n_records_unflushed=len(runner._pending),
+                            generator_stats=res._gen.memory_stats() if hasattr(res._gen, "memory_stats") else None)
     from ..evaluation.reporting import write_reports
 
     write_reports(ctx)

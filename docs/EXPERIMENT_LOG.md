@@ -183,3 +183,31 @@ Generations were not served from the old cache, because the generation cache key
 **Preflight on this laptop:** `wsh preflight --config configs/pilot.yaml --tiny-generation` passed every check. The device resolved to MPS, the dataset hashes match the frozen set, and the frozen questions load with 0 excluded questions.
 
 Reports for the three runs were regenerated with `wsh report` after the run, from unchanged `predictions.jsonl`: the reporting code gained the identical-evidence column while Exp1 was running. Final test suite: **133 passed** (2026-10-11).
+
+## 8. Final readiness audit (2026-10-11)
+
+**Changes:**
+- Batched generation (`model.batch_size`): left padding, out-of-memory splitting, de-duplication, request-order results, batch-size-specific cache keys, and a runner queue with resume.
+- GPU memory statistics in run manifests.
+- Stage `gpu_pilot` (authorised, exploratory, frozen pilot questions); `full` refuses pilot questions.
+- Qwen2.5-3B/7B-Instruct and Qwen3.5-9B registered with Hub-verified revisions, parameter counts and licences. Qwen3.5 thinking is disabled through the chat template.
+- `--set` for `validate-config` and `preflight`; `wsh preflight --batch-check`.
+- Informative-pairs and coverage-difference columns in contrasts.
+- Portable smoke script.
+
+**Runs (0.5B, smoke questions, pipeline checks only):**
+
+| run | wall clock | records | errors | notes |
+|---|---|---|---|---|
+| `exp1/20261011-002549_a203d3a2` | 142 s | 210 | 0 | batch_size 8. Versus the unbatched `20261010-235522`: 210/210 identical record keys, 186/186 identical prompts, outputs and evaluations; 65 in-batch duplicates generated once. Slower than unbatched (94 s) on CPU. |
+| `exp0/20261011-002812_6c9a495a` | 491 s | 75 | 0 | First Exp0 run with the current code (batched answers; extraction unbatched). 420/420 finite retrieval scores. |
+
+**Preflight on this laptop:** `wsh preflight --config configs/pilot.yaml --batch-check 16` on MPS gave 16/16 identical outputs, with 27 s unbatched vs 52 s batched. One earlier attempt exited with code 120 and empty output, consistent with a stdout-flush failure. It did not recur and was not investigated further.
+
+**Frozen-set structure (data only):**
+- R5 = R1 identical in 25/100 MuSiQue, 56/100 2Wiki and 36/50 HotpotQA questions.
+- R4 = R5 identical in 0/100 MuSiQue, 29/100 2Wiki and 25/50 HotpotQA questions.
+- Protocol A violations: 0/250.
+- Maximum evidence length: 1,603 tokens (Qwen2.5 tokenizer).
+
+**Tests:** 156 passed, 1 skipped (opt-in real-model test; run separately: 30/30).

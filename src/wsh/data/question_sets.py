@@ -34,9 +34,22 @@ def load_excluded(path: str | Path | None) -> dict[str, str]:
     return {e["uid"]: e["reason"] for e in raw["excluded"]}
 
 
+def pilot_question_uids(pattern: str = "configs/question_sets/pilot_*.json") -> dict[str, str]:
+    """Every question of every frozen pilot set (uid -> reason). The confirmatory stage must
+    never reuse a question that any pilot (0.5B or GPU) has seen."""
+    out = {}
+    for f in sorted(repo_path(".").glob(pattern)):
+        for ds, qids in json.loads(f.read_text())["datasets"].items():
+            for q in qids:
+                out[f"{ds}/{q}"] = f"used by the exploratory pilot ({f.name})"
+    return out
+
+
 def assert_no_excluded(questions: dict[str, list[Question]], excluded: dict[str, str], stage: str) -> None:
     if stage == "smoke":
         return
+    if stage == "full":
+        excluded = {**pilot_question_uids(), **excluded}
     hits = [q.uid for qs in questions.values() for q in qs if q.uid in excluded]
     if hits:
         raise ExcludedQuestionError(f"{len(hits)} excluded question(s) selected for a {stage} run "

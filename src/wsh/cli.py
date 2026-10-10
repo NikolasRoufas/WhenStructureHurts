@@ -10,7 +10,7 @@
     wsh questions freeze --spec configs/question_sets/pilot_v1.spec.yaml --out configs/question_sets/pilot_v1.json
     wsh annotations export --questions configs/question_sets/pilot_v1.json --out annotations/verification_v1
     wsh annotations import --package annotations/verification_v1 [--completed DIR] --out annotations/verified/v1.jsonl
-    wsh preflight --config configs/pilot.yaml [--tiny-generation]
+    wsh preflight --config configs/pilot.yaml [--tiny-generation] [--batch-check [N]]
 """
 
 from __future__ import annotations
@@ -55,6 +55,7 @@ def main(argv: list[str] | None = None) -> int:
     v = sub.add_parser("validate-config")
     v.add_argument("config")
     v.add_argument("--authorized-compute", action="store_true")
+    v.add_argument("--set", nargs="*", help="override config values, e.g. model.model_id=Qwen/Qwen3.5-9B")
 
     r = sub.add_parser("run")
     r.add_argument("experiment", choices=["exp0", "exp1", "exp2", "exp3"])
@@ -90,6 +91,9 @@ def main(argv: list[str] | None = None) -> int:
     pf.add_argument("--config", required=True)
     pf.add_argument("--authorized-compute", action="store_true")
     pf.add_argument("--tiny-generation", action="store_true", help="load the configured generator and generate once")
+    pf.add_argument("--set", nargs="*", help="override config values, e.g. model.model_id=Qwen/Qwen3.5-9B")
+    pf.add_argument("--batch-check", type=int, nargs="?", const=16, default=0, metavar="N",
+                    help="compare batched vs unbatched outputs on N real pilot prompts (default 16)")
 
     a = ap.parse_args(argv)
     logging.basicConfig(level=logging.INFO if a.verbose else logging.WARNING, format="%(asctime)s %(name)s %(message)s")
@@ -128,9 +132,10 @@ def main(argv: list[str] | None = None) -> int:
     if a.cmd == "validate-config":
         from .config import load_config
 
-        cfg = load_config(a.config)
+        cfg = load_config(a.config, _parse_sets(a.set))
         cfg.enforce_model_policy(a.authorized_compute)
-        print(f"OK: {a.config} (stage={cfg.stage}, model={cfg.model.model_id}, datasets={[x.name for x in cfg.datasets]})")
+        print(f"OK: {a.config} (stage={cfg.stage}, model={cfg.model.model_id}@{cfg.model.revision[:8]}, "
+              f"batch_size={cfg.model.batch_size}, datasets={[x.name for x in cfg.datasets]})")
         return 0
 
     if a.cmd == "run":
@@ -217,7 +222,7 @@ def main(argv: list[str] | None = None) -> int:
     if a.cmd == "preflight":
         from .preflight import run_preflight
 
-        rep = run_preflight(a.config, a.authorized_compute, a.tiny_generation)
+        rep = run_preflight(a.config, a.authorized_compute, a.tiny_generation, a.batch_check, _parse_sets(a.set))
         print(json.dumps(rep, indent=2, default=str))
         return 0 if rep["ok"] else 1
 

@@ -4,8 +4,9 @@ Checks: config + model-size policy; the device the config resolves to; every mod
 its pinned revision (nothing is downloaded); generator memory/disk preflight; dataset files
 present and identical (sha256) to the ones the frozen question set was drawn from; frozen
 question set loads and does not overlap the exclusion list; results/cache directories
-writable. ``tiny_generation`` additionally loads the configured generator and generates once
-(the only check that touches a model; it is still subject to the size policy).
+writable. ``tiny_generation`` additionally loads the configured generator and generates once;
+``batch_check`` compares batched vs unbatched greedy outputs on real pilot prompts and reports
+memory and throughput (both are subject to the size policy and its authorisation).
 """
 
 from __future__ import annotations
@@ -28,7 +29,8 @@ def _check(report: dict, name: str, fn) -> Any:
         return None
 
 
-def run_preflight(config_path: str, authorized_flag: bool = False, tiny_generation: bool = False) -> dict[str, Any]:
+def run_preflight(config_path: str, authorized_flag: bool = False, tiny_generation: bool = False,
+                  batch_check: int = 0, overrides: dict | None = None) -> dict[str, Any]:
     from .artifacts import environment
     from .config import load_config, repo_path
     from .data.loaders import DEFAULT_DATA_ROOT, load_registry
@@ -36,11 +38,12 @@ def run_preflight(config_path: str, authorized_flag: bool = False, tiny_generati
     from .models.policy import check_model, is_cached, load_model_registry, preflight
 
     report: dict[str, Any] = {"config": config_path, "time": time.strftime("%Y-%m-%dT%H:%M:%S%z"), "checks": {}}
-    cfg = _check(report, "config_valid", lambda: load_config(config_path).stage)
+    report["overrides"] = overrides or {}
+    cfg = _check(report, "config_valid", lambda: load_config(config_path, overrides).stage)
     if cfg is None:
         report["ok"] = False
         return report
-    cfg = load_config(config_path)
+    cfg = load_config(config_path, overrides)
     _check(report, "model_policy", lambda: cfg.enforce_model_policy(authorized_flag) or "all models allowed for stage")
     report["environment"] = environment()
 
@@ -124,5 +127,56 @@ def run_preflight(config_path: str, authorized_flag: bool = False, tiny_generati
                     "determinism": g.determinism}
 
         _check(report, "tiny_generation", gen)
+    if batch_check:
+        _check(report, "batched_equals_unbatched", lambda: _batch_check(cfg, authorized_flag, batch_check))
     report["ok"] = all(c["ok"] for c in report["checks"].values())
     return report
+
+
+def _batch_check(cfg, authorized_flag: bool, n_prompts: int) -> dict:
+    """Greedy outputs of the configured model/device/dtype with batch_size 1 vs the configured
+    batch size, on real Exp1 prompts from the frozen questions (mixed lengths and
+    representations). Any disagreement fails the check: run with batch_size 1, or accept and
+    document the difference, before the pilot."""
+    import time as _t
+
+    from .cache import KVCache
+    from .experiments.common import load_questions, make_layout
+    from .models.local_generator import LocalHFGenerator
+    from .models.prompts import build_request
+    from .representations.evidence import EvidenceUnavailable, gold_bundle
+    from .representations.serialization import render
+
+    if cfg.model.batch_size < 2:
+        return {"skipped": "model.batch_size is 1"}
+    reqs = []
+    for qs in load_questions(cfg).values():
+        for q in qs:
+            try:
+                b = gold_bundle(q)
+            except EvidenceUnavailable:
+                continue
+            for rep in ("R0", "R4"):
+                reqs.append(build_request(q, render(make_layout(rep, b, 0)).text, cfg.model.max_new_tokens))
+            if len(reqs) >= n_prompts:
+                break
+        if len(reqs) >= n_prompts:
+            break
+    gen = LocalHFGenerator(cfg.model, cfg.stage, KVCache(None), authorized_flag)
+    t0 = _t.perf_counter()
+    gen.batch_size = 1
+    ref = gen.generate_batch(reqs)
+    t1 = _t.perf_counter()
+    gen.batch_size = cfg.model.batch_size
+    gen.cache = KVCache(None)  # fresh: decoding settings are shared, outputs must be regenerated
+    got = gen.generate_batch(reqs)
+    t2 = _t.perf_counter()
+    diff = [i for i, (a, b) in enumerate(zip(ref, got)) if a.text != b.text]
+    out = {"n_prompts": len(reqs), "batch_size": cfg.model.batch_size, "n_identical": len(reqs) - len(diff),
+           "differing_indices": diff[:20], "seconds_unbatched": round(t1 - t0, 2), "seconds_batched": round(t2 - t1, 2),
+           "output_tokens": sum(r.output_tokens for r in got), "memory": gen.memory_stats(),
+           "finish_reasons": sorted({r.finish_reason for r in got})}
+    if diff or any(r.finish_reason == "error" for r in got):
+        raise RuntimeError(f"batched outputs differ from unbatched for {len(diff)}/{len(reqs)} prompts "
+                           f"or errored: {out}")
+    return out

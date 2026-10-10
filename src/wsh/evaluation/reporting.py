@@ -131,7 +131,20 @@ def contrasts(records: list[dict], experiment: str, stage: str = "smoke") -> lis
                     if metric is None:
                         continue
                     res = paired_bootstrap(_metric_by_q(groups[a], metric), _metric_by_q(groups[b], metric))
-                    res["n_identical_evidence"] = _n_identical_evidence(groups[a], groups[b])
+                    ident = _identical_evidence_questions(groups[a], groups[b])
+                    res["n_identical_evidence"] = len(ident)
+                    # secondary, pre-specified (PILOT_PROTOCOL §7): the same contrast on pairs whose
+                    # evidence differs. Selection uses inputs only, never outcomes.
+                    ma, mb = _metric_by_q(groups[a], metric), _metric_by_q(groups[b], metric)
+                    inf = paired_bootstrap({q: v for q, v in ma.items() if q not in ident},
+                                           {q: v for q, v in mb.items() if q not in ident})
+                    res["informative_pairs"] = {k: inf.get(k) for k in ("n_paired", "delta", "ci", "verdict")}
+                    # format/generation failures can drive an EM difference: report the paired
+                    # difference in coverage (answered rate) next to every contrast
+                    ans = lambda rs: by_question([r for r in rs if not r.get("unavailable")],  # noqa: E731
+                                                 lambda r: float(r["failure"]["answered"]))
+                    cov = paired_bootstrap(ans(groups[a]), ans(groups[b]))
+                    res["coverage_delta"] = {k: cov.get(k) for k in ("delta", "ci")}
                     protocol = (groups[a][0]["condition"].get("protocol"))
                     confirm = (role == "primary" and edge == "all" and ds in PRIMARY_DATASETS and protocol in ("A", None)
                                and metric == primary_metric(task) and stage == "full" and res["n_paired"] >= MIN_N_CONFIRMATORY)
@@ -144,13 +157,18 @@ def contrasts(records: list[dict], experiment: str, stage: str = "smoke") -> lis
     return out
 
 
-def _n_identical_evidence(ra: list[dict], rb: list[dict]) -> int:
-    """Questions whose two conditions showed byte-identical evidence (e.g. R5 = R1 when the
-    graph order equals the context order, R4 = R5 without edges). Their difference can only
-    be 0, so they dilute the contrast; reported so effects can be read per informative pair."""
-    ta = {r["question_uid"]: r["evidence"]["text"] for r in ra if "evidence" in r}
-    tb = {r["question_uid"]: r["evidence"]["text"] for r in rb if "evidence" in r}
-    return sum(1 for q in ta.keys() & tb.keys() if ta[q] == tb[q])
+def _identical_evidence_questions(ra: list[dict], rb: list[dict]) -> set[str]:
+    """Questions whose two conditions showed byte-identical evidence in every record (e.g.
+    R5 = R1 when the graph order equals the context order, R4 = R5 without edges). Their
+    difference can only be 0, so they dilute the contrast."""
+    ta, tb = defaultdict(set), defaultdict(set)
+    for r in ra:
+        if "evidence" in r:
+            ta[r["question_uid"]].add(r["evidence"]["text"])
+    for r in rb:
+        if "evidence" in r:
+            tb[r["question_uid"]].add(r["evidence"]["text"])
+    return {q for q in ta.keys() & tb.keys() if len(ta[q]) == 1 and ta[q] == tb[q]}
 
 
 def protocol_accounting(records: list[dict]) -> list[dict]:
@@ -322,6 +340,14 @@ def write_reports(ctx) -> dict:
     return result
 
 
+def _informative(c: dict) -> str:
+    i = c.get("informative_pairs") or {}
+    if not i.get("n_paired"):
+        return "-"
+    ci = f"[{i['ci'][0]:.3f}, {i['ci'][1]:.3f}]" if i.get("ci") else "-"
+    return f"{i['n_paired']}, {_fmt(i.get('delta'))} {ci}"
+
+
 def _fmt(x) -> str:
     if x is None:
         return "-"
@@ -335,8 +361,9 @@ def render_markdown(result: dict, manifest: dict) -> str:
     if manifest["stage"] == "smoke":
         L += ["> **SMOKE TEST - software/pipeline validation only.** Sample sizes are tiny and the model is a",
               "> 0.5B development model. Nothing here is evidence for or against any hypothesis.", ""]
-    elif manifest["stage"] == "pilot":
-        L += ["> **PILOT - exploratory.** Estimates effect sizes and variance for planning; no confirmatory claims.", ""]
+    elif manifest["stage"] in ("pilot", "gpu_pilot"):
+        L += [f"> **{manifest['stage'].upper()} - exploratory.** Estimates effect sizes and variance for planning; "
+              "no confirmatory claims.", ""]
     if not result.get("consistency", {}).get("generator_settings_identical", True):
         L += ["> **WARNING: generator settings differ between records of this run** (see metrics.json "
               "'consistency'); paired contrasts may be confounded.", ""]
@@ -358,12 +385,14 @@ def render_markdown(result: dict, manifest: dict) -> str:
     if result.get("paired_contrasts"):
         L += ["", f"## Pre-specified paired contrasts (b - a, question-level bootstrap, 2000 resamples; n < "
               f"{MIN_N_CONFIRMATORY} => exploratory)", "",
-              "| dataset | stratum | edges | a | b | role | metric | n | identical ev. | delta | 95% CI | verdict | confirmatory |",
-              "|---|---|---|---|---|---|---|---|---|---|---|---|---|"]
+              "| dataset | stratum | edges | a | b | role | metric | n | identical ev. | delta | 95% CI | verdict | "
+              "informative pairs: n, delta [CI] | Δcoverage | confirmatory |",
+              "|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|"]
         for c in result["paired_contrasts"]:
             ci = f"[{c['ci'][0]:.3f}, {c['ci'][1]:.3f}]" if c.get("ci") else "-"
             L.append(f"| {c['dataset']} | {c['stratum']} | {c['edge_stratum']} | {c['a']} | {c['b']} | {c['role']} | "
                      f"{c['metric']} | {c['n_paired']} | {c.get('n_identical_evidence')} | {_fmt(c.get('delta'))} | {ci} | {c.get('verdict')} | "
+                     f"{_informative(c)} | {_fmt((c.get('coverage_delta') or {}).get('delta'))} | "
                      f"{'yes (Holm p=' + _fmt(c.get('p_holm')) + ')' if c['confirmatory'] else 'no (exploratory)'} |")
     if result.get("protocol_accounting"):
         L += ["", "## Evidence accounting (Exp1; protocols reported separately)", "",

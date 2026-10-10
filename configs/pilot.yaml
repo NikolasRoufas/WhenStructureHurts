@@ -2,7 +2,7 @@
 # Questions come ONLY from the frozen set configs/question_sets/pilot_v1.json (sha256 recorded in
 # PILOT_PROTOCOL.md); smoke questions are excluded and the exclusion is enforced at run time.
 # Generator: the policy-compliant 0.5B model (no authorisation needed). A larger authorised
-# generator uses configs/pilot_gpu.template.yaml (stage 'full', explicit authorisation).
+# generator uses configs/gpu_pilot.yaml (stage 'gpu_pilot', explicit authorisation).
 stage: pilot
 name: pilot-v1
 seed: 0
@@ -20,6 +20,7 @@ model:
   max_new_tokens: 64
   max_input_tokens: 4096
   max_time_s: 60
+  batch_size: 8
 retrieval: {method: bm25, top_k: 4, rerank_pool: 10, corpus_prefilter: 50}
 extraction: {method: llm, on_empty: drop, min_lexical_support: 0.6, max_new_tokens: 96}
 egrag: {token_budget: 450, max_claims: 12, selector: greedy_connected}

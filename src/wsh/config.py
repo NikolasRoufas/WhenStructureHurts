@@ -13,9 +13,10 @@ from pydantic import BaseModel, ConfigDict, Field, model_validator
 
 from .models.policy import check_model
 
-Stage = Literal["smoke", "pilot", "full"]
+Stage = Literal["smoke", "pilot", "gpu_pilot", "full"]
 STAGE_LIMITS = {"smoke": {"max_examples": 10, "max_generations": 2000},
                 "pilot": {"max_examples": 1000, "max_generations": 200000},
+                "gpu_pilot": {"max_examples": 1000, "max_generations": 200000},  # exploratory, frozen pilot set
                 "full": {"max_examples": 100000, "max_generations": 10_000_000}}
 
 
@@ -33,13 +34,25 @@ def repo_path(p: str | Path) -> Path:
 
 class ModelConfig(Strict):
     model_id: str
-    revision: str
+    revision: str  # a commit sha, or "pinned" = the revision pinned in configs/models.yaml
     device: Literal["auto", "cpu", "mps", "cuda"] = "cpu"
     dtype: Literal["float32", "bfloat16", "float16"] = "float32"
     max_new_tokens: int = Field(64, ge=1, le=1024)
     max_input_tokens: int = Field(3072, ge=128, le=32768)
     max_time_s: float = Field(60.0, gt=0, le=600)
+    batch_size: int = Field(1, ge=1, le=256)  # answer generation; claim extraction stays one prompt at a time
     do_sample: Literal[False] = False  # greedy decoding only; sampling would need seeds per run
+
+    @model_validator(mode="after")
+    def _resolve_pinned(self) -> "ModelConfig":
+        if self.revision == "pinned":
+            from .models.policy import load_model_registry
+
+            entry = load_model_registry()[1].get(self.model_id)
+            if entry is None:
+                raise ValueError(f"{self.model_id} is not in configs/models.yaml")
+            self.revision = entry.revision
+        return self
 
 
 class EncoderRef(Strict):

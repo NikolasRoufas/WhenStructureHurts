@@ -1,5 +1,7 @@
 # Pre-GPU readiness gate (2026-10-11)
 
+> **Superseded by [FINAL_SERVER_HANDOFF.md](FINAL_SERVER_HANDOFF.md)** (final audit later on 2026-10-11: batching implemented, GPU models prepared, 156 tests). Kept as a record.
+
 ## Verdict: **READY_WITH_RESTRICTIONS**
 
 The framework is ready for a **small exploratory GPU pilot of Experiment 1 (Protocols A and B) and Experiment 2** on the frozen question set.
@@ -112,7 +114,7 @@ wsh run exp2 --config configs/pilot.yaml
 wsh run exp0 --config configs/pilot.yaml
 # resume after interruption
 wsh run exp1 --config configs/pilot.yaml --resume <results_root>/pilot/exp1/<run_id>
-# larger authorised generator: configs/pilot_gpu.template.yaml + WSH_COMPUTE_AUTHORIZED=1 + --authorized-compute
+# larger authorised generator: configs/gpu_pilot.yaml (stage gpu_pilot) + WSH_COMPUTE_AUTHORIZED=1 + --authorized-compute
 # after annotation: wsh annotations import ... ; then exp3 with verified_annotations=<file>
 ```
 

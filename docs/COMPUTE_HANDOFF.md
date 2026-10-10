@@ -19,7 +19,7 @@
 git clone <repo> when-structure-hurts && cd when-structure-hurts
 python3.11 -m venv .venv && .venv/bin/pip install -e '.[dev]'     # installs CUDA torch per platform
 for d in musique 2wikimultihopqa hotpotqa hover fever; do .venv/bin/wsh data fetch --dataset $d; done
-.venv/bin/python -m pytest -q                                      # must be 133/133 before anything else
+.venv/bin/python -m pytest -q                                      # must be 156/156 before anything else
 scripts/run_smoke.sh                                               # re-run the smoke test on the new hardware
 ```
 
@@ -58,7 +58,7 @@ Without both the env var and the flag, the policy refuses every model above 1B p
 
 ## 6. Items to do before the pilot
 
-Status on 2026-10-11: see PRE_GPU_READINESS.md (133/133 tests; corrected pipeline smoke-tested).
+Status on 2026-10-11: see PRE_GPU_READINESS.md (156/156 tests; corrected pipeline smoke-tested).
 
 - ~~Decide and implement the token-matched mode fix~~ done: Protocols A/B (METHODOLOGICAL_AUDIT F1).
 - **Human audit of derived gold structure** (item 5 above). This is needed to interpret Exp3 C2, since C2 is circular on HotpotQA (audit A3).

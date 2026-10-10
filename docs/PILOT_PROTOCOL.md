@@ -57,7 +57,7 @@ Pilot and full configs refuse to run on an unfrozen sample (`require_frozen_ques
 
 - **Generator:**
   - Default: the policy-compliant `Qwen/Qwen2.5-0.5B-Instruct@7ae55760` (`configs/pilot.yaml`).
-  - A larger generator is possible only with written authorisation, via `configs/pilot_gpu.template.yaml`. It uses the same questions and conditions, and its results are reported per generator, never pooled.
+  - A larger generator is possible only with written authorisation, via `configs/gpu_pilot.yaml` (stage `gpu_pilot`). It uses the same questions and conditions, and its results are reported per generator, never pooled.
 - **Decoding:** greedy, a fixed prompt template (`qa-v2`) identical for every representation, and `max_new_tokens` 64.
 - **Determinism:** seed 0, with deterministic CUDA settings where supported. Generator settings are checked to be identical across the records of a run (`metrics.json → consistency`).
 - **Exp1 representations:**
@@ -148,3 +148,6 @@ The strata are never pooled into "gold". Every contrast involving R3/R4/R4P/R5 i
 | 2026-10-10 | Primary QA metric changed from token F1 to exact match | Investigator instruction during preflight | no (no pilot run exists) |
 | 2026-10-10 | `min_matched` budget mode replaced by Protocols A/B | Audit A1: end truncation confounded structure with information loss | no |
 | 2026-10-10 | Protocol B budgets set to {1.0, 0.5}× content tokens | The smoke run at 0.75× kept about 37% of facts under the shared policy; one point cannot show a trade-off. Chosen on smoke questions only, before any pilot question was used. | no |
+| 2026-10-11 | Reporting addition (secondary): each contrast also reports the estimate restricted to pairs whose evidence differs ("informative pairs") and the paired coverage difference. Primary estimate, metric and contrasts are unchanged. | On the frozen set R5 = R1 byte-identically for 25/100 MuSiQue and 56/100 2Wiki questions, and R4 = R5 for 29/100 2Wiki questions. Pair selection uses inputs only. | no |
+| 2026-10-11 | Engineering: batched generation (`model.batch_size: 8`) | Throughput. Batched = unbatched verified: 30/30 real prompts (CPU fp32) and 16/16 (MPS fp32). Must be re-verified on the server for each GPU model (`wsh preflight --batch-check`); otherwise use batch_size 1. | no |
+| 2026-10-11 | Larger authorised generators run as stage `gpu_pilot` (`configs/gpu_pilot.yaml`) on the same frozen questions and conditions; `full` refuses every pilot question | Separate the exploratory GPU pilot from the confirmatory study | no |
