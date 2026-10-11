@@ -13,20 +13,20 @@ data/raw/*
 !data/raw/MANIFEST.json
 
 # model weights / HF caches (never committed; revisions are pinned in configs/models.yaml)
-models/
-hf_cache/
+/models/
+/hf_cache/
 .cache/
 *.safetensors
 *.bin
 *.gguf
 
 # output/embedding caches
-cache/
+/cache/
 *.sqlite
 *.sqlite-journal
 
 # temporary logs
-logs/
+/logs/
 *.log
 
 # large experiment outputs: per-record predictions stay on disk / archive storage, not in git.
