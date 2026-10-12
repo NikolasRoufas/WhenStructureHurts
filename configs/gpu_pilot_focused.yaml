@@ -1,0 +1,64 @@
+# FOCUSED GPU PILOT (Stage A): configs/gpu_pilot.yaml restricted to the two PRIMARY datasets
+# (MuSiQue 100 + 2WikiMultiHopQA 100 from the same frozen file). Every other setting is
+# identical, so its generations are reused from the shared cache by the 350-question run.
+# GPU PILOT (exploratory) - same frozen questions, conditions, metrics and analysis as
+# configs/pilot.yaml (docs/PILOT_PROTOCOL.md); only the generator differs. Stage `gpu_pilot`:
+#   * larger models allowed ONLY with WSH_COMPUTE_AUTHORIZED=1 AND --authorized-compute;
+#   * results go to results/gpu_pilot/...; reports are labelled exploratory and no contrast is
+#     ever marked confirmatory (confirmatory = stage `full`, which refuses every pilot question).
+# Choose the generator with --set (revision "pinned" = the pin in configs/models.yaml):
+#   --set model.model_id=Qwen/Qwen2.5-7B-Instruct   (default below)
+#   --set model.model_id=Qwen/Qwen2.5-3B-Instruct
+#   --set model.model_id=Qwen/Qwen3.5-9B
+# batch_size 1: on the server (RTX 5000 Ada, CUDA 13.0, bf16) batched greedy outputs differed
+# from unbatched ones (Qwen2.5-7B 5/8 identical, 0.5B 27/30; fp32 30/30, so padding/masks are
+# correct - bf16 kernels are batch-shape dependent). Unbatched bf16 is run-to-run identical.
+# Per docs/PILOT_PROTOCOL.md section 11 the pilot therefore uses batch_size 1
+# (docs/GPU_PREFLIGHT_REPORT.md). Raise it only if `wsh preflight --batch-check` passes.
+stage: gpu_pilot
+name: gpu-pilot-focused-v1
+seed: 0
+datasets:
+  - {name: musique, split: dev, qids_file: configs/question_sets/pilot_v1.json}
+  - {name: 2wikimultihopqa, split: dev, qids_file: configs/question_sets/pilot_v1.json}
+model:
+  model_id: Qwen/Qwen2.5-7B-Instruct
+  revision: pinned
+  device: cuda
+  dtype: bfloat16
+  max_new_tokens: 64
+  max_input_tokens: 4096
+  max_time_s: 60
+  batch_size: 1
+retrieval: {method: bm25, top_k: 4, rerank_pool: 10, corpus_prefilter: 50}
+extraction: {method: llm, on_empty: drop, min_lexical_support: 0.6, max_new_tokens: 96}
+egrag: {token_budget: 450, max_claims: 12, selector: greedy_connected}
+verified_annotations: null   # set to annotations/verified/verification_v1.jsonl once imported
+exp1:
+  representations: [R0, R1, R2, R3, R4, R4P, R5]
+  evidence_source: gold
+  evidence_scope: gold_passages
+  protocols: [A, B]
+  budgets: ["content:1.0", "content:0.5"]   # two points of the accuracy-cost curve
+  selection: [relevance]
+  budget_policies: [shared, per_representation]
+  shuffle_seeds: [0, 1, 2]
+exp2:
+  base_representations: [R1, R4]
+  seeds: [0]
+  perturbations:
+    - {name: P1, rates: [0.0, 0.2, 0.4]}
+    - {name: P2, rates: [0.0, 0.2, 0.4]}
+    - {name: P3, rates: [0.0, 0.2, 0.4]}
+    - {name: P4, rates: [0.0, 0.2, 0.4], params: {mode: hard}}
+    - {name: P5, rates: [0.0, 0.4], params: {mode: strip}}
+    - {name: P6, rates: [0.0, 0.4], params: {op: negation}}
+    - {name: P6, rates: [0.0, 0.4], params: {op: entity}}
+    - {name: P7, rates: [0.0, 0.4]}
+exp3:
+  conditions: [oracle, C1, C2, C3, C4]
+  # Only human-verified structure counts as ground truth for the pilot's Exp3; without an
+  # imported verification file every question is reported unavailable (by design).
+  accepted_statuses: [human_verified]
+  representation: R4
+max_generations: 100000
