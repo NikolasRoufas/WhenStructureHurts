@@ -1,0 +1,50 @@
+# GPU runner check config (generated from configs/smoke.yaml: musique n=2, cuda, bf16, batch_size 1).
+# Smoke test: real benchmark examples, real 0.5B model, tiny matrix. Pipeline validation only.
+stage: smoke
+name: gpu-runner-check
+seed: 0
+datasets:
+  - {name: musique, split: dev, n_examples: 2, sample_seed: 0}
+model:
+  model_id: Qwen/Qwen2.5-0.5B-Instruct
+  revision: 7ae557604adf67be50417f59c2c2f167def9a775
+  device: cuda
+  dtype: bfloat16
+  max_new_tokens: 48
+  max_input_tokens: 3072
+  max_time_s: 60
+  batch_size: 1
+retrieval: {method: bm25, top_k: 4, rerank_pool: 10, corpus_prefilter: 50}
+extraction: {method: llm, on_empty: drop, min_lexical_support: 0.6, max_new_tokens: 96}
+egrag: {token_budget: 450, max_claims: 12, selector: greedy_connected}
+grounding: {enabled: true}
+exp0: {systems: [B0, B1, B2, B3, B4]}
+exp1:
+  representations: [R0, R1, R2, R3, R4, R4P, R5]
+  evidence_source: gold
+  evidence_scope: gold_passages
+  protocols: [A, B]               # A information-controlled, B budget-controlled (never pooled)
+  budgets: ["content:0.75"]       # Protocol B budget: 0.75 x content tokens of the full fact set
+  selection: [relevance]          # gold-free fact ranking
+  budget_policies: [shared]
+  shuffle_seeds: [0]
+exp2:
+  base_representations: [R1, R4]
+  seeds: [0]
+  temporal_spec_path: null      # no verified temporal data exists -> P7 reported unavailable
+  perturbations:
+    - {name: P1, rates: [0.0, 0.4]}
+    - {name: P2, rates: [0.0, 0.4]}
+    - {name: P3, rates: [0.0, 0.4]}
+    - {name: P4, rates: [0.0, 0.4], params: {mode: hard}}
+    - {name: P5, rates: [0.0, 0.4], params: {mode: strip}}
+    - {name: P6, rates: [0.0, 0.4], params: {op: negation}}
+    - {name: P6, rates: [0.0, 0.4], params: {op: temporal}}
+    - {name: P7, rates: [0.0, 0.4]}
+exp3:
+  conditions: [oracle, C1, C2, C3, C4]
+  accepted_statuses: [dataset_supplied, deterministic_derived, human_verified]
+  representation: R4
+exp4: {enabled: false}
+max_generations: 1500
+max_wall_clock_s: 5400

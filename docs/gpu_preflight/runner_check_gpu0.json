@@ -1,0 +1,112 @@
+{
+ "A": {
+  "dir": "20261012-092831_6ecfceb1",
+  "status": "completed",
+  "n_records": 28,
+  "n_unique_keys": 28,
+  "n_generated": 22,
+  "n_cached": 6,
+  "n_errors": 0,
+  "batch_sizes_used": [
+   1
+  ],
+  "decoding_batch_size": [
+   "1"
+  ],
+  "device": [
+   "cuda"
+  ],
+  "manifest_keys": [
+   "config_hash",
+   "determinism",
+   "device",
+   "environment",
+   "generation_batch_size",
+   "generator_stats",
+   "n_records_unflushed"
+  ]
+ },
+ "C": {
+  "dir": "20261012-092846_6ecfceb1",
+  "status": "completed",
+  "n_records": 28,
+  "n_unique_keys": 28,
+  "n_generated": 0,
+  "n_cached": 28,
+  "n_errors": 0,
+  "batch_sizes_used": [
+   1
+  ],
+  "decoding_batch_size": [
+   "1"
+  ],
+  "device": [
+   "cuda"
+  ],
+  "manifest_keys": [
+   "config_hash",
+   "determinism",
+   "device",
+   "environment",
+   "generation_batch_size",
+   "generator_stats",
+   "n_records_unflushed"
+  ]
+ },
+ "D": {
+  "dir": "20261012-092852_582ad7ac",
+  "status": "completed",
+  "n_records": 28,
+  "n_unique_keys": 28,
+  "n_generated": 22,
+  "n_cached": 6,
+  "n_errors": 0,
+  "batch_sizes_used": [
+   1,
+   4
+  ],
+  "decoding_batch_size": [
+   "4"
+  ],
+  "device": [
+   "cuda"
+  ],
+  "manifest_keys": [
+   "config_hash",
+   "determinism",
+   "device",
+   "environment",
+   "generation_batch_size",
+   "generator_stats",
+   "n_records_unflushed"
+  ]
+ },
+ "A_vs_C_same_keys": true,
+ "A_vs_C_identical_texts": 28,
+ "A_vs_D_identical_texts": 20,
+ "mapping_ok": true,
+ "manifest_A": {
+  "status": "completed",
+  "git_commit": "011e38d453c8fa1431370fe28347056e6226f786",
+  "device": "cuda",
+  "generation_batch_size": 1,
+  "n_records_written": 4,
+  "n_records_skipped_already_done": 24,
+  "n_records_unflushed": 0,
+  "determinism": {
+   "torch_manual_seed": 0,
+   "cudnn_deterministic": true,
+   "deterministic_algorithms": "warn_only",
+   "CUBLAS_WORKSPACE_CONFIG": ":4096:8"
+  },
+  "generator_stats": {
+   "n_batches": 2,
+   "n_batched_prompts": 2,
+   "n_oom_splits": 0,
+   "n_oom_failures": 0,
+   "peak_gpu_mem_bytes": 2276634624,
+   "n_dedup_in_batch": 0,
+   "gpu_mem_reserved_bytes": 2386558976
+  }
+ }
+}

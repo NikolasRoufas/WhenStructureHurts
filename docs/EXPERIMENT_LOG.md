@@ -211,3 +211,18 @@ Reports for the three runs were regenerated with `wsh report` after the run, fro
 - Maximum evidence length: 1,603 tokens (Qwen2.5 tokenizer).
 
 **Tests:** 156 passed, 1 skipped (opt-in real-model test; run separately: 30/30).
+
+## 9. GPU preflight on interstellar (2026-10-12)
+
+Bounded and authorised: Qwen2.5-7B-Instruct (cached), only smoke questions (≤2 per GPU), ≤64 new tokens, no pilot question generated on. Full details are in `docs/GPU_PREFLIGHT_REPORT.md`; the raw measurements are in `docs/gpu_preflight/`.
+
+- **Server:** 2 × RTX 5000 Ada (32 GB). GPU 1 is the administrator's shared Ollama GPU (MPS, Exclusive_Process), so only GPU 0 is usable. The first measurements went through MPS to GPU 1 by accident; they were redone on GPU 0 with identical outputs.
+- **Tests:** 158 passed, 1 skipped (server and local). The opt-in real-model check fails on CUDA bf16 (27/30); this is a finding, and the test is unchanged.
+- **Batching:** fp32 batched = unbatched 30/30. In bf16, 7B gave 5/8 and 0.5B 27/30, with changed answers. Unbatched bf16 is deterministic. `gpu_pilot.yaml` now uses batch_size 1 (PILOT_PROTOCOL §11).
+- **7B on GPU 0, batch size 1:** 2.9–3.0 prompts/s, 34–36 output tok/s, prefill about 0.12 ms per token, decode about 23 ms per token; peak 15.4 GB allocated and 17.6 GB reserved; 85 % mean utilisation; 207 W peak.
+- **Runner on GPU 0:** cap stop and resume lost or duplicated nothing (28/28 unique records); the cached rerun was byte-identical; the batch-size-4 run got 0 cache hits from batch-size-1 entries.
+- **Fixes:**
+  - `7f61ac3`: the execution caps are no longer hashed, so a capped run can resume with a raised cap.
+  - `011e38d`: manifests record the PCI bus and MPS state, and preflight refuses MPS routing.
+- **Estimates (one GPU):** about 6–16 GPU-hours for Exp0–2 on the 350-question set, and about 3.5–9 GPU-hours for the 200-question variant.
+

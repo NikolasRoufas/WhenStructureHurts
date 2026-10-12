@@ -1,0 +1,174 @@
+{
+ "dataset": "musique",
+ "questions": [
+  "musique/2hop__219456_87295",
+  "musique/2hop__802991_443552"
+ ],
+ "n_prompts": 8,
+ "max_new_tokens": 64,
+ "gpu": "NVIDIA RTX 5000 Ada Generation",
+ "cuda_visible_devices": "0",
+ "load_s": 2.9,
+ "param_devices": [
+  "cuda:0"
+ ],
+ "param_dtypes": [
+  "torch.bfloat16"
+ ],
+ "n_params": 7615616512,
+ "mem_after_load": {
+  "n_batches": 0,
+  "n_batched_prompts": 0,
+  "n_oom_splits": 0,
+  "n_oom_failures": 0,
+  "peak_gpu_mem_bytes": 15275798528,
+  "n_dedup_in_batch": 0,
+  "gpu_mem_reserved_bytes": 17593008128
+ },
+ "prefill": [
+  {
+   "input_tokens": 364,
+   "prefill_s": 0.1926
+  },
+  {
+   "input_tokens": 422,
+   "prefill_s": 0.0496
+  },
+  {
+   "input_tokens": 422,
+   "prefill_s": 0.0535
+  },
+  {
+   "input_tokens": 433,
+   "prefill_s": 0.0535
+  },
+  {
+   "input_tokens": 398,
+   "prefill_s": 0.0528
+  },
+  {
+   "input_tokens": 505,
+   "prefill_s": 0.0556
+  },
+  {
+   "input_tokens": 505,
+   "prefill_s": 0.0561
+  },
+  {
+   "input_tokens": 516,
+   "prefill_s": 0.0634
+  }
+ ],
+ "unbatched_run1": {
+  "wall_s": 2.736,
+  "output_tokens": 94,
+  "input_tokens": 3565,
+  "tok_per_s": 34.36,
+  "prompts_per_s": 2.924,
+  "peak_alloc_gb": 15.41,
+  "peak_reserved_gb": 17.64,
+  "errors": 0,
+  "finish": [
+   "eos"
+  ]
+ },
+ "unbatched_run2": {
+  "wall_s": 2.637,
+  "output_tokens": 94,
+  "input_tokens": 3565,
+  "tok_per_s": 35.64,
+  "prompts_per_s": 3.033,
+  "peak_alloc_gb": 15.41,
+  "peak_reserved_gb": 17.64,
+  "errors": 0,
+  "finish": [
+   "eos"
+  ]
+ },
+ "batched": {
+  "wall_s": 0.826,
+  "output_tokens": 93,
+  "input_tokens": 3565,
+  "tok_per_s": 112.54,
+  "prompts_per_s": 9.681,
+  "peak_alloc_gb": 16.04,
+  "peak_reserved_gb": 17.64,
+  "errors": 0,
+  "finish": [
+   "eos"
+  ],
+  "batch_size": 8
+ },
+ "unbatched_run_to_run_identical": 8,
+ "batched_vs_unbatched_identical": 5,
+ "mapping_check": true,
+ "outputs": [
+  {
+   "uid": "musique/2hop__219456_87295",
+   "rep": "R0",
+   "unbatched": "Answer: Mia Thermopolis\nEvidence: E1",
+   "batched": "Answer: Mia Thermopolis\nEvidence: E1",
+   "in": 364,
+   "out": 10
+  },
+  {
+   "uid": "musique/2hop__219456_87295",
+   "rep": "R1",
+   "unbatched": "Answer: Mia Thermopolis\nEvidence: E2",
+   "batched": "Answer: Mia Thermopolis\nEvidence: E2",
+   "in": 422,
+   "out": 10
+  },
+  {
+   "uid": "musique/2hop__219456_87295",
+   "rep": "R5",
+   "unbatched": "Answer: Mia Thermopolis\nEvidence: E4, E5",
+   "batched": "Answer: Mia Thermopolis\nEvidence: E4, E5",
+   "in": 422,
+   "out": 13
+  },
+  {
+   "uid": "musique/2hop__219456_87295",
+   "rep": "R4",
+   "unbatched": "Answer: Mia Thermopolis\nEvidence: E4, E5",
+   "batched": "Answer: Mia Thermopolis\nEvidence: E4, E5",
+   "in": 433,
+   "out": 13
+  },
+  {
+   "uid": "musique/2hop__802991_443552",
+   "rep": "R0",
+   "unbatched": "Answer: Hayneville\nEvidence: [E1], [E2]",
+   "batched": "Answer: Hayneville\nEvidence: E1, E2",
+   "in": 398,
+   "out": 15
+  },
+  {
+   "uid": "musique/2hop__802991_443552",
+   "rep": "R1",
+   "unbatched": "Answer: insufficient evidence\nEvidence: E5, E7",
+   "batched": "Answer: Hayneville\nEvidence: E5, E7",
+   "in": 505,
+   "out": 11
+  },
+  {
+   "uid": "musique/2hop__802991_443552",
+   "rep": "R5",
+   "unbatched": "Answer: insufficient evidence\nEvidence: E5, E7",
+   "batched": "Answer: Hayneville\nEvidence: E5, E7",
+   "in": 505,
+   "out": 11
+  },
+  {
+   "uid": "musique/2hop__802991_443552",
+   "rep": "R4",
+   "unbatched": "Answer: insufficient evidence\nEvidence: E1, E2",
+   "batched": "Answer: insufficient evidence\nEvidence: E1, E2",
+   "in": 516,
+   "out": 11
+  }
+ ],
+ "cpu_s": 12.9,
+ "max_rss_gb": 5.64,
+ "total_s": 9.8
+}

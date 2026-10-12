@@ -52,6 +52,11 @@ All models load with `local_files_only=True` at the pinned revision; the paramet
 
 ## 5. CUDA verification
 
+> **interstellar (measured 2026-10-12):** an NVIDIA MPS daemon serves GPU 1 (shared Ollama GPU) and by default
+> captures every CUDA process. Use GPU 0 directly with `export CUDA_MPS_PIPE_DIRECTORY=/data/roufas/wsh_preflight/no_mps
+> CUDA_DEVICE_ORDER=PCI_BUS_ID CUDA_VISIBLE_DEVICES=0`; `wsh preflight` fails its device check otherwise
+> (override `WSH_ALLOW_MPS=1`). Keep everything on `/data` (the root disk is 98 % full). See docs/GPU_PREFLIGHT_REPORT.md.
+
 ```bash
 nvidia-smi
 python - <<'EOF'
@@ -136,7 +141,7 @@ wsh run exp3 --config configs/pilot.yaml --set verified_annotations=annotations/
 
   The run continues only if the config hash matches. Machine paths are excluded from the hash, so a run can move between mounts. Completed records are skipped.
 - Generation, NLI, reranker and embedding outputs are cached in SQLite (`WSH_CACHE_PATH`), keyed by model, revision, full prompt, decoding settings, device and dtype. A resumed or repeated run never regenerates an identical prompt, and never reuses CPU outputs on a GPU.
-- Hard caps: `max_generations` and `max_wall_clock_s` per run. When a cap is hit the run stops cleanly with status `stopped: …`; resume it with a raised cap only if you authorise that.
+- Hard caps: `max_generations` and `max_wall_clock_s` per run. When a cap is hit the run stops cleanly with status `stopped: …`; resume it with a raised cap only if you authorise that (`--resume <run_dir> --set max_generations=<n>`; the caps are not part of the config hash, so this is accepted).
 - Reports are recomputable at any time: `wsh report <run_dir>`.
 - Use one cache file per machine. SQLite on network filesystems with concurrent writers is not supported, so run experiments sequentially or give each concurrent job its own `WSH_CACHE_PATH`.
 
