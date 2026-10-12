@@ -1,6 +1,7 @@
 \begin{table*}[t]
 \centering
 \footnotesize
+\begin{adjustbox}{max width=\linewidth}
 \begin{tabular}{@{}llrrlrrrrrrl@{}}
 \toprule
 Data & Contrast & $n$ & $\Delta$EM & 95\% CI & $p$ & $p_{\text{Holm}}$ & +/$-$ & Ident. & Inform. $\Delta$ & $\Delta$Cov. & Equiv. \\
@@ -13,6 +14,7 @@ MuSiQue & R4$-$R5 & 1744 & +0.010 & [-0.003, +0.024] & 0.117 & 0.535 & 75/57 & 0
 2Wiki & R4$-$R5 & 3232 & +0.006 & [-0.002, +0.015] & 0.174 & 0.535 & 103/84 & 879 & +0.008 & -0.011 & yes \\
 \bottomrule
 \end{tabular}
+\end{adjustbox}
 \caption{Confirmatory test of the six pre-specified primary contrasts (Protocol~A, EM, disjoint sample; \texttt{docs/CONFIRMATORY\_PROTOCOL.md}). $p$: two-sided paired bootstrap; $p_{\text{Holm}}$: Holm-adjusted over the six tests. Equiv.: 90\% CI inside $\pm0.02$ (pre-specified secondary check). Source: \texttt{F\_exp1\_contrasts.csv}.}
 \label{tab:confirmatory}
 \end{table*}

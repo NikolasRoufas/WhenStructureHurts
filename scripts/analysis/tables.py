@@ -37,11 +37,11 @@ def ci(x, nd=2):
 
 def emit(name, header, body, caption, label, colspec, star=False, size="\\small", csv_rows=None):
     env = "table*" if star else "table"
-    tex = [f"\\begin{{{env}}}[t]", "\\centering", size, f"\\begin{{tabular}}{{{colspec}}}", "\\toprule",
-           " & ".join(header) + " \\\\", "\\midrule"]
+    tex = [f"\\begin{{{env}}}[t]", "\\centering", size, "\\begin{adjustbox}{max width=\\linewidth}",
+           f"\\begin{{tabular}}{{{colspec}}}", "\\toprule", " & ".join(header) + " \\\\", "\\midrule"]
     for r in body:
         tex.append("\\midrule" if r == "MID" else " & ".join(r) + " \\\\")
-    tex += ["\\bottomrule", "\\end{tabular}", f"\\caption{{{caption}}}", f"\\label{{{label}}}", f"\\end{{{env}}}"]
+    tex += ["\\bottomrule", "\\end{tabular}", "\\end{adjustbox}", f"\\caption{{{caption}}}", f"\\label{{{label}}}", f"\\end{{{env}}}"]
     (OUT / f"{name}.tex").write_text("\n".join(tex) + "\n")
     with open(OUT / f"{name}.csv", "w", newline="") as f:
         w = csv.writer(f)
@@ -187,7 +187,7 @@ if conf:
                      ci(r["ci"], 3), r["n_identical_evidence"], num(r["coverage_delta"], 3, sign=True)])
     emit("tab_confirm_secondary", ["Data", "Contrast", "$n$", "$\\Delta$EM", "95\\% CI", "Ident.", "$\\Delta$Cov."], body,
          "Secondary contrasts on the confirmatory sample (pre-specified as secondary; not part of the tested family, so "
-         "descriptive). Source: \\texttt{F\\_exp1\\_contrasts.csv}.", "tab:confirm-secondary", "@{}llrrlrr@{}")
+         "descriptive). Source: \\texttt{F\\_exp1\\_contrasts.csv}.", "tab:confirm-secondary", "@{}llrrlrr@{}", star=True)
     body = []
     for (ds, con), r in sorted(dec.items()):
         if con not in ("R1-R0", "R5-R1", "R4-R5", "R4P-R4"):
@@ -196,17 +196,27 @@ if conf:
                      num(r["contrib_both_answered"], 3, sign=True),
                      f"{num(float(r['contrib_only_b_answered']) + float(r['contrib_only_a_answered']), 3, sign=True)}",
                      f"{r['n_only_a_answered']}/{r['n_only_b_answered']}", r["n_neither_answered"]])
+    full_body = body
+    body = [r for r in full_body if r != "MID" and r[1] in ("R1$-$R0", "R4P$-$R4")]
+    emit("tab_decomposition_main", ["Data", "Contrast", "$\\Delta$EM", "both", "one abst.", "abst.\\ 1st/2nd"],
+         [r[:5] + [r[5]] for r in body],
+         "Exploratory decomposition (added after the confirmatory result) of paired EM differences on the confirmatory sample "
+         "into the contribution of questions answered under both representations (\\emph{both}) and under only one "
+         "(\\emph{one abst.}); the last column counts questions where only the first- / only the second-named "
+         "representation abstained. Full table: Appendix~\\ref{app:tables}.", "tab:decomposition-main", "@{}llrrrr@{}",
+         size="\\footnotesize")
+    body = full_body
     emit("tab_decomposition", ["Data", "Contrast", "$\\Delta$EM", "both ans.", "one abstains", "abst.\\ only first / only second",
                                "neither"], body,
          "Exploratory decomposition of each paired EM difference on the confirmatory sample (added after the confirmatory "
          "result). \\emph{both ans.}: contribution of questions answered under both representations; \\emph{one abstains}: "
          "contribution of questions answered under only one. The columns sum to $\\Delta$EM. Source: "
-         "\\texttt{F\\_exp1\\_decomposition\\_exploratory.csv}.", "tab:decomposition", "@{}llrrrrr@{}", size="\\footnotesize")
+         "\\texttt{F\\_exp1\\_decomposition\\_exploratory.csv}.", "tab:decomposition", "@{}llrrrrr@{}", size="\\footnotesize", star=True)
     pr = rows("F_exp1_r4p_relations_exploratory_paired.csv")
     body = [[DSN[r["dataset"]], "yes" if "has" in r["subset"] else "no", r["n_questions"], num(r["abstention_R4"]),
              num(r["abstention_R4P"]), num(r["em_R4"]), num(r["em_R4P"])] for r in pr]
     emit("tab_r4p_contradictions", ["Data", "R4P shows CONTRADICTS", "$n$", "Abst.\\ R4", "Abst.\\ R4P", "EM R4", "EM R4P"], body,
          "Exploratory: the same questions under derived relations (R4) and predicted relations (R4P), split by whether "
          "the predicted block contains at least one \\texttt{CONTRADICTS} line (an input property). Source: "
-         "\\texttt{F\\_exp1\\_r4p\\_relations\\_exploratory\\_paired.csv}.", "tab:r4p", "@{}lcrrrrr@{}", size="\\footnotesize")
+         "\\texttt{F\\_exp1\\_r4p\\_relations\\_exploratory\\_paired.csv}.", "tab:r4p", "@{}lcrrrrr@{}", size="\\footnotesize", star=True)
 print("extra tables written")

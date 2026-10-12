@@ -36,29 +36,37 @@ The following renderings are produced by the experiment code for a MuSiQue devel
 \paragraph{R0 (passages).}
 \begin{footnotesize}
 \begin{verbatim}
-[E1] (source: The Princess Diaries (film)) The Princess
-Diaries is a 2001 American teen romantic comedy ...
-It stars Anne Hathaway ... ruled by her grandmother
-Queen dowager Clarisse Renaldi (Julie Andrews). ...
-[E2] (source: On Golden Pond (2001 film)) On Golden Pond
-is a 2001 American television adaptation of the play
-starring Julie Andrews and Christopher Plummer. ...
+[E1] (source: The Princess Diaries
+(film)) The Princess Diaries is a 2001
+American teen romantic comedy ... It
+stars Anne Hathaway ... ruled by her
+grandmother Queen dowager Clarisse
+Renaldi (Julie Andrews). ...
+[E2] (source: On Golden Pond (2001
+film)) On Golden Pond is a 2001
+American television adaptation of the
+play starring Julie Andrews and
+Christopher Plummer. ...
 \end{verbatim}
 \end{footnotesize}
 
 \paragraph{R1 (sentences, dataset order).}
 \begin{footnotesize}
 \begin{verbatim}
-[E1] (source: The Princess Diaries (film)) The Princess
-Diaries is a 2001 American teen romantic comedy ...
-[E2] (source: The Princess Diaries (film)) It stars
-Anne Hathaway ... Queen dowager Clarisse Renaldi
-(Julie Andrews).
-[E3] (source: The Princess Diaries (film)) The film
-also stars Heather Matarazzo, ...
-[E4] (source: On Golden Pond (2001 film)) On Golden Pond
-is a 2001 American television adaptation of the play
-starring Julie Andrews and Christopher Plummer.
+[E1] (source: The Princess Diaries
+(film)) The Princess Diaries is a 2001
+American teen romantic comedy ...
+[E2] (source: The Princess Diaries
+(film)) It stars Anne Hathaway ...
+Queen dowager Clarisse Renaldi (Julie
+Andrews).
+[E3] (source: The Princess Diaries
+(film)) The film also stars ...
+[E4] (source: On Golden Pond (2001
+film)) On Golden Pond is a 2001
+American television adaptation of the
+play starring Julie Andrews and
+Christopher Plummer.
 [E5] ... [E6] ...
 \end{verbatim}
 \end{footnotesize}
@@ -112,3 +120,48 @@ Every changed item is recorded before and after. P1 and P6 can remove the answer
 \item P7 everywhere, since no verified temporal data exist.
 \end{itemize}
 These cases are counted and never scored as zero.
+
+\section{Details of the exploratory pilot results}
+\label{app:pilot}
+
+\paragraph{Evidence loss under a token budget (pilot).}
+
+Protocol~B was run only in the exploratory pilot (Figure~\ref{fig:budget} and Table~\ref{tab:budget}, Appendix~\ref{app:tables}). Its accounting of what each condition showed is deterministic and does not depend on the generator. Under a budget equal to the content tokens of the fact set, with each representation keeping as much of the shared ranking as it can afford, R0 keeps 0.83 (2WikiMultiHopQA) and 0.81 (MuSiQue) of the facts, whereas R1 keeps 0.64 and 0.65 and R4 keeps 0.63 and 0.62, because their identifiers, titles and relation lines cost 104--108 (2Wiki) and 81--88 (MuSiQue) tokens of overhead against 28 and 32 for R0. The verbose formats also lose the facts that matter: R0 drops 0.11 answer-bearing facts per question on 2WikiMultiHopQA against 0.33 for R1 and 0.34 for R4 (MuSiQue: 0.19, 0.28 and 0.35), so that the answer string remains in 0.85 of R0 blocks but only 0.66 of R1 and 0.64 of R4 blocks. The corresponding accuracy differences are smaller than these evidence losses and inconclusive at $n=100$. For example, R1$-$R0 is $-0.05$ $[-0.11, +0.01]$ on 2WikiMultiHopQA, and R4$-$R5 is $-0.05$ $[-0.11, +0.01]$ on MuSiQue. Under the shared policy, every representation shows the same facts and pays the same evidence loss. Halving the budget reduces exact match for every representation to 0.08--0.19.
+
+
+
+\paragraph{Retrieved-evidence baselines (pilot).}
+
+Table~\ref{tab:exp0} (Appendix~\ref{app:tables}) reports Experiment~0 on the 200 primary pilot questions. Reranking (B1) improves on BM25 (B0) on MuSiQue by $+0.06$ $[0.00, +0.12]$, and the 2WikiMultiHopQA difference is inconclusive. Extracted claims (B2) and predicted reasoning paths (B3) are indistinguishable from reranked passages in exact match; the extracted claims keep the answer string as often as the passages they come from (0.78 and 0.44), but at roughly three times the evidence tokens (1{,}390--1{,}711 against 501--538), because every passage sentence becomes several facts. Our reconstruction of EG-RAG (B4) uses a similar number of tokens to B1 (442--489 against 501--538) but is less accurate, by $-0.15$ $[-0.23, -0.07]$ on 2WikiMultiHopQA and $-0.09$ $[-0.15, -0.04]$ on MuSiQue: its budgeted selection keeps the answer string less often (0.56 against 0.78; 0.31 against 0.44), and coverage falls by 0.29 and 0.15.
+
+
+\paragraph{Controlled perturbations (pilot).}
+
+Table~\ref{tab:exp2} and Figure~\ref{fig:perturb} (Appendix~\ref{app:tables}) summarise Experiment~2. These comparisons are many (roughly fifty cells), and we expect a few intervals to exclude zero by chance; we report the patterns that recur across datasets or representations. When required facts are removed (P1), the model mostly abstains rather than guessing: abstention rises from 0.43 to 0.72 on MuSiQue (R1) and from 0.24 to 0.48 on 2WikiMultiHopQA. Hard distractors (P4) reduce exact match in every QA cell, by up to 0.16 (HotpotQA R1, $[-0.28, -0.04]$) and by 0.09 on MuSiQue R1 ($[-0.17, -0.01]$), and raise abstention on MuSiQue. Retyping or flipping 40\% of the derived relations (P2, R4 only) lowers 2WikiMultiHopQA exact match by 0.10 $[-0.18, -0.01]$ on the 71 questions that have relations, and is inconclusive on MuSiQue and HotpotQA. Reordering (P3) and stripping source titles (P5) produce small effects of inconsistent sign, and HoVer and FEVER verdicts are almost unaffected by any intervention.
+
+
+
+\section{Additional results}
+\label{app:tables}
+
+Table~\ref{tab:absolute} gives the absolute scores of every representation under Protocol~A in the expanded pilot, Table~\ref{tab:budget} the full information accounting under Protocols~A and~B, Table~\ref{tab:exp0} the retrieved-evidence baselines, and Table~\ref{tab:exp2} and Figure~\ref{fig:perturb} the perturbation experiment. Table~\ref{tab:confirm-secondary} lists the secondary contrasts on the confirmatory sample and Table~\ref{tab:r4p} the analysis of predicted contradiction lines; the remaining tables and figures are exploratory pilot results.
+
+\input{tables/tab_confirm_secondary}
+\input{tables/tab_decomposition}
+\input{tables/tab_r4p_contradictions}
+\input{tables/tab_absolute_A}
+\input{tables/tab_budget}
+\input{tables/tab_exp0}
+\input{tables/tab_exp2}
+\begin{figure*}[t]
+\centering
+\includegraphics[width=0.8\textwidth]{figures/fig4_perturbation_sensitivity.pdf}
+\caption{Exploratory pilot: change in exact match under label-preserving perturbations, relative to the same question unperturbed (95\% CIs). P1 and P6 can remove the answer and are reported in Table~\ref{tab:exp2} only.}
+\label{fig:perturb}
+\end{figure*}
+\begin{figure*}[t]
+\centering
+\includegraphics[width=0.85\textwidth]{figures/fig3_accuracy_vs_tokens.pdf}
+\caption{Exploratory pilot: exact match against the mean number of evidence tokens shown, for Protocol~A (natural length) and Protocol~B (budget $1.0\times$ or $0.5\times$ the content tokens; shared or per-representation policy).}
+\label{fig:budget}
+\end{figure*}

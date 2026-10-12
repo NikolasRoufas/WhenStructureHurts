@@ -1,48 +1,27 @@
 \section{Problem Formulation}
 \label{sec:problem}
 
-We separate two things that structured evidence pipelines usually change at the same time: \emph{which facts} reach the answerer, and \emph{how} those facts are arranged and annotated. A transformation can lose a fact (an extractor omits it, a budget cuts it), and it can add information that is not a fact of the source text (an order, a grouping into steps, an explicit relation between two facts). We want to measure the two separately.
+Structured evidence pipelines usually change two things at once: \emph{which facts} reach the answerer, and \emph{how} those facts are arranged and annotated. A transformation can lose a fact (an extractor omits it, a budget cuts it), and it can add information that is not a fact of the source text (an order, a grouping into steps, a relation between two facts). We measure the two separately.
 
-\paragraph{Source evidence and facts.}
-For a question $q$ with gold answer set $A_q$ we start from a fixed set of source passages $P_q=\{p_1,\dots,p_m\}$; in our controlled experiments these are the gold supporting passages of the dataset. Segmenting every passage into sentences gives the fact set
-\begin{equation}
-F_q=\{f_1,\dots,f_n\},\qquad f_j=(\mathrm{id}_j,\ \mathrm{text}_j),
-\end{equation}
-where each fact keeps the identifier of its source span. In Experiment~1 a fact is a sentence of a gold passage, not a model-generated paraphrase, so the fact set contains no extraction error by construction. Model-based claim extraction, and its errors, enter only through the retrieved-evidence systems of Experiment~0.
-
-\paragraph{Representations.}
-A representation $\rho$ maps the facts, optionally together with structure $S_q$ derived from dataset annotations or predicted by a model, to an evidence block,
+\paragraph{Facts and representations.}
+For a question $q$ with gold answers $A_q$ we start from a fixed set of source passages; in our controlled experiments these are the dataset's gold supporting passages. Segmenting them into sentences gives the fact set $F_q=\{f_1,\dots,f_n\}$, where each fact keeps the identifier of its source span. Because facts are sentences of the gold passages, not model-generated paraphrases, $F_q$ contains no extraction error; model-based extraction enters only through the retrieved-evidence systems of Experiment~0. A representation $\rho$ maps the facts, optionally with structure $S_q$ derived from annotations or predicted by a model, to an evidence block
 \begin{equation}
 E_q^{\rho}=\mathrm{render}_\rho\big(\pi_\rho(F_q),\,S_q\big),
 \end{equation}
-where $\pi_\rho$ orders and groups the facts and $\mathrm{render}_\rho$ serialises them, possibly with an explicit list of relations. We call $\mathrm{facts}(E_q^{\rho})$ the facts that appear in the block, and $\mathrm{added}(\rho)$ the information that the block carries beyond the facts: an order, a grouping into reasoning steps, or relation lines. The seven representations of this study are listed in Table~\ref{tab:reps}.
+where $\pi_\rho$ orders and groups the facts and $\mathrm{render}_\rho$ serialises them, possibly with a list of relations. We write $\mathrm{facts}(E)$ for the facts that appear in a block, and $\mathrm{added}(\rho)$ for the information that the block carries beyond them: an order, a grouping into steps, or relation lines. A fixed answerer $M$ with one prompt template $\tau$, identical for every representation, produces $\hat a=M(\tau(q,E_q^{\rho}))$ with greedy decoding.
 
-\paragraph{Answerer.}
-A fixed answerer $M$ produces $\hat a=M(\tau(q,E_q^{\rho}))$, where $\tau$ is one prompt template, identical for every representation and differing only in the evidence block. We use greedy decoding and a fixed generator, so differences between representations of the same question are attributable to the evidence block (and to numerical effects of the prompt length, which we discuss in \S\ref{sec:setup}).
+\paragraph{Protocol A: information-controlled.}
+Protocol A compares representations whose fact sets are identical, $\mathrm{facts}(E_q^{\rho})=F_q$ for every $\rho$, which we verify per question by comparing identifiers and text digests. Under this constraint an accuracy difference cannot come from a missing fact; it can still come from $\mathrm{added}(\rho)$, which we record per record, and from formatting tokens. We record the content tokens $c_q=\sum_j |\mathrm{text}_j|$ and the overhead $o_q^{\rho}=|E_q^{\rho}|-c_q$ separately.
 
-\paragraph{Information-controlled comparison (Protocol A).}
-Protocol A compares representations whose fact sets are identical,
-\begin{equation}
-\mathrm{facts}(E_q^{\rho})=\mathrm{facts}(E_q^{\rho'})=F_q\quad\forall\,\rho,\rho',
-\end{equation}
-which we verify per question by comparing identifiers and text digests; a violation is a pipeline error. Under this constraint, a difference in accuracy between $\rho$ and $\rho'$ cannot come from a missing fact. It can still come from $\mathrm{added}(\rho)$, which is why we report it per record, and from the extra tokens a representation spends on formatting. We record the content tokens $c_q=\sum_j |\mathrm{text}_j|$ and the overhead $o_q^{\rho}=|E_q^{\rho}|-c_q$ separately.
-
-\paragraph{Budget-controlled comparison (Protocol B).}
-Under a token budget $B_q=\beta\, c_q$ a representation can show only part of $F_q$. We rank the facts once, independently of the representation and without gold labels (BM25 against the question), and keep the longest ranking prefix $F_q^{\le k}$ whose rendering fits:
+\paragraph{Protocol B: budget-controlled.}
+Under a budget $B_q=\beta\, c_q$ we rank the facts once, with BM25 against the question, independently of the representation and without gold labels, and each condition keeps the longest prefix of the ranking whose rendering fits,
 \begin{equation}
 k_\rho=\max\{k:\ |\mathrm{render}_\rho(\pi_\rho(F_q^{\le k}),S_q)|\le B_q\}.
 \end{equation}
-Under the \emph{per-representation} policy each representation keeps its own $k_\rho$, so a verbose format keeps fewer facts; under the \emph{shared} policy every representation keeps $k=\min_\rho k_\rho$, so all show the same facts. Facts are never cut mid-sentence. For every dropped fact we record whether it is a gold supporting fact and whether it contains the answer string.
+Under the \emph{per-representation} policy each representation keeps its own $k_\rho$, so verbose formats keep fewer facts; under the \emph{shared} policy all keep $\min_\rho k_\rho$ and show the same facts. Facts are never cut mid-sentence. For every dropped fact we record whether it is a gold supporting fact and whether it contains the answer string; this is our measure of information loss.
 
-\paragraph{Information loss.}
-We call a representation \emph{information-preserving} for $q$ if every gold supporting fact of $F_q$ is in $\mathrm{facts}(E_q^{\rho})$. Under Protocol B we report the number of gold supporting facts dropped and the number of answer-bearing facts dropped per question; the lexical proxy $\mathrm{suff}(E)$ is $1$ when the gold support, the answer string and the annotated intermediate answers are all present in the block.
-
-\paragraph{Perturbation validity.}
-An intervention $\delta$ maps an evidence block to a corrupted one, $E\mapsto\delta(E)$. It is \emph{label-preserving} if $A_q$ remains a correct answer given $\delta(E)$; deleting a required fact or corrupting an entity in it is not label-preserving, whereas reordering facts or relabelling a relation is. Some interventions could introduce the answer through a distractor; we record this as \emph{answer introduced}. We estimate accuracy changes only on records that are label-preserving and do not introduce the answer, and report the remaining records separately.
-
-\paragraph{Objective.}
-For a contrast between representations $\rho$ and $\rho'$ we estimate the paired difference in question-level exact match,
+\paragraph{Perturbation validity and objective.}
+An intervention $\delta$ maps an evidence block $E$ to a corrupted block $\delta(E)$. It is \emph{label-preserving} if $A_q$ remains correct given $\delta(E)$. Reordering facts or relabelling a relation is label-preserving; deleting a required fact is not. Accuracy changes are estimated only on label-preserving records that do not introduce the answer through a distractor. For a contrast between $\rho$ and $\rho'$ we estimate the paired difference in question-level exact match over the questions $Q$ available in both conditions, with unanswered questions scored as incorrect:
 \begin{equation}
-\Delta_{\rho'\!-\!\rho}=\frac{1}{|Q|}\sum_{q\in Q}\big(\mathrm{EM}(q,\rho')-\mathrm{EM}(q,\rho)\big),
+\Delta_{\rho'\!-\!\rho}=\tfrac{1}{|Q|}\textstyle\sum_{q\in Q}\big(\mathrm{EM}(q,\rho')-\mathrm{EM}(q,\rho)\big).
 \end{equation}
-over the questions $Q$ for which both conditions are available, with unanswered questions scored as incorrect.

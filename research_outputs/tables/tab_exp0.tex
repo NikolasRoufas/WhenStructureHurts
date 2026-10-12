@@ -1,6 +1,7 @@
 \begin{table*}[t]
 \centering
 \footnotesize
+\begin{adjustbox}{max width=\linewidth}
 \begin{tabular}{@{}llrlrrrrrr@{}}
 \toprule
 Data & Sys. & EM & 95\% CI & F1 & Cov. & Tok. & Units & Ans.\ in ev. & Lat.\,(s) \\
@@ -18,6 +19,7 @@ MuSiQue & B4 & 0.03 & [+0.00, +0.07] & 0.05 & 0.18 & 442 & 11.9 & 0.31 & 0.51 \\
 2Wiki & B4 & 0.11 & [+0.05, +0.17] & 0.13 & 0.25 & 489 & 11.9 & 0.56 & 0.51 \\
 \bottomrule
 \end{tabular}
+\end{adjustbox}
 \caption{Experiment~0, retrieved evidence (exploratory, $n$=100 per dataset). Tok.: mean evidence tokens; Units: items shown; Lat.: answer-generation latency (claim extraction for B2--B4 is not included). B4 is our reconstruction of EG-RAG. Source: \texttt{A\_exp0\_absolute.csv}.}
 \label{tab:exp0}
 \end{table*}

@@ -1,6 +1,7 @@
 \begin{table*}[t]
 \centering
 \footnotesize
+\begin{adjustbox}{max width=\linewidth}
 \begin{tabular}{@{}lllrrrrrrr@{}}
 \toprule
 Data & Setting & Rep. & Kept & Ovh. & Tok. & Ans.\ drop & Ans.\ in ev. & EM & Cov. \\
@@ -48,6 +49,7 @@ MuSiQue & B 0.5$\times$ shared & R4 & 0.27 & 38 & 136 & 0.80 & 0.42 & 0.08 & 0.3
 2Wiki & B 0.5$\times$ shared & R4 & 0.29 & 50 & 161 & 0.63 & 0.38 & 0.15 & 0.37 \\
 \bottomrule
 \end{tabular}
+\end{adjustbox}
 \caption{Information accounting under Protocol~A and Protocol~B (budget $\beta\times$ the content tokens of the fact set). Kept: fraction of facts shown; Ovh./Tok.: mean overhead and evidence tokens; Ans.\ drop: answer-bearing facts cut per question; Ans.\ in ev.: answer string present in the block. Source: \texttt{C\_exp1\_protocol\_accounting.csv}, \texttt{C\_exp1\_absolute.csv}.}
 \label{tab:budget}
 \end{table*}

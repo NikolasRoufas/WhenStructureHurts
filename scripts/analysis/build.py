@@ -534,14 +534,19 @@ def figures(exp1_abs: list[dict], exp2_rows: list[dict], outdirs: list[Path], bu
                         continue
                     y = len(cons) - 1 - k + (0.15 if j == 0 else -0.15)
                     ax.errorbar(r["delta"], y, xerr=[[r["delta"] - r["ci"][0]], [r["ci"][1] - r["delta"]]], fmt="o", ms=3,
-                                capsize=2, color=cols[name], label=f"{name} (n={r['n_paired']})" if k == 0 else None)
+                                capsize=2, color=cols[name], label=None)
             ax.axvline(0, color="gray", lw=0.5)
             ax.set_yticks(range(len(cons)), [c[1] for c in cons][::-1], fontsize=7)
             ax.set_title(DS_NAME[ds], fontsize=8)
             ax.set_xlabel("Δ EM (paired, 95% CI)")
             ax.grid(axis="x", lw=0.3, alpha=0.5)
-            ax.legend(fontsize=6, frameon=False, loc="lower left")
-        fig.tight_layout()
+        from matplotlib.lines import Line2D
+        ns = {name: sorted({str(x["n_paired"]) for x in rows if x["setting"] == "A" and x["edge_stratum"] == "all"
+                            and x["contrast"] == "R1-R0" and x["dataset"] in PRIMARY_DATASETS}) for name, rows in forest}
+        hs = [Line2D([], [], color=cols[name], marker="o", ls="-", ms=3) for name, _ in forest]
+        ls = [f"{name} (n = {' / '.join(ns[name])} for MuSiQue / 2Wiki)" for name, _ in forest]
+        fig.legend(hs, ls, loc="lower center", ncol=2, fontsize=6.5, frameon=False, bbox_to_anchor=(0.5, -0.06))
+        fig.tight_layout(rect=(0, 0.06, 1, 1))
         save(fig, "fig5_contrasts_pilot_vs_confirmatory")
     return made
 

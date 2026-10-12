@@ -1,6 +1,7 @@
 \begin{table*}[t]
 \centering
 \footnotesize
+\begin{adjustbox}{max width=\linewidth}
 \begin{tabular}{@{}lllrrrlrl@{}}
 \toprule
 Data & Rep. & Perturbation & $n$ & Lab.-pres. & $\Delta$EM & 95\% CI & Ans.\ changed & Abstention \\
@@ -51,6 +52,7 @@ HotpotQA & R4 & P6 entity & 50 & 0 & -- & -- & 0.16 & 0.16$\to$0.18 \\
 HotpotQA & R4 & P6 negation & 5 & 0 & -- & -- & 0.00 & 0.20$\to$0.20 \\
 \bottomrule
 \end{tabular}
+\end{adjustbox}
 \caption{Experiment~2 at rate 0.4 (exploratory). $\Delta$EM is computed only on label-preserving records without introduced answers (Lab.-pres.); P1 and P6 can remove the answer, so only answer-change and abstention rates are given. Source: \texttt{C\_exp2\_sensitivity.csv}.}
 \label{tab:exp2}
 \end{table*}
