@@ -1,0 +1,9 @@
+# Confirmatory question set (docs/CONFIRMATORY_PROTOCOL.md §4-5). Sizes from the pilot variance
+# rule (PILOT_PROTOCOL §8.3); disjoint from smoke and pilot questions. Produce with:
+#   wsh questions freeze --spec configs/question_sets/confirm_v1.spec.yaml --out configs/question_sets/confirm_v1.json
+seed: 2
+split: dev
+excluded: configs/excluded_confirmatory.json
+datasets:
+  musique: {n: 1744, stratify_by: hop_count}
+  2wikimultihopqa: {n: 3232, stratify_by: question_type}

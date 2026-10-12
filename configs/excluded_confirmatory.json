@@ -1,0 +1,1465 @@
+{
+ "description": "Confirmatory-sample exclusions (docs/CONFIRMATORY_PROTOCOL.md \u00a75): the smoke/prompt-development questions of configs/excluded_questions.json plus every question of configs/question_sets/pilot_v1.json.",
+ "excluded": [
+  {
+   "uid": "2wikimultihopqa/089aff34086111ebbd5dac1f6bf848b6",
+   "reason": "used by the exploratory pilot (pilot_v1.json)"
+  },
+  {
+   "uid": "2wikimultihopqa/08cae5720baf11ebab90acde48001122",
+   "reason": "used by the exploratory pilot (pilot_v1.json)"
+  },
+  {
+   "uid": "2wikimultihopqa/0f44750808e411ebbda4ac1f6bf848b6",
+   "reason": "used by the exploratory pilot (pilot_v1.json)"
+  },
+  {
+   "uid": "2wikimultihopqa/10b80bac0baf11ebab90acde48001122",
+   "reason": "used by the exploratory pilot (pilot_v1.json)"
+  },
+  {
+   "uid": "2wikimultihopqa/18035ea008be11ebbd8aac1f6bf848b6",
+   "reason": "used by the exploratory pilot (pilot_v1.json)"
+  },
+  {
+   "uid": "2wikimultihopqa/1806efe409b911ebbdb0ac1f6bf848b6",
+   "reason": "used by the exploratory pilot (pilot_v1.json)"
+  },
+  {
+   "uid": "2wikimultihopqa/18abce6a08ae11ebbd83ac1f6bf848b6",
+   "reason": "used by the exploratory pilot (pilot_v1.json)"
+  },
+  {
+   "uid": "2wikimultihopqa/18f0a0220baf11ebab90acde48001122",
+   "reason": "used by the exploratory pilot (pilot_v1.json)"
+  },
+  {
+   "uid": "2wikimultihopqa/1999f2020bdd11eba7f7acde48001122",
+   "reason": "used by the exploratory pilot (pilot_v1.json)"
+  },
+  {
+   "uid": "2wikimultihopqa/1c5eb1f80bdd11eba7f7acde48001122",
+   "reason": "used by the exploratory pilot (pilot_v1.json)"
+  },
+  {
+   "uid": "2wikimultihopqa/214a91ca08ca11ebbd92ac1f6bf848b6",
+   "reason": "used by the exploratory pilot (pilot_v1.json)"
+  },
+  {
+   "uid": "2wikimultihopqa/21d77262096b11ebbdafac1f6bf848b6",
+   "reason": "used by the exploratory pilot (pilot_v1.json)"
+  },
+  {
+   "uid": "2wikimultihopqa/2204f9ba0baf11ebab90acde48001122",
+   "reason": "used by the exploratory pilot (pilot_v1.json)"
+  },
+  {
+   "uid": "2wikimultihopqa/22e6318a0bde11eba7f7acde48001122",
+   "reason": "used by the exploratory pilot (pilot_v1.json)"
+  },
+  {
+   "uid": "2wikimultihopqa/25ca7393088d11ebbd70ac1f6bf848b6",
+   "reason": "used by the exploratory pilot (pilot_v1.json)"
+  },
+  {
+   "uid": "2wikimultihopqa/2dc690ba0bdc11eba7f7acde48001122",
+   "reason": "used by the exploratory pilot (pilot_v1.json)"
+  },
+  {
+   "uid": "2wikimultihopqa/2f7507ba0bb011ebab90acde48001122",
+   "reason": "used by the exploratory pilot (pilot_v1.json)"
+  },
+  {
+   "uid": "2wikimultihopqa/33c77397088311ebbd6dac1f6bf848b6",
+   "reason": "used by the exploratory pilot (pilot_v1.json)"
+  },
+  {
+   "uid": "2wikimultihopqa/3733d61a0bde11eba7f7acde48001122",
+   "reason": "smoke-test question (configs/smoke.yaml, sample_seed 0); seen during prompt revision qa-v1 -> qa-v2 and relation-threshold inspection"
+  },
+  {
+   "uid": "2wikimultihopqa/3803e25f08d411ebbd96ac1f6bf848b6",
+   "reason": "used by the exploratory pilot (pilot_v1.json)"
+  },
+  {
+   "uid": "2wikimultihopqa/40642d760bb011ebab90acde48001122",
+   "reason": "used by the exploratory pilot (pilot_v1.json)"
+  },
+  {
+   "uid": "2wikimultihopqa/40a0ab780bda11eba7f7acde48001122",
+   "reason": "used by the exploratory pilot (pilot_v1.json)"
+  },
+  {
+   "uid": "2wikimultihopqa/433bcf3c08b711ebbd88ac1f6bf848b6",
+   "reason": "used by the exploratory pilot (pilot_v1.json)"
+  },
+  {
+   "uid": "2wikimultihopqa/43ad02c20bde11eba7f7acde48001122",
+   "reason": "used by the exploratory pilot (pilot_v1.json)"
+  },
+  {
+   "uid": "2wikimultihopqa/46e4933a0baf11ebab90acde48001122",
+   "reason": "used by the exploratory pilot (pilot_v1.json)"
+  },
+  {
+   "uid": "2wikimultihopqa/4759b57e0bb011ebab90acde48001122",
+   "reason": "used by the exploratory pilot (pilot_v1.json)"
+  },
+  {
+   "uid": "2wikimultihopqa/484af294089b11ebbd78ac1f6bf848b6",
+   "reason": "used by the exploratory pilot (pilot_v1.json)"
+  },
+  {
+   "uid": "2wikimultihopqa/48c623840bdd11eba7f7acde48001122",
+   "reason": "used by the exploratory pilot (pilot_v1.json)"
+  },
+  {
+   "uid": "2wikimultihopqa/4bf12d9e08b111ebbd85ac1f6bf848b6",
+   "reason": "used by the exploratory pilot (pilot_v1.json)"
+  },
+  {
+   "uid": "2wikimultihopqa/4e1dc515091f11ebbdaeac1f6bf848b6",
+   "reason": "used by the exploratory pilot (pilot_v1.json)"
+  },
+  {
+   "uid": "2wikimultihopqa/4e786ebb08f911ebbdaaac1f6bf848b6",
+   "reason": "used by the exploratory pilot (pilot_v1.json)"
+  },
+  {
+   "uid": "2wikimultihopqa/4f7ae3820bdc11eba7f7acde48001122",
+   "reason": "used by the exploratory pilot (pilot_v1.json)"
+  },
+  {
+   "uid": "2wikimultihopqa/5119254208ac11ebbd82ac1f6bf848b6",
+   "reason": "used by the exploratory pilot (pilot_v1.json)"
+  },
+  {
+   "uid": "2wikimultihopqa/534cb7600bdc11eba7f7acde48001122",
+   "reason": "used by the exploratory pilot (pilot_v1.json)"
+  },
+  {
+   "uid": "2wikimultihopqa/55660c0a086b11ebbd5fac1f6bf848b6",
+   "reason": "used by the exploratory pilot (pilot_v1.json)"
+  },
+  {
+   "uid": "2wikimultihopqa/5b2359b00bd911eba7f7acde48001122",
+   "reason": "used by the exploratory pilot (pilot_v1.json)"
+  },
+  {
+   "uid": "2wikimultihopqa/5da934fa099711ebbdb0ac1f6bf848b6",
+   "reason": "used by the exploratory pilot (pilot_v1.json)"
+  },
+  {
+   "uid": "2wikimultihopqa/5ead80ee0baf11ebab90acde48001122",
+   "reason": "used by the exploratory pilot (pilot_v1.json)"
+  },
+  {
+   "uid": "2wikimultihopqa/602e4c14087b11ebbd68ac1f6bf848b6",
+   "reason": "used by the exploratory pilot (pilot_v1.json)"
+  },
+  {
+   "uid": "2wikimultihopqa/60b304900baf11ebab90acde48001122",
+   "reason": "used by the exploratory pilot (pilot_v1.json)"
+  },
+  {
+   "uid": "2wikimultihopqa/621b4a880bda11eba7f7acde48001122",
+   "reason": "used by the exploratory pilot (pilot_v1.json)"
+  },
+  {
+   "uid": "2wikimultihopqa/63ff30f80bda11eba7f7acde48001122",
+   "reason": "used by the exploratory pilot (pilot_v1.json)"
+  },
+  {
+   "uid": "2wikimultihopqa/653dfa8f08f211ebbdaaac1f6bf848b6",
+   "reason": "used by the exploratory pilot (pilot_v1.json)"
+  },
+  {
+   "uid": "2wikimultihopqa/65f06f70088411ebbd6dac1f6bf848b6",
+   "reason": "used by the exploratory pilot (pilot_v1.json)"
+  },
+  {
+   "uid": "2wikimultihopqa/668d503a085a11ebbd5cac1f6bf848b6",
+   "reason": "used by the exploratory pilot (pilot_v1.json)"
+  },
+  {
+   "uid": "2wikimultihopqa/676d16800bb011ebab90acde48001122",
+   "reason": "smoke-test question (configs/smoke.yaml, sample_seed 0); seen during prompt revision qa-v1 -> qa-v2 and relation-threshold inspection"
+  },
+  {
+   "uid": "2wikimultihopqa/76ec405f08b811ebbd88ac1f6bf848b6",
+   "reason": "used by the exploratory pilot (pilot_v1.json)"
+  },
+  {
+   "uid": "2wikimultihopqa/77f41ab20bb011ebab90acde48001122",
+   "reason": "used by the exploratory pilot (pilot_v1.json)"
+  },
+  {
+   "uid": "2wikimultihopqa/7a21f2d20bb011ebab90acde48001122",
+   "reason": "used by the exploratory pilot (pilot_v1.json)"
+  },
+  {
+   "uid": "2wikimultihopqa/7a6a6a2c091611ebbdaeac1f6bf848b6",
+   "reason": "used by the exploratory pilot (pilot_v1.json)"
+  },
+  {
+   "uid": "2wikimultihopqa/7a71a91e087f11ebbd6cac1f6bf848b6",
+   "reason": "used by the exploratory pilot (pilot_v1.json)"
+  },
+  {
+   "uid": "2wikimultihopqa/8272c3eb093111ebbdaeac1f6bf848b6",
+   "reason": "used by the exploratory pilot (pilot_v1.json)"
+  },
+  {
+   "uid": "2wikimultihopqa/8513167c088011ebbd6cac1f6bf848b6",
+   "reason": "used by the exploratory pilot (pilot_v1.json)"
+  },
+  {
+   "uid": "2wikimultihopqa/85483fe908ab11ebbd82ac1f6bf848b6",
+   "reason": "used by the exploratory pilot (pilot_v1.json)"
+  },
+  {
+   "uid": "2wikimultihopqa/86947bc20bdb11eba7f7acde48001122",
+   "reason": "used by the exploratory pilot (pilot_v1.json)"
+  },
+  {
+   "uid": "2wikimultihopqa/86a16c4608b711ebbd88ac1f6bf848b6",
+   "reason": "used by the exploratory pilot (pilot_v1.json)"
+  },
+  {
+   "uid": "2wikimultihopqa/883aa6e60bda11eba7f7acde48001122",
+   "reason": "used by the exploratory pilot (pilot_v1.json)"
+  },
+  {
+   "uid": "2wikimultihopqa/88be48840bda11eba7f7acde48001122",
+   "reason": "used by the exploratory pilot (pilot_v1.json)"
+  },
+  {
+   "uid": "2wikimultihopqa/8cd3fe6c0baf11ebab90acde48001122",
+   "reason": "used by the exploratory pilot (pilot_v1.json)"
+  },
+  {
+   "uid": "2wikimultihopqa/93adfc01098011ebbdb0ac1f6bf848b6",
+   "reason": "used by the exploratory pilot (pilot_v1.json)"
+  },
+  {
+   "uid": "2wikimultihopqa/980237060bda11eba7f7acde48001122",
+   "reason": "used by the exploratory pilot (pilot_v1.json)"
+  },
+  {
+   "uid": "2wikimultihopqa/983d79c208d011ebbd95ac1f6bf848b6",
+   "reason": "used by the exploratory pilot (pilot_v1.json)"
+  },
+  {
+   "uid": "2wikimultihopqa/98ab6cfe08c411ebbd8eac1f6bf848b6",
+   "reason": "used by the exploratory pilot (pilot_v1.json)"
+  },
+  {
+   "uid": "2wikimultihopqa/a0942617088511ebbd6dac1f6bf848b6",
+   "reason": "used by the exploratory pilot (pilot_v1.json)"
+  },
+  {
+   "uid": "2wikimultihopqa/a635f66e088d11ebbd70ac1f6bf848b6",
+   "reason": "used by the exploratory pilot (pilot_v1.json)"
+  },
+  {
+   "uid": "2wikimultihopqa/a9f090fa0baf11ebab90acde48001122",
+   "reason": "used by the exploratory pilot (pilot_v1.json)"
+  },
+  {
+   "uid": "2wikimultihopqa/aa90320a08de11ebbd9fac1f6bf848b6",
+   "reason": "used by the exploratory pilot (pilot_v1.json)"
+  },
+  {
+   "uid": "2wikimultihopqa/aabdb95608c411ebbd8eac1f6bf848b6",
+   "reason": "used by the exploratory pilot (pilot_v1.json)"
+  },
+  {
+   "uid": "2wikimultihopqa/ad6dc5540baf11ebab90acde48001122",
+   "reason": "used by the exploratory pilot (pilot_v1.json)"
+  },
+  {
+   "uid": "2wikimultihopqa/b1203e9a0bda11eba7f7acde48001122",
+   "reason": "used by the exploratory pilot (pilot_v1.json)"
+  },
+  {
+   "uid": "2wikimultihopqa/bab5dcee0bda11eba7f7acde48001122",
+   "reason": "used by the exploratory pilot (pilot_v1.json)"
+  },
+  {
+   "uid": "2wikimultihopqa/bbefa25e08cc11ebbd93ac1f6bf848b6",
+   "reason": "used by the exploratory pilot (pilot_v1.json)"
+  },
+  {
+   "uid": "2wikimultihopqa/bd28d8c60baf11ebab90acde48001122",
+   "reason": "used by the exploratory pilot (pilot_v1.json)"
+  },
+  {
+   "uid": "2wikimultihopqa/bf39cea20bd911eba7f7acde48001122",
+   "reason": "used by the exploratory pilot (pilot_v1.json)"
+  },
+  {
+   "uid": "2wikimultihopqa/bf3fd3ba08cd11ebbd93ac1f6bf848b6",
+   "reason": "used by the exploratory pilot (pilot_v1.json)"
+  },
+  {
+   "uid": "2wikimultihopqa/c10c0d5b094311ebbdaeac1f6bf848b6",
+   "reason": "used by the exploratory pilot (pilot_v1.json)"
+  },
+  {
+   "uid": "2wikimultihopqa/c221ce2e0bdb11eba7f7acde48001122",
+   "reason": "used by the exploratory pilot (pilot_v1.json)"
+  },
+  {
+   "uid": "2wikimultihopqa/c3392729092211ebbdaeac1f6bf848b6",
+   "reason": "used by the exploratory pilot (pilot_v1.json)"
+  },
+  {
+   "uid": "2wikimultihopqa/c37f944e08e611ebbda5ac1f6bf848b6",
+   "reason": "used by the exploratory pilot (pilot_v1.json)"
+  },
+  {
+   "uid": "2wikimultihopqa/c818d9480baf11ebab90acde48001122",
+   "reason": "used by the exploratory pilot (pilot_v1.json)"
+  },
+  {
+   "uid": "2wikimultihopqa/c8c299420baf11ebab90acde48001122",
+   "reason": "used by the exploratory pilot (pilot_v1.json)"
+  },
+  {
+   "uid": "2wikimultihopqa/c9819f720baf11ebab90acde48001122",
+   "reason": "used by the exploratory pilot (pilot_v1.json)"
+  },
+  {
+   "uid": "2wikimultihopqa/ca3e5ea408cc11ebbd93ac1f6bf848b6",
+   "reason": "used by the exploratory pilot (pilot_v1.json)"
+  },
+  {
+   "uid": "2wikimultihopqa/cbedd9020bdb11eba7f7acde48001122",
+   "reason": "used by the exploratory pilot (pilot_v1.json)"
+  },
+  {
+   "uid": "2wikimultihopqa/cd791c8a0bdd11eba7f7acde48001122",
+   "reason": "smoke-test question (configs/smoke.yaml, sample_seed 0); seen during prompt revision qa-v1 -> qa-v2 and relation-threshold inspection"
+  },
+  {
+   "uid": "2wikimultihopqa/cfad61500bdd11eba7f7acde48001122",
+   "reason": "used by the exploratory pilot (pilot_v1.json)"
+  },
+  {
+   "uid": "2wikimultihopqa/d1b9b6060bdd11eba7f7acde48001122",
+   "reason": "used by the exploratory pilot (pilot_v1.json)"
+  },
+  {
+   "uid": "2wikimultihopqa/d58ede7c086e11ebbd62ac1f6bf848b6",
+   "reason": "used by the exploratory pilot (pilot_v1.json)"
+  },
+  {
+   "uid": "2wikimultihopqa/da4ed34908c511ebbd8fac1f6bf848b6",
+   "reason": "used by the exploratory pilot (pilot_v1.json)"
+  },
+  {
+   "uid": "2wikimultihopqa/df14cd5308ec11ebbda7ac1f6bf848b6",
+   "reason": "used by the exploratory pilot (pilot_v1.json)"
+  },
+  {
+   "uid": "2wikimultihopqa/e19960120bdd11eba7f7acde48001122",
+   "reason": "used by the exploratory pilot (pilot_v1.json)"
+  },
+  {
+   "uid": "2wikimultihopqa/e7ebb87508c811ebbd92ac1f6bf848b6",
+   "reason": "used by the exploratory pilot (pilot_v1.json)"
+  },
+  {
+   "uid": "2wikimultihopqa/ea755618087311ebbd67ac1f6bf848b6",
+   "reason": "used by the exploratory pilot (pilot_v1.json)"
+  },
+  {
+   "uid": "2wikimultihopqa/eadb2cac085711ebbd5aac1f6bf848b6",
+   "reason": "used by the exploratory pilot (pilot_v1.json)"
+  },
+  {
+   "uid": "2wikimultihopqa/ebd650640bae11ebab90acde48001122",
+   "reason": "used by the exploratory pilot (pilot_v1.json)"
+  },
+  {
+   "uid": "2wikimultihopqa/ee9346260baf11ebab90acde48001122",
+   "reason": "used by the exploratory pilot (pilot_v1.json)"
+  },
+  {
+   "uid": "2wikimultihopqa/ef22b9d208b211ebbd85ac1f6bf848b6",
+   "reason": "used by the exploratory pilot (pilot_v1.json)"
+  },
+  {
+   "uid": "2wikimultihopqa/efb76f1e0baf11ebab90acde48001122",
+   "reason": "used by the exploratory pilot (pilot_v1.json)"
+  },
+  {
+   "uid": "2wikimultihopqa/f23fe16c0baf11ebab90acde48001122",
+   "reason": "used by the exploratory pilot (pilot_v1.json)"
+  },
+  {
+   "uid": "2wikimultihopqa/f599bc25086311ebbd5eac1f6bf848b6",
+   "reason": "used by the exploratory pilot (pilot_v1.json)"
+  },
+  {
+   "uid": "2wikimultihopqa/f6dce6440bae11ebab90acde48001122",
+   "reason": "used by the exploratory pilot (pilot_v1.json)"
+  },
+  {
+   "uid": "2wikimultihopqa/f6e4582a0bae11ebab90acde48001122",
+   "reason": "used by the exploratory pilot (pilot_v1.json)"
+  },
+  {
+   "uid": "2wikimultihopqa/fb4101280bdd11eba7f7acde48001122",
+   "reason": "used by the exploratory pilot (pilot_v1.json)"
+  },
+  {
+   "uid": "fever/0d7da5233b09bb7827d74edbcdba04fd",
+   "reason": "used by the exploratory pilot (pilot_v1.json)"
+  },
+  {
+   "uid": "fever/0ea2c589cd162188627873d1fd8905fe",
+   "reason": "used by the exploratory pilot (pilot_v1.json)"
+  },
+  {
+   "uid": "fever/1e1e148d1e1c89c5c9e959fddec7b792",
+   "reason": "smoke-test question (configs/smoke.yaml, sample_seed 0); seen during prompt revision qa-v1 -> qa-v2 and relation-threshold inspection"
+  },
+  {
+   "uid": "fever/1ef262c09b23cd8d83384b441b452c04",
+   "reason": "used by the exploratory pilot (pilot_v1.json)"
+  },
+  {
+   "uid": "fever/243505069eda8e8237bc4b5d2d1fa1e5",
+   "reason": "used by the exploratory pilot (pilot_v1.json)"
+  },
+  {
+   "uid": "fever/2b77e964428563fae8f4584335765000",
+   "reason": "used by the exploratory pilot (pilot_v1.json)"
+  },
+  {
+   "uid": "fever/403ff157d8fb6ed04b4e6ecd9bcc57ce",
+   "reason": "used by the exploratory pilot (pilot_v1.json)"
+  },
+  {
+   "uid": "fever/417391d4307fe7cb5eeb96184db076f9",
+   "reason": "used by the exploratory pilot (pilot_v1.json)"
+  },
+  {
+   "uid": "fever/4c7347f5c1e1ecf96bd57641276676ef",
+   "reason": "used by the exploratory pilot (pilot_v1.json)"
+  },
+  {
+   "uid": "fever/54561c2e3edb2d8d432857339f4a2ebb",
+   "reason": "used by the exploratory pilot (pilot_v1.json)"
+  },
+  {
+   "uid": "fever/56fc80c87e8ad9c2d56de805d58b44fc",
+   "reason": "used by the exploratory pilot (pilot_v1.json)"
+  },
+  {
+   "uid": "fever/598c0020d3bc17ca7a323ad99360fe10",
+   "reason": "used by the exploratory pilot (pilot_v1.json)"
+  },
+  {
+   "uid": "fever/5d3333821d8d8ac917478c5b5892a5bc",
+   "reason": "used by the exploratory pilot (pilot_v1.json)"
+  },
+  {
+   "uid": "fever/5e6341966910fa8a0d09cd89c8005201",
+   "reason": "smoke-test question (configs/smoke.yaml, sample_seed 0); seen during prompt revision qa-v1 -> qa-v2 and relation-threshold inspection"
+  },
+  {
+   "uid": "fever/650864cb8b8b81763f66135c26342f9e",
+   "reason": "used by the exploratory pilot (pilot_v1.json)"
+  },
+  {
+   "uid": "fever/670e3927d1eeaa82b7cfaeb69b5355c1",
+   "reason": "used by the exploratory pilot (pilot_v1.json)"
+  },
+  {
+   "uid": "fever/674afe5f90dfd1342371aaacbaf63fc2",
+   "reason": "used by the exploratory pilot (pilot_v1.json)"
+  },
+  {
+   "uid": "fever/6cc07950cdf12c60baab819727817318",
+   "reason": "used by the exploratory pilot (pilot_v1.json)"
+  },
+  {
+   "uid": "fever/6e6eb176cc0b9cefbcbe14f6a6d277be",
+   "reason": "used by the exploratory pilot (pilot_v1.json)"
+  },
+  {
+   "uid": "fever/6ef55d31b7c8f61b06bfe059e8cb5f21",
+   "reason": "used by the exploratory pilot (pilot_v1.json)"
+  },
+  {
+   "uid": "fever/73f43782f3cd6dd3b3e2d6e6a2cfd047",
+   "reason": "used by the exploratory pilot (pilot_v1.json)"
+  },
+  {
+   "uid": "fever/76ee26a10ba2bcfa726d1c043d7ab80a",
+   "reason": "used by the exploratory pilot (pilot_v1.json)"
+  },
+  {
+   "uid": "fever/770fd44b334080111f7bde6c41400ef7",
+   "reason": "used by the exploratory pilot (pilot_v1.json)"
+  },
+  {
+   "uid": "fever/7be97be89cbf93c3a7e628094dd7ff27",
+   "reason": "used by the exploratory pilot (pilot_v1.json)"
+  },
+  {
+   "uid": "fever/7fa5eeab4e0d3693bce6ae90d7c99593",
+   "reason": "used by the exploratory pilot (pilot_v1.json)"
+  },
+  {
+   "uid": "fever/82a68d2cf6926e681764180dd4c62659",
+   "reason": "used by the exploratory pilot (pilot_v1.json)"
+  },
+  {
+   "uid": "fever/8bdb9d08db2d340d5c8326a57f563f9e",
+   "reason": "used by the exploratory pilot (pilot_v1.json)"
+  },
+  {
+   "uid": "fever/8d40bdaddb40d55ed8c7341c8f10f89a",
+   "reason": "used by the exploratory pilot (pilot_v1.json)"
+  },
+  {
+   "uid": "fever/95a5be5861d38f738e004c5f3b0cc31a",
+   "reason": "used by the exploratory pilot (pilot_v1.json)"
+  },
+  {
+   "uid": "fever/9b140236ac561b567dc2d45b0fde666c",
+   "reason": "used by the exploratory pilot (pilot_v1.json)"
+  },
+  {
+   "uid": "fever/9ce7a3370a1ef433fd162ae2531e1295",
+   "reason": "used by the exploratory pilot (pilot_v1.json)"
+  },
+  {
+   "uid": "fever/9e46ee8378b0c2f5fe28c962001410c7",
+   "reason": "used by the exploratory pilot (pilot_v1.json)"
+  },
+  {
+   "uid": "fever/a112c470a23fd0e7b064ed6c24b4e9bd",
+   "reason": "used by the exploratory pilot (pilot_v1.json)"
+  },
+  {
+   "uid": "fever/a6fec2811f60aa27ba7da38359552463",
+   "reason": "used by the exploratory pilot (pilot_v1.json)"
+  },
+  {
+   "uid": "fever/a7320d832069e15dc4cd599b9ff3f025",
+   "reason": "used by the exploratory pilot (pilot_v1.json)"
+  },
+  {
+   "uid": "fever/b3557b982420408be61f339b43ccb2a4",
+   "reason": "used by the exploratory pilot (pilot_v1.json)"
+  },
+  {
+   "uid": "fever/b355e1cd5e300a7e5150d3c2b0e69946",
+   "reason": "used by the exploratory pilot (pilot_v1.json)"
+  },
+  {
+   "uid": "fever/b37690956a82b25653e695419d45f3ad",
+   "reason": "used by the exploratory pilot (pilot_v1.json)"
+  },
+  {
+   "uid": "fever/b9fb8740bf5d178afab473d9910580ae",
+   "reason": "used by the exploratory pilot (pilot_v1.json)"
+  },
+  {
+   "uid": "fever/bbf84f1193cd9ecedceb053c04087ef7",
+   "reason": "used by the exploratory pilot (pilot_v1.json)"
+  },
+  {
+   "uid": "fever/bfc5009bd295d44758b6393a23e07820",
+   "reason": "smoke-test question (configs/smoke.yaml, sample_seed 0); seen during prompt revision qa-v1 -> qa-v2 and relation-threshold inspection"
+  },
+  {
+   "uid": "fever/c1fe6e63ea6cf66cc694b118c6fb7684",
+   "reason": "used by the exploratory pilot (pilot_v1.json)"
+  },
+  {
+   "uid": "fever/c6614501c55a76139111931ff36eee2b",
+   "reason": "used by the exploratory pilot (pilot_v1.json)"
+  },
+  {
+   "uid": "fever/c6e1ab95bbc77757136cd4d2836ffcde",
+   "reason": "used by the exploratory pilot (pilot_v1.json)"
+  },
+  {
+   "uid": "fever/d4fb33b708dec3cc9f8c4448b72327f8",
+   "reason": "used by the exploratory pilot (pilot_v1.json)"
+  },
+  {
+   "uid": "fever/daa9ee8118f8a792f6656c9b56d394df",
+   "reason": "used by the exploratory pilot (pilot_v1.json)"
+  },
+  {
+   "uid": "fever/dbcf2262a4690629c78f025c70fdc3d4",
+   "reason": "used by the exploratory pilot (pilot_v1.json)"
+  },
+  {
+   "uid": "fever/e3d6a422e086a8fea845ea355a9400a1",
+   "reason": "used by the exploratory pilot (pilot_v1.json)"
+  },
+  {
+   "uid": "fever/f3ce34a9dd13868da3bf9148980d7ce6",
+   "reason": "used by the exploratory pilot (pilot_v1.json)"
+  },
+  {
+   "uid": "fever/f82941e5e5755bf0282263ead6b37ed8",
+   "reason": "used by the exploratory pilot (pilot_v1.json)"
+  },
+  {
+   "uid": "fever/fa529ca9158a5e195a709aeed2f7150d",
+   "reason": "used by the exploratory pilot (pilot_v1.json)"
+  },
+  {
+   "uid": "fever/fb7debf9cd7f1265faef455003cf4bd4",
+   "reason": "used by the exploratory pilot (pilot_v1.json)"
+  },
+  {
+   "uid": "fever/fb9324405cb50d96006d27091d7ce625",
+   "reason": "used by the exploratory pilot (pilot_v1.json)"
+  },
+  {
+   "uid": "hotpotqa/5a716dc15542994082a3e82b",
+   "reason": "used by the exploratory pilot (pilot_v1.json)"
+  },
+  {
+   "uid": "hotpotqa/5a72239a55429971e9dc92cf",
+   "reason": "used by the exploratory pilot (pilot_v1.json)"
+  },
+  {
+   "uid": "hotpotqa/5a73024f5542991f9a20c5fc",
+   "reason": "used by the exploratory pilot (pilot_v1.json)"
+  },
+  {
+   "uid": "hotpotqa/5a73354f5542991f9a20c687",
+   "reason": "used by the exploratory pilot (pilot_v1.json)"
+  },
+  {
+   "uid": "hotpotqa/5a734acf5542991f9a20c6ec",
+   "reason": "used by the exploratory pilot (pilot_v1.json)"
+  },
+  {
+   "uid": "hotpotqa/5a7555215542996c70cfaee1",
+   "reason": "smoke-test question (configs/smoke.yaml, sample_seed 0); seen during prompt revision qa-v1 -> qa-v2 and relation-threshold inspection"
+  },
+  {
+   "uid": "hotpotqa/5a7647505542992d0ec06089",
+   "reason": "used by the exploratory pilot (pilot_v1.json)"
+  },
+  {
+   "uid": "hotpotqa/5a771ead55429966f1a36c7c",
+   "reason": "used by the exploratory pilot (pilot_v1.json)"
+  },
+  {
+   "uid": "hotpotqa/5a777fd655429949eeb29e93",
+   "reason": "used by the exploratory pilot (pilot_v1.json)"
+  },
+  {
+   "uid": "hotpotqa/5a7b215f55429931da12c9e3",
+   "reason": "used by the exploratory pilot (pilot_v1.json)"
+  },
+  {
+   "uid": "hotpotqa/5a7c68575542996dd594b91c",
+   "reason": "used by the exploratory pilot (pilot_v1.json)"
+  },
+  {
+   "uid": "hotpotqa/5a7f90a15542995d8a8ddea5",
+   "reason": "used by the exploratory pilot (pilot_v1.json)"
+  },
+  {
+   "uid": "hotpotqa/5a801e845542992097ad2fd9",
+   "reason": "used by the exploratory pilot (pilot_v1.json)"
+  },
+  {
+   "uid": "hotpotqa/5a8198565542995ce29dcc13",
+   "reason": "used by the exploratory pilot (pilot_v1.json)"
+  },
+  {
+   "uid": "hotpotqa/5a8595a85542992a431d1b48",
+   "reason": "smoke-test question (configs/smoke.yaml, sample_seed 0); seen during prompt revision qa-v1 -> qa-v2 and relation-threshold inspection"
+  },
+  {
+   "uid": "hotpotqa/5a85f2f55542997b5ce40036",
+   "reason": "used by the exploratory pilot (pilot_v1.json)"
+  },
+  {
+   "uid": "hotpotqa/5a8b9cd65542997f31a41d8b",
+   "reason": "used by the exploratory pilot (pilot_v1.json)"
+  },
+  {
+   "uid": "hotpotqa/5a8c52685542995e66a475bb",
+   "reason": "used by the exploratory pilot (pilot_v1.json)"
+  },
+  {
+   "uid": "hotpotqa/5a8ed30655429917b4a5bdcd",
+   "reason": "used by the exploratory pilot (pilot_v1.json)"
+  },
+  {
+   "uid": "hotpotqa/5a8f5a185542992414482a71",
+   "reason": "used by the exploratory pilot (pilot_v1.json)"
+  },
+  {
+   "uid": "hotpotqa/5a9052765542995651fb513d",
+   "reason": "used by the exploratory pilot (pilot_v1.json)"
+  },
+  {
+   "uid": "hotpotqa/5ab29624554299545a2cf9b5",
+   "reason": "used by the exploratory pilot (pilot_v1.json)"
+  },
+  {
+   "uid": "hotpotqa/5ab3acc9554299753aec5985",
+   "reason": "used by the exploratory pilot (pilot_v1.json)"
+  },
+  {
+   "uid": "hotpotqa/5ab4378f5542991751b4d6f3",
+   "reason": "used by the exploratory pilot (pilot_v1.json)"
+  },
+  {
+   "uid": "hotpotqa/5ab521575542996a3a96a02e",
+   "reason": "used by the exploratory pilot (pilot_v1.json)"
+  },
+  {
+   "uid": "hotpotqa/5ab5c8c5554299637185c60d",
+   "reason": "used by the exploratory pilot (pilot_v1.json)"
+  },
+  {
+   "uid": "hotpotqa/5ab64cfa55429953192ad2b7",
+   "reason": "used by the exploratory pilot (pilot_v1.json)"
+  },
+  {
+   "uid": "hotpotqa/5ab678f455429954757d32d3",
+   "reason": "used by the exploratory pilot (pilot_v1.json)"
+  },
+  {
+   "uid": "hotpotqa/5ab720685542993667793f44",
+   "reason": "used by the exploratory pilot (pilot_v1.json)"
+  },
+  {
+   "uid": "hotpotqa/5ab7b3cc55429928e1fe3893",
+   "reason": "used by the exploratory pilot (pilot_v1.json)"
+  },
+  {
+   "uid": "hotpotqa/5ab9379a554299753720f79d",
+   "reason": "used by the exploratory pilot (pilot_v1.json)"
+  },
+  {
+   "uid": "hotpotqa/5ab946d7554299743d22eaaf",
+   "reason": "used by the exploratory pilot (pilot_v1.json)"
+  },
+  {
+   "uid": "hotpotqa/5abaee845542996606241696",
+   "reason": "used by the exploratory pilot (pilot_v1.json)"
+  },
+  {
+   "uid": "hotpotqa/5abf63f15542997ec76fd3ea",
+   "reason": "smoke-test question (configs/smoke.yaml, sample_seed 0); seen during prompt revision qa-v1 -> qa-v2 and relation-threshold inspection"
+  },
+  {
+   "uid": "hotpotqa/5ac09d265542992a796ded39",
+   "reason": "used by the exploratory pilot (pilot_v1.json)"
+  },
+  {
+   "uid": "hotpotqa/5ac24cc45542996366519963",
+   "reason": "used by the exploratory pilot (pilot_v1.json)"
+  },
+  {
+   "uid": "hotpotqa/5ac3b8b8554299741d48a301",
+   "reason": "used by the exploratory pilot (pilot_v1.json)"
+  },
+  {
+   "uid": "hotpotqa/5ac448185542995c82c4ad1b",
+   "reason": "used by the exploratory pilot (pilot_v1.json)"
+  },
+  {
+   "uid": "hotpotqa/5ac4deff554299076e296e26",
+   "reason": "used by the exploratory pilot (pilot_v1.json)"
+  },
+  {
+   "uid": "hotpotqa/5ac4f33355429924173fb507",
+   "reason": "used by the exploratory pilot (pilot_v1.json)"
+  },
+  {
+   "uid": "hotpotqa/5ac4f9db55429924173fb532",
+   "reason": "used by the exploratory pilot (pilot_v1.json)"
+  },
+  {
+   "uid": "hotpotqa/5adfeab455429942ec259b86",
+   "reason": "used by the exploratory pilot (pilot_v1.json)"
+  },
+  {
+   "uid": "hotpotqa/5adff4a555429925eb1afb91",
+   "reason": "used by the exploratory pilot (pilot_v1.json)"
+  },
+  {
+   "uid": "hotpotqa/5ae083e855429924de1b70fb",
+   "reason": "used by the exploratory pilot (pilot_v1.json)"
+  },
+  {
+   "uid": "hotpotqa/5ae127c9554299422ee99612",
+   "reason": "used by the exploratory pilot (pilot_v1.json)"
+  },
+  {
+   "uid": "hotpotqa/5ae1316555429901ffe4adda",
+   "reason": "used by the exploratory pilot (pilot_v1.json)"
+  },
+  {
+   "uid": "hotpotqa/5ae1408a55429901ffe4ae2a",
+   "reason": "used by the exploratory pilot (pilot_v1.json)"
+  },
+  {
+   "uid": "hotpotqa/5ae2c4d75542991a06ce98d0",
+   "reason": "used by the exploratory pilot (pilot_v1.json)"
+  },
+  {
+   "uid": "hotpotqa/5ae2cbc9554299495565db36",
+   "reason": "used by the exploratory pilot (pilot_v1.json)"
+  },
+  {
+   "uid": "hotpotqa/5ae4b5935542995ad6573e27",
+   "reason": "used by the exploratory pilot (pilot_v1.json)"
+  },
+  {
+   "uid": "hotpotqa/5ae55a4e5542990ba0bbb285",
+   "reason": "used by the exploratory pilot (pilot_v1.json)"
+  },
+  {
+   "uid": "hotpotqa/5ae67dba55429908198fa5f0",
+   "reason": "used by the exploratory pilot (pilot_v1.json)"
+  },
+  {
+   "uid": "hotpotqa/5ae7d03b55429952e35ea9c2",
+   "reason": "used by the exploratory pilot (pilot_v1.json)"
+  },
+  {
+   "uid": "hover/028a25c6-aa80-4663-9c65-1e4d34c2e478",
+   "reason": "used by the exploratory pilot (pilot_v1.json)"
+  },
+  {
+   "uid": "hover/12b815cb-7265-4e82-92bc-65ef9e79484c",
+   "reason": "used by the exploratory pilot (pilot_v1.json)"
+  },
+  {
+   "uid": "hover/195e1e48-3153-4b65-90ba-ec6a22bc6a46",
+   "reason": "used by the exploratory pilot (pilot_v1.json)"
+  },
+  {
+   "uid": "hover/1b81d900-f3ba-4822-a3bf-b898b2f86d8f",
+   "reason": "used by the exploratory pilot (pilot_v1.json)"
+  },
+  {
+   "uid": "hover/1fde776f-f5e1-45d1-a48a-b2929ebedf39",
+   "reason": "smoke-test question (configs/smoke.yaml, sample_seed 0); seen during prompt revision qa-v1 -> qa-v2 and relation-threshold inspection"
+  },
+  {
+   "uid": "hover/26971f8b-c01b-4e9c-acb3-40ae5352dc8c",
+   "reason": "used by the exploratory pilot (pilot_v1.json)"
+  },
+  {
+   "uid": "hover/29478058-d22a-4c5f-b4da-f80fadf2f208",
+   "reason": "used by the exploratory pilot (pilot_v1.json)"
+  },
+  {
+   "uid": "hover/3911126e-6175-48f3-b625-e298853abc13",
+   "reason": "used by the exploratory pilot (pilot_v1.json)"
+  },
+  {
+   "uid": "hover/3a56af64-7ea7-4f70-ae96-3f9a6a501754",
+   "reason": "used by the exploratory pilot (pilot_v1.json)"
+  },
+  {
+   "uid": "hover/3c4ffa15-727e-4029-8827-b92080dabd41",
+   "reason": "used by the exploratory pilot (pilot_v1.json)"
+  },
+  {
+   "uid": "hover/3f128741-9b99-4497-9b23-666bcdc2b17f",
+   "reason": "used by the exploratory pilot (pilot_v1.json)"
+  },
+  {
+   "uid": "hover/46b5b25b-428f-4591-bed4-c6b377bee8a5",
+   "reason": "used by the exploratory pilot (pilot_v1.json)"
+  },
+  {
+   "uid": "hover/4aa7c8d9-7d61-44ca-ab89-be9e96b4ee3d",
+   "reason": "used by the exploratory pilot (pilot_v1.json)"
+  },
+  {
+   "uid": "hover/4eb5f94b-0d87-47a2-9fac-3c7b680ef531",
+   "reason": "used by the exploratory pilot (pilot_v1.json)"
+  },
+  {
+   "uid": "hover/54f17270-54f2-456a-9840-e53a0508916e",
+   "reason": "used by the exploratory pilot (pilot_v1.json)"
+  },
+  {
+   "uid": "hover/55532db0-c805-4c40-b057-db9fa3b555d4",
+   "reason": "used by the exploratory pilot (pilot_v1.json)"
+  },
+  {
+   "uid": "hover/560f7f32-6a32-4f44-91ff-8e7dc49f8d6c",
+   "reason": "used by the exploratory pilot (pilot_v1.json)"
+  },
+  {
+   "uid": "hover/57e4d228-5870-4e5a-b9c0-6ebc1136e114",
+   "reason": "used by the exploratory pilot (pilot_v1.json)"
+  },
+  {
+   "uid": "hover/64816404-73fb-4893-882e-b88819e30d44",
+   "reason": "used by the exploratory pilot (pilot_v1.json)"
+  },
+  {
+   "uid": "hover/680c8742-45d4-467e-893a-52ab4309e1f0",
+   "reason": "used by the exploratory pilot (pilot_v1.json)"
+  },
+  {
+   "uid": "hover/684a22ae-0a68-476f-8e82-75b63dc29d81",
+   "reason": "used by the exploratory pilot (pilot_v1.json)"
+  },
+  {
+   "uid": "hover/6d9638d9-5d98-4712-9047-f4787e65b7c6",
+   "reason": "used by the exploratory pilot (pilot_v1.json)"
+  },
+  {
+   "uid": "hover/75cc8298-519e-4d3d-84c4-4ec75a8e3e61",
+   "reason": "used by the exploratory pilot (pilot_v1.json)"
+  },
+  {
+   "uid": "hover/803c5c58-9668-4b64-8e79-b0cb7da92466",
+   "reason": "used by the exploratory pilot (pilot_v1.json)"
+  },
+  {
+   "uid": "hover/8be9cb5b-e9eb-447a-b77b-ebf79050cb35",
+   "reason": "used by the exploratory pilot (pilot_v1.json)"
+  },
+  {
+   "uid": "hover/8e67f301-61da-4cc7-b8d5-778d7e1bfa2e",
+   "reason": "used by the exploratory pilot (pilot_v1.json)"
+  },
+  {
+   "uid": "hover/90a72698-ac56-4bb4-9e4d-3bad018fa6c8",
+   "reason": "used by the exploratory pilot (pilot_v1.json)"
+  },
+  {
+   "uid": "hover/92b231e8-e136-471c-a52c-eb6a336a9a8a",
+   "reason": "used by the exploratory pilot (pilot_v1.json)"
+  },
+  {
+   "uid": "hover/984928b7-6d4b-412a-9265-d04ed8738a64",
+   "reason": "smoke-test question (configs/smoke.yaml, sample_seed 0); seen during prompt revision qa-v1 -> qa-v2 and relation-threshold inspection"
+  },
+  {
+   "uid": "hover/9a6c72f4-024b-406e-aa1e-575ab2be55f3",
+   "reason": "smoke-test question (configs/smoke.yaml, sample_seed 0); seen during prompt revision qa-v1 -> qa-v2 and relation-threshold inspection"
+  },
+  {
+   "uid": "hover/a1a0d591-7ecd-4886-b16d-0535dcbab777",
+   "reason": "used by the exploratory pilot (pilot_v1.json)"
+  },
+  {
+   "uid": "hover/a257e402-c7fc-4dad-a7ea-7c3270d606cc",
+   "reason": "used by the exploratory pilot (pilot_v1.json)"
+  },
+  {
+   "uid": "hover/a7b636b5-980a-4b26-a788-923370a39de4",
+   "reason": "used by the exploratory pilot (pilot_v1.json)"
+  },
+  {
+   "uid": "hover/adb2b1cb-6b70-4981-af60-1ce2b367b08d",
+   "reason": "used by the exploratory pilot (pilot_v1.json)"
+  },
+  {
+   "uid": "hover/ae68fc24-ac5d-44b2-85f0-419e0af781ec",
+   "reason": "used by the exploratory pilot (pilot_v1.json)"
+  },
+  {
+   "uid": "hover/b1ea835c-998f-456a-a809-f40e3323154f",
+   "reason": "used by the exploratory pilot (pilot_v1.json)"
+  },
+  {
+   "uid": "hover/b64d3c5c-1b72-410a-8e0f-715e8808611c",
+   "reason": "used by the exploratory pilot (pilot_v1.json)"
+  },
+  {
+   "uid": "hover/c0290b25-4fd2-4afe-847c-da23b2779bf7",
+   "reason": "used by the exploratory pilot (pilot_v1.json)"
+  },
+  {
+   "uid": "hover/c0de89e2-3a1b-40f8-86af-f73eeab49e42",
+   "reason": "used by the exploratory pilot (pilot_v1.json)"
+  },
+  {
+   "uid": "hover/cafe28c4-3e70-4420-b6b4-95562f15ef44",
+   "reason": "used by the exploratory pilot (pilot_v1.json)"
+  },
+  {
+   "uid": "hover/cba8028c-23dc-4593-921d-e952352cdf73",
+   "reason": "used by the exploratory pilot (pilot_v1.json)"
+  },
+  {
+   "uid": "hover/d18112d1-14f2-4d0b-b4ea-ff35feac8e36",
+   "reason": "used by the exploratory pilot (pilot_v1.json)"
+  },
+  {
+   "uid": "hover/d5429500-84d3-4d19-8ea4-ca05d96923de",
+   "reason": "used by the exploratory pilot (pilot_v1.json)"
+  },
+  {
+   "uid": "hover/d8085dcb-8d51-49f0-b3b6-a05e47903dfc",
+   "reason": "used by the exploratory pilot (pilot_v1.json)"
+  },
+  {
+   "uid": "hover/d8d3e8be-237d-443e-b347-f1cdbf100187",
+   "reason": "used by the exploratory pilot (pilot_v1.json)"
+  },
+  {
+   "uid": "hover/dfada457-975b-4d9e-bd4d-3a810f68adff",
+   "reason": "used by the exploratory pilot (pilot_v1.json)"
+  },
+  {
+   "uid": "hover/e332120e-1fe6-4764-aca8-47406a66a380",
+   "reason": "used by the exploratory pilot (pilot_v1.json)"
+  },
+  {
+   "uid": "hover/e5a6f823-eee9-497b-8b9b-24379aebe979",
+   "reason": "used by the exploratory pilot (pilot_v1.json)"
+  },
+  {
+   "uid": "hover/f163f88d-b5c7-473e-8297-649900db84e0",
+   "reason": "used by the exploratory pilot (pilot_v1.json)"
+  },
+  {
+   "uid": "hover/f6c24559-da1e-4e23-9f66-e368502ec288",
+   "reason": "used by the exploratory pilot (pilot_v1.json)"
+  },
+  {
+   "uid": "hover/f857e450-4185-4911-a29e-f65db8ced646",
+   "reason": "used by the exploratory pilot (pilot_v1.json)"
+  },
+  {
+   "uid": "hover/f91fd989-d1b0-43ba-b1d0-cd515d321279",
+   "reason": "used by the exploratory pilot (pilot_v1.json)"
+  },
+  {
+   "uid": "hover/ffdcea8e-13cb-46dc-a467-9f1547fb31e7",
+   "reason": "used by the exploratory pilot (pilot_v1.json)"
+  },
+  {
+   "uid": "musique/2hop__152700_141308",
+   "reason": "used by the exploratory pilot (pilot_v1.json)"
+  },
+  {
+   "uid": "musique/2hop__156658_155922",
+   "reason": "used by the exploratory pilot (pilot_v1.json)"
+  },
+  {
+   "uid": "musique/2hop__17192_77606",
+   "reason": "used by the exploratory pilot (pilot_v1.json)"
+  },
+  {
+   "uid": "musique/2hop__176_51164",
+   "reason": "used by the exploratory pilot (pilot_v1.json)"
+  },
+  {
+   "uid": "musique/2hop__178922_5385",
+   "reason": "used by the exploratory pilot (pilot_v1.json)"
+  },
+  {
+   "uid": "musique/2hop__20256_71302",
+   "reason": "used by the exploratory pilot (pilot_v1.json)"
+  },
+  {
+   "uid": "musique/2hop__219456_87295",
+   "reason": "smoke-test question (configs/smoke.yaml, sample_seed 0); seen during prompt revision qa-v1 -> qa-v2 and relation-threshold inspection"
+  },
+  {
+   "uid": "musique/2hop__2416_86208",
+   "reason": "used by the exploratory pilot (pilot_v1.json)"
+  },
+  {
+   "uid": "musique/2hop__284613_87295",
+   "reason": "used by the exploratory pilot (pilot_v1.json)"
+  },
+  {
+   "uid": "musique/2hop__327688_56873",
+   "reason": "used by the exploratory pilot (pilot_v1.json)"
+  },
+  {
+   "uid": "musique/2hop__35137_22943",
+   "reason": "used by the exploratory pilot (pilot_v1.json)"
+  },
+  {
+   "uid": "musique/2hop__373759_136043",
+   "reason": "used by the exploratory pilot (pilot_v1.json)"
+  },
+  {
+   "uid": "musique/2hop__41158_35123",
+   "reason": "used by the exploratory pilot (pilot_v1.json)"
+  },
+  {
+   "uid": "musique/2hop__424294_19033",
+   "reason": "used by the exploratory pilot (pilot_v1.json)"
+  },
+  {
+   "uid": "musique/2hop__43776_162341",
+   "reason": "used by the exploratory pilot (pilot_v1.json)"
+  },
+  {
+   "uid": "musique/2hop__486392_35739",
+   "reason": "used by the exploratory pilot (pilot_v1.json)"
+  },
+  {
+   "uid": "musique/2hop__491195_265959",
+   "reason": "used by the exploratory pilot (pilot_v1.json)"
+  },
+  {
+   "uid": "musique/2hop__516918_126537",
+   "reason": "used by the exploratory pilot (pilot_v1.json)"
+  },
+  {
+   "uid": "musique/2hop__563476_61845",
+   "reason": "used by the exploratory pilot (pilot_v1.json)"
+  },
+  {
+   "uid": "musique/2hop__58691_192417",
+   "reason": "used by the exploratory pilot (pilot_v1.json)"
+  },
+  {
+   "uid": "musique/2hop__593688_292889",
+   "reason": "used by the exploratory pilot (pilot_v1.json)"
+  },
+  {
+   "uid": "musique/2hop__603365_120259",
+   "reason": "used by the exploratory pilot (pilot_v1.json)"
+  },
+  {
+   "uid": "musique/2hop__607517_161450",
+   "reason": "used by the exploratory pilot (pilot_v1.json)"
+  },
+  {
+   "uid": "musique/2hop__661847_288421",
+   "reason": "used by the exploratory pilot (pilot_v1.json)"
+  },
+  {
+   "uid": "musique/2hop__6736_6733",
+   "reason": "used by the exploratory pilot (pilot_v1.json)"
+  },
+  {
+   "uid": "musique/2hop__6956_192417",
+   "reason": "used by the exploratory pilot (pilot_v1.json)"
+  },
+  {
+   "uid": "musique/2hop__699172_141338",
+   "reason": "used by the exploratory pilot (pilot_v1.json)"
+  },
+  {
+   "uid": "musique/2hop__711946_269414",
+   "reason": "used by the exploratory pilot (pilot_v1.json)"
+  },
+  {
+   "uid": "musique/2hop__729651_631003",
+   "reason": "used by the exploratory pilot (pilot_v1.json)"
+  },
+  {
+   "uid": "musique/2hop__731228_609866",
+   "reason": "used by the exploratory pilot (pilot_v1.json)"
+  },
+  {
+   "uid": "musique/2hop__735014_83837",
+   "reason": "used by the exploratory pilot (pilot_v1.json)"
+  },
+  {
+   "uid": "musique/2hop__748615_123956",
+   "reason": "used by the exploratory pilot (pilot_v1.json)"
+  },
+  {
+   "uid": "musique/2hop__757497_78606",
+   "reason": "used by the exploratory pilot (pilot_v1.json)"
+  },
+  {
+   "uid": "musique/2hop__802991_443552",
+   "reason": "smoke-test question (configs/smoke.yaml, sample_seed 0); seen during prompt revision qa-v1 -> qa-v2 and relation-threshold inspection"
+  },
+  {
+   "uid": "musique/2hop__810884_22402",
+   "reason": "used by the exploratory pilot (pilot_v1.json)"
+  },
+  {
+   "uid": "musique/2hop__91667_67223",
+   "reason": "used by the exploratory pilot (pilot_v1.json)"
+  },
+  {
+   "uid": "musique/3hop1__120881_2053_52946",
+   "reason": "used by the exploratory pilot (pilot_v1.json)"
+  },
+  {
+   "uid": "musique/3hop1__131783_131926_87157",
+   "reason": "used by the exploratory pilot (pilot_v1.json)"
+  },
+  {
+   "uid": "musique/3hop1__135659_87694_124169",
+   "reason": "used by the exploratory pilot (pilot_v1.json)"
+  },
+  {
+   "uid": "musique/3hop1__152880_131926_89261",
+   "reason": "used by the exploratory pilot (pilot_v1.json)"
+  },
+  {
+   "uid": "musique/3hop1__186307_503371_21711",
+   "reason": "used by the exploratory pilot (pilot_v1.json)"
+  },
+  {
+   "uid": "musique/3hop1__208108_547811_41132",
+   "reason": "used by the exploratory pilot (pilot_v1.json)"
+  },
+  {
+   "uid": "musique/3hop1__222979_40769_64047",
+   "reason": "used by the exploratory pilot (pilot_v1.json)"
+  },
+  {
+   "uid": "musique/3hop1__251085_831637_91775",
+   "reason": "used by the exploratory pilot (pilot_v1.json)"
+  },
+  {
+   "uid": "musique/3hop1__273571_834494_34088",
+   "reason": "used by the exploratory pilot (pilot_v1.json)"
+  },
+  {
+   "uid": "musique/3hop1__280834_547811_41132",
+   "reason": "used by the exploratory pilot (pilot_v1.json)"
+  },
+  {
+   "uid": "musique/3hop1__354480_834494_34099",
+   "reason": "used by the exploratory pilot (pilot_v1.json)"
+  },
+  {
+   "uid": "musique/3hop1__426806_42197_18397",
+   "reason": "used by the exploratory pilot (pilot_v1.json)"
+  },
+  {
+   "uid": "musique/3hop1__459153_544076_84283",
+   "reason": "used by the exploratory pilot (pilot_v1.json)"
+  },
+  {
+   "uid": "musique/3hop1__504362_443779_52195",
+   "reason": "used by the exploratory pilot (pilot_v1.json)"
+  },
+  {
+   "uid": "musique/3hop1__506062_792411_51423",
+   "reason": "used by the exploratory pilot (pilot_v1.json)"
+  },
+  {
+   "uid": "musique/3hop1__53690_161697_49779",
+   "reason": "used by the exploratory pilot (pilot_v1.json)"
+  },
+  {
+   "uid": "musique/3hop1__53690_161697_85460",
+   "reason": "used by the exploratory pilot (pilot_v1.json)"
+  },
+  {
+   "uid": "musique/3hop1__558449_503371_21711",
+   "reason": "used by the exploratory pilot (pilot_v1.json)"
+  },
+  {
+   "uid": "musique/3hop1__602329_792411_51423",
+   "reason": "used by the exploratory pilot (pilot_v1.json)"
+  },
+  {
+   "uid": "musique/3hop1__635099_131926_89261",
+   "reason": "used by the exploratory pilot (pilot_v1.json)"
+  },
+  {
+   "uid": "musique/3hop1__742464_15840_36002",
+   "reason": "used by the exploratory pilot (pilot_v1.json)"
+  },
+  {
+   "uid": "musique/3hop1__820301_720914_27537",
+   "reason": "used by the exploratory pilot (pilot_v1.json)"
+  },
+  {
+   "uid": "musique/3hop1__831162_831637_91775",
+   "reason": "used by the exploratory pilot (pilot_v1.json)"
+  },
+  {
+   "uid": "musique/3hop1__840353_503371_21711",
+   "reason": "used by the exploratory pilot (pilot_v1.json)"
+  },
+  {
+   "uid": "musique/3hop1__844109_720914_41132",
+   "reason": "used by the exploratory pilot (pilot_v1.json)"
+  },
+  {
+   "uid": "musique/3hop1__92991_73181_68042",
+   "reason": "used by the exploratory pilot (pilot_v1.json)"
+  },
+  {
+   "uid": "musique/3hop2__101905_30152_20999",
+   "reason": "used by the exploratory pilot (pilot_v1.json)"
+  },
+  {
+   "uid": "musique/3hop2__132957_800948_40768",
+   "reason": "used by the exploratory pilot (pilot_v1.json)"
+  },
+  {
+   "uid": "musique/3hop2__304722_203717_63959",
+   "reason": "used by the exploratory pilot (pilot_v1.json)"
+  },
+  {
+   "uid": "musique/3hop2__326964_320101_7713",
+   "reason": "used by the exploratory pilot (pilot_v1.json)"
+  },
+  {
+   "uid": "musique/3hop2__49541_140875_51068",
+   "reason": "used by the exploratory pilot (pilot_v1.json)"
+  },
+  {
+   "uid": "musique/3hop2__668732_467331_162182",
+   "reason": "used by the exploratory pilot (pilot_v1.json)"
+  },
+  {
+   "uid": "musique/3hop2__90098_156850_10557",
+   "reason": "used by the exploratory pilot (pilot_v1.json)"
+  },
+  {
+   "uid": "musique/4hop1__130276_59747_211319_557671",
+   "reason": "used by the exploratory pilot (pilot_v1.json)"
+  },
+  {
+   "uid": "musique/4hop1__130623_32392_823060_610794",
+   "reason": "used by the exploratory pilot (pilot_v1.json)"
+  },
+  {
+   "uid": "musique/4hop1__131632_32392_823060_610794",
+   "reason": "used by the exploratory pilot (pilot_v1.json)"
+  },
+  {
+   "uid": "musique/4hop1__151650_5274_458768_33633",
+   "reason": "used by the exploratory pilot (pilot_v1.json)"
+  },
+  {
+   "uid": "musique/4hop1__152146_5274_458768_33633",
+   "reason": "used by the exploratory pilot (pilot_v1.json)"
+  },
+  {
+   "uid": "musique/4hop1__152146_5274_458768_33677",
+   "reason": "used by the exploratory pilot (pilot_v1.json)"
+  },
+  {
+   "uid": "musique/4hop1__15567_59747_211319_557671",
+   "reason": "used by the exploratory pilot (pilot_v1.json)"
+  },
+  {
+   "uid": "musique/4hop1__277409_49925_13759_736921",
+   "reason": "used by the exploratory pilot (pilot_v1.json)"
+  },
+  {
+   "uid": "musique/4hop1__343844_17130_70784_79935",
+   "reason": "used by the exploratory pilot (pilot_v1.json)"
+  },
+  {
+   "uid": "musique/4hop1__408432_32392_823060_610794",
+   "reason": "used by the exploratory pilot (pilot_v1.json)"
+  },
+  {
+   "uid": "musique/4hop1__455862_508773_85832_745702",
+   "reason": "used by the exploratory pilot (pilot_v1.json)"
+  },
+  {
+   "uid": "musique/4hop1__483807_508773_85832_745702",
+   "reason": "used by the exploratory pilot (pilot_v1.json)"
+  },
+  {
+   "uid": "musique/4hop1__58323_375563_161848_53331",
+   "reason": "smoke-test question (configs/smoke.yaml, sample_seed 0); seen during prompt revision qa-v1 -> qa-v2 and relation-threshold inspection"
+  },
+  {
+   "uid": "musique/4hop1__606685_508773_85832_745702",
+   "reason": "used by the exploratory pilot (pilot_v1.json)"
+  },
+  {
+   "uid": "musique/4hop1__711773_508773_85832_745702",
+   "reason": "used by the exploratory pilot (pilot_v1.json)"
+  },
+  {
+   "uid": "musique/4hop1__777217_32392_823060_610794",
+   "reason": "used by the exploratory pilot (pilot_v1.json)"
+  },
+  {
+   "uid": "musique/4hop1__842143_153080_159767_81096",
+   "reason": "used by the exploratory pilot (pilot_v1.json)"
+  },
+  {
+   "uid": "musique/4hop1__88342_75218_128008_46748",
+   "reason": "used by the exploratory pilot (pilot_v1.json)"
+  },
+  {
+   "uid": "musique/4hop1__88342_75218_128008_46894",
+   "reason": "used by the exploratory pilot (pilot_v1.json)"
+  },
+  {
+   "uid": "musique/4hop1__94201_642284_131926_89261",
+   "reason": "used by the exploratory pilot (pilot_v1.json)"
+  },
+  {
+   "uid": "musique/4hop2__105527_14670_8987_8529",
+   "reason": "used by the exploratory pilot (pilot_v1.json)"
+  },
+  {
+   "uid": "musique/4hop2__161602_426860_88460_18966",
+   "reason": "used by the exploratory pilot (pilot_v1.json)"
+  },
+  {
+   "uid": "musique/4hop2__161602_426860_88460_20988",
+   "reason": "used by the exploratory pilot (pilot_v1.json)"
+  },
+  {
+   "uid": "musique/4hop2__161602_426860_88460_21062",
+   "reason": "used by the exploratory pilot (pilot_v1.json)"
+  },
+  {
+   "uid": "musique/4hop2__567956_14670_8987_8974",
+   "reason": "used by the exploratory pilot (pilot_v1.json)"
+  },
+  {
+   "uid": "musique/4hop2__71753_158985_70784_79935",
+   "reason": "used by the exploratory pilot (pilot_v1.json)"
+  },
+  {
+   "uid": "musique/4hop3__129682_29339_508306_70744",
+   "reason": "used by the exploratory pilot (pilot_v1.json)"
+  },
+  {
+   "uid": "musique/4hop3__129754_29339_508306_70744",
+   "reason": "used by the exploratory pilot (pilot_v1.json)"
+  },
+  {
+   "uid": "musique/4hop3__15567_29339_508306_70744",
+   "reason": "used by the exploratory pilot (pilot_v1.json)"
+  },
+  {
+   "uid": "musique/4hop3__257340_88460_30152_20999",
+   "reason": "used by the exploratory pilot (pilot_v1.json)"
+  },
+  {
+   "uid": "musique/4hop3__316459_41402_145922_13584",
+   "reason": "used by the exploratory pilot (pilot_v1.json)"
+  },
+  {
+   "uid": "musique/4hop3__373866_5189_276146_86687",
+   "reason": "used by the exploratory pilot (pilot_v1.json)"
+  },
+  {
+   "uid": "musique/4hop3__719125_132409_223216_35031",
+   "reason": "used by the exploratory pilot (pilot_v1.json)"
+  },
+  {
+   "uid": "musique/4hop3__800262_466199_695123_72134",
+   "reason": "used by the exploratory pilot (pilot_v1.json)"
+  }
+ ]
+}

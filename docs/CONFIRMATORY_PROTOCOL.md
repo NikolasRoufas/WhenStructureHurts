@@ -100,3 +100,4 @@ The confirmatory questions are disjoint from every question whose output was see
 | date | entry |
 |---|---|
 | 2026-10-12 | Protocol frozen (this file). |
+| 2026-10-12 | Sample frozen: `configs/question_sets/confirm_v1.json` sha256 `d7b49cb3771728821266401ecf543cdab33b1a84015bf852fdda8e18b69d5256`. MuSiQue 1,744 (hop 2/3/4: 687/686/371; only 371 eligible 4-hop questions remain, so the round-robin filled the other strata), 2Wiki 3,232 (808 per type). Overlap with pilot and smoke questions: 0 (checked by uid). No generation yet. |
