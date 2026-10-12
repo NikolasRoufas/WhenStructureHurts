@@ -177,3 +177,36 @@ emit("tab_exp2", ["Data", "Rep.", "Perturbation", "$n$", "Lab.-pres.", "$\\Delta
      "answers (Lab.-pres.); P1 and P6 can remove the answer, so only answer-change and abstention rates are given. "
      "Source: \\texttt{C\\_exp2\\_sensitivity.csv}.", "tab:exp2", "@{}lllrrrlrl@{}", star=True, size="\\footnotesize")
 print("tables written to", OUT)
+
+# T-confirmatory secondary contrasts (descriptive; outside the Holm family) with abstention decomposition
+if conf:
+    dec = {(r["dataset"], r["contrast"]): r for r in rows("F_exp1_decomposition_exploratory.csv")}
+    body = []
+    for r in contrast_rows("F_exp1", contrasts=("R2-R1", "R3-R5", "R4P-R4")):
+        body.append([DSN[r["dataset"]], r["contrast"].replace("-", "$-$"), r["n_paired"], num(r["delta"], 3, sign=True),
+                     ci(r["ci"], 3), r["n_identical_evidence"], num(r["coverage_delta"], 3, sign=True)])
+    emit("tab_confirm_secondary", ["Data", "Contrast", "$n$", "$\\Delta$EM", "95\\% CI", "Ident.", "$\\Delta$Cov."], body,
+         "Secondary contrasts on the confirmatory sample (pre-specified as secondary; not part of the tested family, so "
+         "descriptive). Source: \\texttt{F\\_exp1\\_contrasts.csv}.", "tab:confirm-secondary", "@{}llrrlrr@{}")
+    body = []
+    for (ds, con), r in sorted(dec.items()):
+        if con not in ("R1-R0", "R5-R1", "R4-R5", "R4P-R4"):
+            continue
+        body.append([DSN[ds], con.replace("-", "$-$"), num(r["delta_primary_metric"], 3, sign=True),
+                     num(r["contrib_both_answered"], 3, sign=True),
+                     f"{num(float(r['contrib_only_b_answered']) + float(r['contrib_only_a_answered']), 3, sign=True)}",
+                     f"{r['n_only_a_answered']}/{r['n_only_b_answered']}", r["n_neither_answered"]])
+    emit("tab_decomposition", ["Data", "Contrast", "$\\Delta$EM", "both ans.", "one abstains", "abst.\\ only first / only second",
+                               "neither"], body,
+         "Exploratory decomposition of each paired EM difference on the confirmatory sample (added after the confirmatory "
+         "result). \\emph{both ans.}: contribution of questions answered under both representations; \\emph{one abstains}: "
+         "contribution of questions answered under only one. The columns sum to $\\Delta$EM. Source: "
+         "\\texttt{F\\_exp1\\_decomposition\\_exploratory.csv}.", "tab:decomposition", "@{}llrrrrr@{}", size="\\footnotesize")
+    pr = rows("F_exp1_r4p_relations_exploratory_paired.csv")
+    body = [[DSN[r["dataset"]], "yes" if "has" in r["subset"] else "no", r["n_questions"], num(r["abstention_R4"]),
+             num(r["abstention_R4P"]), num(r["em_R4"]), num(r["em_R4P"])] for r in pr]
+    emit("tab_r4p_contradictions", ["Data", "R4P shows CONTRADICTS", "$n$", "Abst.\\ R4", "Abst.\\ R4P", "EM R4", "EM R4P"], body,
+         "Exploratory: the same questions under derived relations (R4) and predicted relations (R4P), split by whether "
+         "the predicted block contains at least one \\texttt{CONTRADICTS} line (an input property). Source: "
+         "\\texttt{F\\_exp1\\_r4p\\_relations\\_exploratory\\_paired.csv}.", "tab:r4p", "@{}lcrrrrr@{}", size="\\footnotesize")
+print("extra tables written")

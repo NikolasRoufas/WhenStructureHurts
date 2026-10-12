@@ -66,5 +66,39 @@
    "report.md": "93908f7ff7670e57d68d148b934cd0aaad35528794789a8e97ebc828e1498bc4",
    "summary.csv": "87afb556bd6485c178f98710fd3eb66b065336580cf17f3ef9bf40c69a686445"
   }
+ },
+ "F_exp1": {
+  "run_dir": "20261012-125639_49dfe135",
+  "experiment": "exp1",
+  "stage": "full",
+  "config_hash": "49dfe1356aa184c0f89477a3d7dcba50307759b48b3087ad554ad7523ffd5611",
+  "git_commit": "ed7c391da5762467ca4610ca545accfd3492babb",
+  "status": "completed",
+  "n_records": 44784,
+  "files": {
+   "config.resolved.yaml": "a0f5d2a48d3d54ce55bed1dbabeb00fab4801c40e0d1e83e4898d6eab4cdc57e",
+   "manifest.json": "1d4715c6261cd6f7302e7413f8a5e6aaa3d4d0ee35b0a4d3209aa192c1acf0cc",
+   "metrics.json": "c1b0622be540c0f9c7b6f5c84eec651b15172485d0c4f56dd56e90d0ee3fbe0e",
+   "predictions.jsonl": "6c90773ba31824a4b0b7bd383578aa19154f0d6d010cc31458958e24a95fbfb7",
+   "report.md": "ab81998878af63a6fc1d7d9f995e4318c040162fbf583b2aa829d8d58f156baf",
+   "summary.csv": "faa911df495990e4d0760e025dd8d243afd1bc57ba958d2f348c39e73d71bf5d"
+  }
+ },
+ "C_exp3": {
+  "run_dir": "20261012-183018_f702b552",
+  "experiment": "exp3",
+  "stage": "gpu_pilot",
+  "config_hash": "f702b552d8d462d6f36300bab91bec119dc199a38e65364921058c550459b0ce",
+  "git_commit": "ed7c391da5762467ca4610ca545accfd3492babb",
+  "status": "completed",
+  "n_records": 1750,
+  "files": {
+   "config.resolved.yaml": "d915ac9330a640cf4ab533c0f19de051a6a4d0c29909593e6298c80174d07eee",
+   "manifest.json": "f20b461a107975db5a4e74a1b67e43c3b958bf783e84cacb456845cfa1c9d2aa",
+   "metrics.json": "cc9941a6130d8192f4dbb68c2e5762ee9d3bb2850668617ab803acd4f0c73eb3",
+   "predictions.jsonl": "babc5d023bbbcbfd51b296b33c5ec70d9a2bfe49abe0b1fcd7c7152732b06ee8",
+   "report.md": "fdca25c3d11a2041600e2cee90ea9f45d132c3cd1b95842f3c14acaca495f908",
+   "summary.csv": "81a00fe6404ca44b102b48c50d35507afa0cf6391483b912e2c1cd11b2bc8b72"
+  }
  }
 }

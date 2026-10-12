@@ -1,0 +1,15 @@
+run,dataset,setting,condition,abstained,reasoning_error_evidence_present,evaluation_mismatch_candidate,missing_evidence,n_incorrect
+F_exp1,2wikimultihopqa,A,R0,610,1003,260,41,1914
+F_exp1,2wikimultihopqa,A,R1,779,936,215,38,1968
+F_exp1,2wikimultihopqa,A,R2,2502,2894,637,107,6140
+F_exp1,2wikimultihopqa,A,R3,868,879,217,42,2006
+F_exp1,2wikimultihopqa,A,R4,854,878,204,39,1975
+F_exp1,2wikimultihopqa,A,R4P,1052,835,166,38,2091
+F_exp1,2wikimultihopqa,A,R5,819,916,220,39,1994
+F_exp1,musique,A,R0,820,297,129,,1246
+F_exp1,musique,A,R1,804,330,113,,1247
+F_exp1,musique,A,R2,2196,1062,410,3,3671
+F_exp1,musique,A,R3,824,324,132,,1280
+F_exp1,musique,A,R4,791,323,135,,1249
+F_exp1,musique,A,R4P,946,265,116,,1327
+F_exp1,musique,A,R5,798,334,134,1,1267

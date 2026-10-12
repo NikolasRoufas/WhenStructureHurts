@@ -416,7 +416,8 @@ def exp2_tables(records: list[dict], run: str) -> list[dict]:
 
 # ----------------------------------------------------------------------------- figures
 
-def figures(exp1_abs: list[dict], exp2_rows: list[dict], outdirs: list[Path]) -> list[str]:
+def figures(exp1_abs: list[dict], exp2_rows: list[dict], outdirs: list[Path], budget_abs: list[dict] | None = None,
+            forest: list[tuple[str, list[dict]]] | None = None) -> list[str]:
     import matplotlib
     matplotlib.use("Agg")
     import matplotlib.pyplot as plt
@@ -452,6 +453,7 @@ def figures(exp1_abs: list[dict], exp2_rows: list[dict], outdirs: list[Path]) ->
         save(fig, "fig2_representations_protocolA")
 
     # Fig 3: score vs evidence tokens (Protocol A and B), primary datasets
+    exp1_abs = budget_abs if budget_abs is not None else exp1_abs
     pds = [d for d in PRIMARY_DATASETS if any(r["dataset"] == d for r in exp1_abs)]
     if pds:
         fig, axes = plt.subplots(1, len(pds), figsize=(3.3 * len(pds), 2.3), squeeze=False)
@@ -516,6 +518,31 @@ def figures(exp1_abs: list[dict], exp2_rows: list[dict], outdirs: list[Path]) ->
         fig.legend(hs, ls, loc="upper center", ncol=4, fontsize=6.5, frameon=False, bbox_to_anchor=(0.5, 1.04))
         fig.tight_layout()
         save(fig, "fig4_perturbation_sensitivity")
+
+    # Fig 5: forest plot of the primary (and two secondary) Protocol A contrasts, pilot vs confirmatory
+    if forest:
+        cons = [("R1-R0", "R1 − R0"), ("R5-R1", "R5 − R1"), ("R4-R5", "R4 − R5"), ("R2-R1", "R2 − R1 (sec.)"),
+                ("R4P-R4", "R4P − R4 (sec.)")]
+        fig, axes = plt.subplots(1, 2, figsize=(6.6, 2.3), sharey=True)
+        cols = {"pilot": "#7fa7c9", "confirmatory": "#a3241e"}
+        for ax, ds in zip(axes, PRIMARY_DATASETS):
+            for k, (con, lab) in enumerate(cons):
+                for j, (name, rows) in enumerate(forest):
+                    r = next((x for x in rows if x["dataset"] == ds and x["setting"] == "A" and x["edge_stratum"] == "all"
+                              and x["contrast"] == con and x["metric"] == "em"), None)
+                    if not r or r["delta"] is None:
+                        continue
+                    y = len(cons) - 1 - k + (0.15 if j == 0 else -0.15)
+                    ax.errorbar(r["delta"], y, xerr=[[r["delta"] - r["ci"][0]], [r["ci"][1] - r["delta"]]], fmt="o", ms=3,
+                                capsize=2, color=cols[name], label=f"{name} (n={r['n_paired']})" if k == 0 else None)
+            ax.axvline(0, color="gray", lw=0.5)
+            ax.set_yticks(range(len(cons)), [c[1] for c in cons][::-1], fontsize=7)
+            ax.set_title(DS_NAME[ds], fontsize=8)
+            ax.set_xlabel("Δ EM (paired, 95% CI)")
+            ax.grid(axis="x", lw=0.3, alpha=0.5)
+            ax.legend(fontsize=6, frameon=False, loc="lower left")
+        fig.tight_layout()
+        save(fig, "fig5_contrasts_pilot_vs_confirmatory")
     return made
 
 
@@ -528,6 +555,9 @@ def main() -> None:
     ap.add_argument("--paper")
     ap.add_argument("--figures-exp1", default=None, help="run label whose Exp1 results are plotted")
     ap.add_argument("--figures-exp2", default=None, help="run label whose Exp2 results are plotted")
+    ap.add_argument("--figures-budget", default=None, help="run label whose Protocol A/B results are plotted (Fig 3)")
+    ap.add_argument("--forest-pilot", default=None)
+    ap.add_argument("--forest-confirm", default=None)
     a = ap.parse_args()
     out = Path(a.out)
     runs = json.loads(Path(a.runs).read_text())
@@ -541,7 +571,7 @@ def main() -> None:
     an.mkdir(parents=True, exist_ok=True)
     (an / "provenance.json").write_text(json.dumps(prov, indent=1))
     summary = {}
-    fig_exp1, fig_exp2 = [], []
+    fig_exp1, fig_exp2, budget_abs, contr = [], [], None, {}
     for label, (recs, man) in res.items():
         exp, stage = man["experiment"], man["stage"]
         summary[label] = {"experiment": exp, "stage": stage, "n_records": len(recs),
@@ -557,7 +587,10 @@ def main() -> None:
             write_csv(an / f"{label}_absolute.csv", ab)
             if label == a.figures_exp1:
                 fig_exp1 = ab
-            write_csv(an / f"{label}_contrasts.csv", exp1_contrasts(recs, stage, label))
+            if label == a.figures_budget:
+                budget_abs = ab
+            contr[label] = exp1_contrasts(recs, stage, label)
+            write_csv(an / f"{label}_contrasts.csv", contr[label])
             write_csv(an / f"{label}_subgroups.csv", exp1_subgroups(recs, label))
             write_csv(an / f"{label}_protocol_accounting.csv", protocol_accounting(recs))
             write_csv(an / f"{label}_error_taxonomy.csv", error_taxonomy(recs, label))
@@ -580,7 +613,8 @@ def main() -> None:
             (an / f"{label}_attribution.json").write_text(json.dumps(exp3_attribution(recs), indent=1, default=str))
     (an / "run_summary.json").write_text(json.dumps(summary, indent=1))
     dirs = [out / "figures"] + ([Path(a.paper) / "figures"] if a.paper else [])
-    summary["_figures"] = figures(fig_exp1, fig_exp2, dirs)
+    forest = [(n, contr[l]) for n, l in (("pilot", a.forest_pilot), ("confirmatory", a.forest_confirm)) if l in contr]
+    summary["_figures"] = figures(fig_exp1, fig_exp2, dirs, budget_abs=budget_abs, forest=forest or None)
     print(json.dumps(summary, indent=1))
 
 

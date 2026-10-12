@@ -65,5 +65,36 @@
   "unavailable_reasons": {
    "ConditionUnavailable": 2664
   }
+ },
+ "F_exp1": {
+  "experiment": "exp1",
+  "stage": "full",
+  "n_records": 44784,
+  "n_unavailable": 0,
+  "n_generation_error": 0,
+  "n_pipeline_error": 0,
+  "finish_reasons": {
+   "eos": 44742,
+   "length": 42
+  },
+  "consistency": true,
+  "wall_clock_s": 19925.97,
+  "status": "completed",
+  "unavailable_reasons": {}
+ },
+ "C_exp3": {
+  "experiment": "exp3",
+  "stage": "gpu_pilot",
+  "n_records": 1750,
+  "n_unavailable": 1750,
+  "n_generation_error": 0,
+  "n_pipeline_error": 0,
+  "finish_reasons": {},
+  "consistency": true,
+  "wall_clock_s": 2.81,
+  "status": "completed",
+  "unavailable_reasons": {
+   "ConditionUnavailable": 1750
+  }
  }
 }

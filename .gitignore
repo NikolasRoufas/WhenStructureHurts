@@ -48,3 +48,6 @@ secrets/
 .DS_Store
 .idea/
 .vscode/
+
+# large derived outputs: regenerate with scripts/analysis/build.py (kept on the server)
+research_outputs/analysis/F_exp1_discordant_examples.json
