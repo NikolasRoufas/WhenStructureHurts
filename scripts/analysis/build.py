@@ -25,6 +25,8 @@ import hashlib
 import json
 import math
 import statistics as st
+import unicodedata
+from statistics import NormalDist
 from collections import Counter, defaultdict
 from pathlib import Path
 
@@ -124,7 +126,7 @@ def write_csv(path: Path, rows: list[dict]) -> None:
         w = csv.DictWriter(f, fieldnames=cols)
         w.writeheader()
         for r in rows:
-            w.writerow({k: (json.dumps(v) if isinstance(v, (list, dict)) else v) for k, v in r.items()})
+            w.writerow({k: (json.dumps(v) if isinstance(v, (list, dict, tuple)) else v) for k, v in r.items()})
 
 
 def latex_table(path: Path, header: list[str], rows: list[list[str]], caption: str, label: str, colspec: str,
@@ -269,6 +271,75 @@ def discordant_examples(records: list[dict], a: str, b: str, ds: str, s: str = "
                         b: {"em": d[b]["eval"]["em"], "answer": (d[b].get("parsed") or {}).get("answer"),
                             "evidence": d[b]["evidence"]["text"], "failure": d[b]["failure"]["primary"]}})
     return out[:k] if k else out
+
+
+# ----------------------------------------------------------------------------- secondary checks
+
+def _fold(s: str) -> str:
+    return unicodedata.normalize("NFKD", normalize_answer(s)).encode("ascii", "ignore").decode()
+
+
+def folded_em(r: dict) -> float | None:
+    """SECONDARY sensitivity metric (not the frozen primary): EM after additionally folding
+    diacritics (e.g. 'Wurttemberg' vs 'Württemberg'). It can only add matches to EM."""
+    if r.get("unavailable") or "eval" not in r or r["task"] != "qa":
+        return None
+    em = r["eval"].get("em") or 0.0
+    pred = (r.get("parsed") or {}).get("answer")
+    if em == 1 or not r["failure"]["answered"] or pred is None:
+        return em
+    return float(any(_fold(pred) == _fold(g) for g in r["gold_answers"]))
+
+
+def em_sensitivity(records: list[dict], run: str) -> list[dict]:
+    out = []
+    for ds in PRIMARY_DATASETS:
+        rs = [r for r in records if r["dataset"] == ds and setting(r["condition"]) == "A"]
+        if not rs:
+            continue
+        flips = sum(1 for r in rs if folded_em(r) is not None and folded_em(r) != (r["eval"].get("em") or 0.0))
+        for a, b in PRIMARY:
+            ga = [r for r in rs if r["condition"]["representation"] == a]
+            gb = [r for r in rs if r["condition"]["representation"] == b]
+            res = paired_bootstrap(by_question(ga, folded_em), by_question(gb, folded_em))
+            out.append({"run": run, "dataset": ds, "setting": "A", "contrast": f"{b}-{a}", "metric": "em_diacritics_folded",
+                        "n_paired": res["n_paired"], "delta": res["delta"], "ci": res["ci"], "p_boot": res["p_boot"],
+                        "n_records_changed_by_folding_in_dataset": flips})
+    return out
+
+
+def sample_size(records: list[dict], run: str, delta_min: float = 0.03, n_tests: int = 6, power: float = 0.8,
+                inflate: float = 1.2) -> list[dict]:
+    """PILOT_PROTOCOL §8.3: n for 80% power to detect |dEM| = 0.03 at the Holm/Bonferroni-level
+    alpha for 6 tests (two-sided), from the pilot SD of paired question-level differences
+    inflated by 20%; also the minimum detectable effect at the remaining dev pool size."""
+    za = NormalDist().inv_cdf(1 - 0.05 / n_tests / 2)
+    zb = NormalDist().inv_cdf(power)
+    pools = {}
+    try:
+        frozen = json.loads(Path("configs/question_sets/pilot_v1.json").read_text())["details"]
+        pools = {k: v["n_eligible"] - v["n_selected"] for k, v in frozen.items()}
+    except Exception:
+        pass
+    out = []
+    for ds in PRIMARY_DATASETS:
+        rs = [r for r in records if r["dataset"] == ds and setting(r["condition"]) == "A"]
+        for a, b in PRIMARY:
+            ma = em_map([r for r in rs if r["condition"]["representation"] == a], "em")
+            mb = em_map([r for r in rs if r["condition"]["representation"] == b], "em")
+            qs = sorted(set(ma) & set(mb))
+            if len(qs) < 2:
+                continue
+            d = [mb[q] - ma[q] for q in qs]
+            sd = st.stdev(d) * inflate
+            n_req = math.ceil(((za + zb) * sd / delta_min) ** 2) if sd > 0 else None
+            pool = pools.get(ds)
+            mde = (za + zb) * sd / math.sqrt(pool) if pool and sd > 0 else None
+            out.append({"run": run, "dataset": ds, "contrast": f"{b}-{a}", "n_pilot": len(qs), "sd_paired_diff": st.stdev(d),
+                        "sd_inflated": sd, "alpha_per_test": 0.05 / n_tests, "power": power, "delta_min": delta_min,
+                        "n_required": n_req, "remaining_dev_pool": pool, "mde_at_full_pool": mde,
+                        "discordant_rate": sum(x != 0 for x in d) / len(d)})
+    return out
 
 
 # ----------------------------------------------------------------------------- Exp0 / Exp2 / Exp3
@@ -456,6 +527,8 @@ def main() -> None:
             write_csv(an / f"{label}_subgroups.csv", exp1_subgroups(recs, label))
             write_csv(an / f"{label}_protocol_accounting.csv", protocol_accounting(recs))
             write_csv(an / f"{label}_error_taxonomy.csv", error_taxonomy(recs, label))
+            write_csv(an / f"{label}_em_sensitivity_secondary.csv", em_sensitivity(recs, label))
+            write_csv(an / f"{label}_sample_size.csv", sample_size(recs, label))
             ex = {f"{ds}:{b}-{a}": discordant_examples(recs, a, b, ds, k=0)
                   for ds in DS_ORDER for a, b in PRIMARY if any(r["dataset"] == ds for r in recs)}
             (an / f"{label}_discordant_examples.json").write_text(json.dumps(ex, indent=1))
