@@ -1,0 +1,70 @@
+{
+ "A_exp1": {
+  "run_dir": "20261012-095222_797a0644",
+  "experiment": "exp1",
+  "stage": "gpu_pilot",
+  "config_hash": "797a0644041f7f96d7c0a03a446f017d260dc24432a1a200ddad1e02a3f5067f",
+  "git_commit": "dea50b3bd774221e010f25c6dc8863a01063feb8",
+  "status": "completed",
+  "n_records": 9000,
+  "files": {
+   "config.resolved.yaml": "0b7c5f4ab650dcbda8c1ea2be81c8ee9605605c666f3203c6858cb78cf5d154e",
+   "manifest.json": "42bd47f190dff66aee3244918f5bea1af449ebe2e059f580cd041a8333ef985b",
+   "metrics.json": "4fe05ea24418399a89c9e9a022ded63ff14e166ed478fdcf396adc451b3aca66",
+   "predictions.jsonl": "b9e0187c5ef8d9bf115ae34931808302d193615a6b6b7801110431247b4663b4",
+   "report.md": "ae5aef47b3d9916ddd860e3d79f3b3da1a66bab79c58148a5cf4978e6158978b",
+   "summary.csv": "27fda89bb3af2f29f9b639df65f1437481d51ce21e8a9bd57b23ccce73c727ed"
+  }
+ },
+ "A_exp0": {
+  "run_dir": "20261012-102947_8dad35aa",
+  "experiment": "exp0",
+  "stage": "gpu_pilot",
+  "config_hash": "8dad35aabe44f8d471893bc078ce335152b051171c648f64a53784f9c0c7188a",
+  "git_commit": "dea50b3bd774221e010f25c6dc8863a01063feb8",
+  "status": "completed",
+  "n_records": 1000,
+  "files": {
+   "config.resolved.yaml": "0b7c5f4ab650dcbda8c1ea2be81c8ee9605605c666f3203c6858cb78cf5d154e",
+   "manifest.json": "5b7e7590815f1b4e94519328ef411a22fcf97471a5b38b68b1f6f617aeb0afd2",
+   "metrics.json": "a8cfaf2b215852b99a9131e447c59400883d5da3e4c7b72b1c183b9602d21742",
+   "predictions.jsonl": "7704fff8551902e0a7c6f0e25d52eac0a6708e9ce1e5b3706ed4108b42cdb4ad",
+   "report.md": "03bbf635c08706fce37a7c01b271a655308bd2e97799a0fd3a70096a83ee5344",
+   "summary.csv": "012004820ea244c88383617fa6de4bc0138e483198b09eb705b5ac6a5f881ee4"
+  }
+ },
+ "C_exp1": {
+  "run_dir": "20261012-120617_d4f7f61d",
+  "experiment": "exp1",
+  "stage": "gpu_pilot",
+  "config_hash": "d4f7f61d563a42d5eb2f107fd8e68a205a4f6de14ef65f6f7fee24e9a50140c3",
+  "git_commit": "ed7c391da5762467ca4610ca545accfd3492babb",
+  "status": "completed",
+  "n_records": 15750,
+  "files": {
+   "config.resolved.yaml": "d915ac9330a640cf4ab533c0f19de051a6a4d0c29909593e6298c80174d07eee",
+   "manifest.json": "5de54d0fb393ebc93218fade55d9e345354ee5b4c547cd4b732c27b279c006be",
+   "metrics.json": "8378b1a6607bbf4e90a78a89d747137d086d1dc986b353148ad412ece904b18f",
+   "predictions.jsonl": "7e7e58a842bf73f8be9cd6c7123668f11ad504eeb3ceb0a4043b7ce95ee2c61f",
+   "report.md": "0ea9678215c356d1c6ba8f416b5f590ab8a8388bc1b37c5a414686fd6dd970ea",
+   "summary.csv": "39adbf549fdac281a028481e1377d746f0f6793b30a2628c0268a936efae874f"
+  }
+ },
+ "C_exp2": {
+  "run_dir": "20261012-122150_20896430",
+  "experiment": "exp2",
+  "stage": "gpu_pilot",
+  "config_hash": "2089643011eae655ebc91e06323b72fb53db263e256f3732ba2789eb9ed1035e",
+  "git_commit": "ed7c391da5762467ca4610ca545accfd3492babb",
+  "status": "completed",
+  "n_records": 14000,
+  "files": {
+   "config.resolved.yaml": "d915ac9330a640cf4ab533c0f19de051a6a4d0c29909593e6298c80174d07eee",
+   "manifest.json": "5af70edf78bd5f56a936920049dfdfb37b52ba8ac381c7c06c132e12a280b4c9",
+   "metrics.json": "0967e944b58038f4e92945c411b9069354a7bea8fe7d9e78e04561d719d07335",
+   "predictions.jsonl": "efa88c4129f6f9948332e21787bea3f88fec76b74f1ac20dd089ec1cc38523ed",
+   "report.md": "93908f7ff7670e57d68d148b934cd0aaad35528794789a8e97ebc828e1498bc4",
+   "summary.csv": "87afb556bd6485c178f98710fd3eb66b065336580cf17f3ef9bf40c69a686445"
+  }
+ }
+}

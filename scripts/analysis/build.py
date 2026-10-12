@@ -247,7 +247,7 @@ def error_taxonomy(records: list[dict], run: str) -> list[dict]:
             cat = "evaluation_mismatch_candidate"
         else:
             cat = "reasoning_error_evidence_present"
-        g[(r["dataset"], setting(r["condition"]), r["condition"].get("representation") or r["condition"].get("system"))][cat] += 1
+        g[(r["dataset"], setting(r["condition"]), r["condition"].get("system") or r["condition"].get("representation"))][cat] += 1
     return [{"run": run, "dataset": k[0], "setting": k[1], "condition": k[2], **dict(v), "n_incorrect": sum(v.values())}
             for k, v in sorted(g.items())]
 
@@ -371,8 +371,26 @@ def exp0_tables(records: list[dict], stage: str, run: str) -> tuple[list[dict], 
     return absr, cons
 
 
+def _exp2_means(records: list[dict]) -> dict:
+    """Per (dataset, rep, P, params, rate): mean groundedness / citation / evidence indicators
+    over available records (descriptive; base = rate 0 of the same perturbation)."""
+    g = defaultdict(lambda: defaultdict(list))
+    for r in records:
+        if r.get("unavailable") or "eval" not in r:
+            continue
+        c = r["condition"]
+        k = (r["dataset"], c["representation"], c["perturbation"], json.dumps(c["params"], sort_keys=True), c["rate"])
+        for m in ("grounded_nli", "grounded_lexical", "citation_validity", "answer_in_evidence", "evidence_sufficient"):
+            v = r["eval"].get(m)
+            if v is not None:
+                g[k][m].append(float(v))
+        g[k]["cites_anything"].append(float((r["eval"].get("n_cited") or 0) > 0))
+    return {k: {m: (sum(v) / len(v) if v else None) for m, v in d.items()} for k, d in g.items()}
+
+
 def exp2_tables(records: list[dict], run: str) -> list[dict]:
     rows = []
+    means = _exp2_means(records)
     for s in exp2_sensitivity(records):
         m = "em" if s["dataset"] not in ("hover", "fever") else "verdict_acc"
         d = s.get(f"delta_{m}_label_preserved") or {}
@@ -383,6 +401,11 @@ def exp2_tables(records: list[dict], run: str) -> list[dict]:
                      "abstention_rate": s["abstention_rate"], "abstention_rate_base": s["abstention_rate_base"],
                      "metric": m, "delta_label_preserved": d.get("delta"), "ci": d.get("ci"),
                      "n_paired_label_preserved": d.get("n_paired"), "verdict": d.get("verdict")})
+        kb = (s["dataset"], s["representation"], s["perturbation"], s["params"], 0.0)
+        kp = kb[:4] + (s["rate"],)
+        for m in ("grounded_nli", "citation_validity", "cites_anything", "answer_in_evidence", "evidence_sufficient"):
+            rows[-1][f"{m}_base"] = (means.get(kb) or {}).get(m)
+            rows[-1][f"{m}_perturbed"] = (means.get(kp) or {}).get(m)
     return rows
 
 
@@ -411,12 +434,12 @@ def figures(exp1_abs: list[dict], exp2_rows: list[dict], outdirs: list[Path]) ->
         fig, axes = plt.subplots(1, len(dss), figsize=(1.55 * len(dss) + 0.4, 1.9), sharey=False, squeeze=False)
         for ax, ds in zip(axes[0], dss):
             rows = {r["representation"]: r for r in exp1_abs if r["dataset"] == ds and r["setting"] == "A"}
-            reps = [x for x in REPS if x in rows]
+            reps = [x for x in REPS if x in rows and rows[x]["score"] is not None and rows[x]["score_ci"]]
             ys = [rows[x]["score"] for x in reps]
             lo = [rows[x]["score"] - rows[x]["score_ci"][0] for x in reps]
             hi = [rows[x]["score_ci"][1] - rows[x]["score"] for x in reps]
             ax.errorbar(range(len(reps)), ys, yerr=[lo, hi], fmt="o", ms=3, capsize=2, color="#2b5d8a")
-            ax.set_xticks(range(len(reps)), reps, rotation=0, fontsize=6.5)
+            ax.set_xticks(range(len(reps)), reps, rotation=60, fontsize=6.5)
             ax.set_title(DS_NAME[ds], fontsize=8)
             ax.set_ylabel("EM" if ds not in ("hover", "fever") else "verdict acc.", fontsize=7)
             ax.grid(axis="y", lw=0.3, alpha=0.5)
@@ -432,7 +455,7 @@ def figures(exp1_abs: list[dict], exp2_rows: list[dict], outdirs: list[Path]) ->
         cols = dict(zip(REPS, ["#1b1b1b", "#2b5d8a", "#7fa7c9", "#b5651d", "#a3241e", "#e08c86", "#4f8a3a"]))
         for ax, ds in zip(axes[0], pds):
             for r in exp1_abs:
-                if r["dataset"] != ds or r["setting"] not in marks:
+                if r["dataset"] != ds or r["setting"] not in marks or r["score"] is None:
                     continue
                 ax.scatter(r["evidence_tokens"], r["score"], marker=marks[r["setting"]], s=14,
                            color=cols[r["representation"]], alpha=0.85, linewidths=0)
@@ -447,30 +470,36 @@ def figures(exp1_abs: list[dict], exp2_rows: list[dict], outdirs: list[Path]) ->
         fig.tight_layout()
         save(fig, "fig3_accuracy_vs_tokens")
 
-    # Fig 4: Exp2 label-preserved change in score vs perturbation rate
+    # Fig 4: Exp2 label-preserved change in score vs rate, QA datasets, with 95% bootstrap CIs.
+    # Points are drawn only at measured rates (rate 0 is the reference, delta 0 by definition).
     if exp2_rows:
-        dss = [d for d in DS_ORDER if any(r["dataset"] == d for r in exp2_rows)]
-        perts = sorted({(r["perturbation"], r["params"]) for r in exp2_rows})
-        fig, axes = plt.subplots(len(dss), 2, figsize=(6.6, 1.45 * len(dss) + 0.5), squeeze=False, sharex=True)
+        dss = [d for d in ("musique", "2wikimultihopqa", "hotpotqa") if any(r["dataset"] == d for r in exp2_rows)]
+        perts = sorted({(r["perturbation"], r["params"]) for r in exp2_rows
+                        if r["delta_label_preserved"] is not None and r["dataset"] in dss})
+        fig, axes = plt.subplots(len(dss), 2, figsize=(6.6, 1.55 * len(dss) + 0.5), squeeze=False, sharex=True)
         pal = ["#2b5d8a", "#a3241e", "#4f8a3a", "#b5651d", "#6b4c9a", "#1b1b1b", "#d4a017", "#7fa7c9"]
         for i, ds in enumerate(dss):
             for j, rep in enumerate(("R1", "R4")):
                 ax = axes[i][j]
                 for k, (P, params) in enumerate(perts):
-                    pts = sorted((r["rate"], r["delta_label_preserved"], r["ci"]) for r in exp2_rows
+                    pts = sorted((float(r["rate"]), r["delta_label_preserved"], r["ci"]) for r in exp2_rows
                                  if r["dataset"] == ds and r["representation"] == rep and r["perturbation"] == P
                                  and r["params"] == params and r["delta_label_preserved"] is not None)
                     if not pts:
                         continue
                     lab = P + ("" if params in ("{}", "null") else " " + ",".join(f"{v}" for v in json.loads(params).values()))
-                    xs = [0.0] + [p[0] for p in pts]
-                    ys = [0.0] + [p[1] for p in pts]
-                    ax.plot(xs, ys, marker="o", ms=2.5, lw=0.9, color=pal[k % len(pal)], label=lab)
+                    off = (k - (len(perts) - 1) / 2) * 0.012
+                    xs = [p[0] + off for p in pts]
+                    ys = [p[1] for p in pts]
+                    lo = [p[1] - p[2][0] for p in pts]
+                    hi = [p[2][1] - p[1] for p in pts]
+                    ax.errorbar(xs, ys, yerr=[lo, hi], fmt="o-", ms=2.8, lw=0.8, capsize=1.5, color=pal[k % len(pal)], label=lab)
                 ax.axhline(0, color="gray", lw=0.4)
                 ax.set_title(f"{DS_NAME[ds]} / {rep}", fontsize=7.5)
                 ax.grid(lw=0.3, alpha=0.5)
+                ax.set_xticks([0.2, 0.4])
                 if j == 0:
-                    ax.set_ylabel("Δ score")
+                    ax.set_ylabel("Δ EM")
         for ax in axes[-1]:
             ax.set_xlabel("perturbation rate")
         hs, ls = [], []

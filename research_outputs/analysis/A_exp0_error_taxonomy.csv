@@ -1,0 +1,11 @@
+run,dataset,setting,condition,abstained,reasoning_error_evidence_present,evaluation_mismatch_candidate,missing_evidence,n_incorrect,generation_failure
+A_exp0,2wikimultihopqa,-,B0,46,21,2,8,77,
+A_exp0,2wikimultihopqa,-,B1,46,19,3,6,74,
+A_exp0,2wikimultihopqa,-,B2,52,17,2,5,76,
+A_exp0,2wikimultihopqa,-,B3,48,23,2,5,80,2
+A_exp0,2wikimultihopqa,-,B4,75,9,1,4,89,
+A_exp0,musique,-,B0,77,4,5,8,94,
+A_exp0,musique,-,B1,67,2,6,13,88,
+A_exp0,musique,-,B2,64,2,5,16,87,
+A_exp0,musique,-,B3,62,6,3,14,85,
+A_exp0,musique,-,B4,82,3,3,9,97,

@@ -1,0 +1,21 @@
+run,dataset,contrast,metric,n_paired,delta,ci,p_boot,verdict,n_identical_evidence,coverage_delta
+A_exp0,2wikimultihopqa,B1-B0,em,100,0.03,"[-0.04, 0.11]",0.513,inconclusive (CI contains 0; not evidence of equivalence),3,0.0
+A_exp0,2wikimultihopqa,B1-B0,f1,100,0.026111111111111113,"[-0.049444444444444444, 0.10555555555555556]",0.489,inconclusive (CI contains 0; not evidence of equivalence),3,0.0
+A_exp0,2wikimultihopqa,B2-B1,em,100,-0.02,"[-0.1, 0.06]",0.746,inconclusive (CI contains 0; not evidence of equivalence),0,-0.06
+A_exp0,2wikimultihopqa,B2-B1,f1,100,-0.02705555555555556,"[-0.10333333333333333, 0.053777777777777785]",0.566,inconclusive (CI contains 0; not evidence of equivalence),0,-0.06
+A_exp0,2wikimultihopqa,B3-B2,em,100,-0.04,"[-0.11, 0.02]",0.276,inconclusive (CI contains 0; not evidence of equivalence),0,0.02
+A_exp0,2wikimultihopqa,B3-B2,f1,100,-0.03358730158730159,"[-0.10534126984126983, 0.031658730158730164]",0.322,inconclusive (CI contains 0; not evidence of equivalence),0,0.02
+A_exp0,2wikimultihopqa,B4-B2,em,100,-0.13,"[-0.21, -0.05]",0.008,b < a,0,-0.23
+A_exp0,2wikimultihopqa,B4-B2,f1,100,-0.14322222222222222,"[-0.22972222222222222, -0.055999999999999994]",0.001,b < a,0,-0.23
+A_exp0,2wikimultihopqa,B4-B1,em,100,-0.15,"[-0.23, -0.07]",0.0,b < a,0,-0.29
+A_exp0,2wikimultihopqa,B4-B1,f1,100,-0.17027777777777778,"[-0.2558333333333333, -0.08416666666666667]",0.0,b < a,0,-0.29
+A_exp0,musique,B1-B0,em,100,0.06,"[0.0, 0.12]",0.067,inconclusive (CI contains 0; not evidence of equivalence),0,0.1
+A_exp0,musique,B1-B0,f1,100,0.0719047619047619,"[0.009, 0.13747619047619047]",0.019,b > a,0,0.1
+A_exp0,musique,B2-B1,em,100,0.01,"[-0.05, 0.07]",0.818,inconclusive (CI contains 0; not evidence of equivalence),0,0.03
+A_exp0,musique,B2-B1,f1,100,0.006095238095238095,"[-0.04814285714285714, 0.06233333333333333]",0.795,inconclusive (CI contains 0; not evidence of equivalence),0,0.03
+A_exp0,musique,B3-B2,em,100,0.02,"[-0.04, 0.08]",0.645,inconclusive (CI contains 0; not evidence of equivalence),0,0.02
+A_exp0,musique,B3-B2,f1,100,0.0035555555555555553,"[-0.05333333333333333, 0.058888888888888886]",0.927,inconclusive (CI contains 0; not evidence of equivalence),0,0.02
+A_exp0,musique,B4-B2,em,100,-0.1,"[-0.17, -0.04]",0.002,b < a,0,-0.18
+A_exp0,musique,B4-B2,f1,100,-0.12129411764705882,"[-0.1929607843137255, -0.056333333333333326]",0.0,b < a,0,-0.18
+A_exp0,musique,B4-B1,em,100,-0.09,"[-0.15, -0.04]",0.0,b < a,0,-0.15
+A_exp0,musique,B4-B1,f1,100,-0.11519887955182073,"[-0.17814285714285713, -0.059666666666666666]",0.0,b < a,0,-0.15

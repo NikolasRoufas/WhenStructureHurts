@@ -1,0 +1,7 @@
+run,dataset,setting,contrast,metric,n_paired,delta,ci,p_boot,n_records_changed_by_folding_in_dataset
+C_exp1,musique,A,R1-R0,em_diacritics_folded,100,0.03,"[-0.03, 0.09]",0.426,0
+C_exp1,musique,A,R5-R1,em_diacritics_folded,100,-0.02,"[-0.07, 0.04]",0.643,0
+C_exp1,musique,A,R4-R5,em_diacritics_folded,100,0.0,"[-0.05, 0.05]",1.0,0
+C_exp1,2wikimultihopqa,A,R1-R0,em_diacritics_folded,100,-0.07,"[-0.16, 0.01]",0.111,3
+C_exp1,2wikimultihopqa,A,R5-R1,em_diacritics_folded,100,0.01,"[-0.06, 0.09]",0.918,3
+C_exp1,2wikimultihopqa,A,R4-R5,em_diacritics_folded,100,0.04,"[0.0, 0.09]",0.136,3

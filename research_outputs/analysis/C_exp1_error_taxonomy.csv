@@ -1,0 +1,166 @@
+run,dataset,setting,condition,reasoning_error_evidence_present,evaluation_mismatch_candidate,abstained,missing_evidence,n_incorrect
+C_exp1,2wikimultihopqa,A,R0,31,8,16,1,56
+C_exp1,2wikimultihopqa,A,R1,29,9,24,1,63
+C_exp1,2wikimultihopqa,A,R2,86,24,79,4,193
+C_exp1,2wikimultihopqa,A,R3,25,4,33,1,63
+C_exp1,2wikimultihopqa,A,R4,21,7,31,,59
+C_exp1,2wikimultihopqa,A,R4P,21,7,34,,62
+C_exp1,2wikimultihopqa,A,R5,25,6,30,1,62
+C_exp1,2wikimultihopqa,B 0.5x per_representation,R0,9,4,50,20,83
+C_exp1,2wikimultihopqa,B 0.5x per_representation,R1,7,1,61,14,83
+C_exp1,2wikimultihopqa,B 0.5x per_representation,R2,29,9,176,46,260
+C_exp1,2wikimultihopqa,B 0.5x per_representation,R3,5,3,65,11,84
+C_exp1,2wikimultihopqa,B 0.5x per_representation,R4,7,2,62,14,85
+C_exp1,2wikimultihopqa,B 0.5x per_representation,R4P,6,3,64,13,86
+C_exp1,2wikimultihopqa,B 0.5x per_representation,R5,6,2,59,14,81
+C_exp1,2wikimultihopqa,B 0.5x shared,R0,9,4,55,18,86
+C_exp1,2wikimultihopqa,B 0.5x shared,R1,7,1,64,13,85
+C_exp1,2wikimultihopqa,B 0.5x shared,R2,25,10,185,40,260
+C_exp1,2wikimultihopqa,B 0.5x shared,R3,5,3,65,11,84
+C_exp1,2wikimultihopqa,B 0.5x shared,R4,7,2,63,13,85
+C_exp1,2wikimultihopqa,B 0.5x shared,R4P,6,3,65,12,86
+C_exp1,2wikimultihopqa,B 0.5x shared,R5,6,2,63,13,84
+C_exp1,2wikimultihopqa,B 1.0x per_representation,R0,26,9,22,5,62
+C_exp1,2wikimultihopqa,B 1.0x per_representation,R1,22,2,33,10,67
+C_exp1,2wikimultihopqa,B 1.0x per_representation,R2,62,15,97,36,210
+C_exp1,2wikimultihopqa,B 1.0x per_representation,R3,20,1,43,10,74
+C_exp1,2wikimultihopqa,B 1.0x per_representation,R4,20,1,36,10,67
+C_exp1,2wikimultihopqa,B 1.0x per_representation,R4P,14,3,42,11,70
+C_exp1,2wikimultihopqa,B 1.0x per_representation,R5,20,3,36,10,69
+C_exp1,2wikimultihopqa,B 1.0x shared,R0,19,5,33,13,70
+C_exp1,2wikimultihopqa,B 1.0x shared,R1,20,3,37,13,73
+C_exp1,2wikimultihopqa,B 1.0x shared,R2,58,14,107,45,224
+C_exp1,2wikimultihopqa,B 1.0x shared,R3,16,2,44,12,74
+C_exp1,2wikimultihopqa,B 1.0x shared,R4,17,3,38,13,71
+C_exp1,2wikimultihopqa,B 1.0x shared,R4P,14,3,43,12,72
+C_exp1,2wikimultihopqa,B 1.0x shared,R5,18,4,38,13,73
+C_exp1,fever,A,R0,2,,,,2
+C_exp1,fever,A,R1,2,,,,2
+C_exp1,fever,A,R2,4,,,,4
+C_exp1,fever,A,R4,2,,,,2
+C_exp1,fever,A,R4P,2,,,,2
+C_exp1,fever,A,R5,2,,,,2
+C_exp1,fever,B 0.5x per_representation,R0,16,,,,16
+C_exp1,fever,B 0.5x per_representation,R1,16,,,,16
+C_exp1,fever,B 0.5x per_representation,R2,48,,,,48
+C_exp1,fever,B 0.5x per_representation,R4,16,,,,16
+C_exp1,fever,B 0.5x per_representation,R4P,16,,,,16
+C_exp1,fever,B 0.5x per_representation,R5,16,,,,16
+C_exp1,fever,B 0.5x shared,R0,16,,,,16
+C_exp1,fever,B 0.5x shared,R1,16,,,,16
+C_exp1,fever,B 0.5x shared,R2,48,,,,48
+C_exp1,fever,B 0.5x shared,R4,16,,,,16
+C_exp1,fever,B 0.5x shared,R4P,16,,,,16
+C_exp1,fever,B 0.5x shared,R5,16,,,,16
+C_exp1,fever,B 1.0x per_representation,R0,15,,,,15
+C_exp1,fever,B 1.0x per_representation,R1,15,,,,15
+C_exp1,fever,B 1.0x per_representation,R2,45,,,,45
+C_exp1,fever,B 1.0x per_representation,R4,15,,,,15
+C_exp1,fever,B 1.0x per_representation,R4P,15,,,,15
+C_exp1,fever,B 1.0x per_representation,R5,15,,,,15
+C_exp1,fever,B 1.0x shared,R0,15,,,,15
+C_exp1,fever,B 1.0x shared,R1,15,,,,15
+C_exp1,fever,B 1.0x shared,R2,45,,,,45
+C_exp1,fever,B 1.0x shared,R4,15,,,,15
+C_exp1,fever,B 1.0x shared,R4P,15,,,,15
+C_exp1,fever,B 1.0x shared,R5,15,,,,15
+C_exp1,hotpotqa,A,R0,15,9,6,,30
+C_exp1,hotpotqa,A,R1,11,9,9,,29
+C_exp1,hotpotqa,A,R2,41,33,23,,97
+C_exp1,hotpotqa,A,R3,13,10,7,,30
+C_exp1,hotpotqa,A,R4,12,10,8,,30
+C_exp1,hotpotqa,A,R4P,10,9,10,,29
+C_exp1,hotpotqa,A,R5,12,10,9,,31
+C_exp1,hotpotqa,B 0.5x per_representation,R0,5,5,24,4,38
+C_exp1,hotpotqa,B 0.5x per_representation,R1,5,4,25,4,38
+C_exp1,hotpotqa,B 0.5x per_representation,R2,16,15,70,14,115
+C_exp1,hotpotqa,B 0.5x per_representation,R3,3,5,28,4,40
+C_exp1,hotpotqa,B 0.5x per_representation,R4,5,4,25,4,38
+C_exp1,hotpotqa,B 0.5x per_representation,R4P,4,5,24,5,38
+C_exp1,hotpotqa,B 0.5x per_representation,R5,4,4,25,4,37
+C_exp1,hotpotqa,B 0.5x shared,R0,4,5,25,4,38
+C_exp1,hotpotqa,B 0.5x shared,R1,4,4,26,4,38
+C_exp1,hotpotqa,B 0.5x shared,R2,16,12,73,14,115
+C_exp1,hotpotqa,B 0.5x shared,R3,3,5,28,4,40
+C_exp1,hotpotqa,B 0.5x shared,R4,4,4,26,4,38
+C_exp1,hotpotqa,B 0.5x shared,R4P,4,5,25,4,38
+C_exp1,hotpotqa,B 0.5x shared,R5,3,4,26,4,37
+C_exp1,hotpotqa,B 1.0x per_representation,R0,13,8,9,2,32
+C_exp1,hotpotqa,B 1.0x per_representation,R1,9,8,9,4,30
+C_exp1,hotpotqa,B 1.0x per_representation,R2,23,24,30,12,89
+C_exp1,hotpotqa,B 1.0x per_representation,R3,10,7,12,4,33
+C_exp1,hotpotqa,B 1.0x per_representation,R4,8,10,11,4,33
+C_exp1,hotpotqa,B 1.0x per_representation,R4P,8,8,11,4,31
+C_exp1,hotpotqa,B 1.0x per_representation,R5,9,8,9,4,30
+C_exp1,hotpotqa,B 1.0x shared,R0,10,7,11,4,32
+C_exp1,hotpotqa,B 1.0x shared,R1,10,7,12,4,33
+C_exp1,hotpotqa,B 1.0x shared,R2,23,24,34,11,92
+C_exp1,hotpotqa,B 1.0x shared,R3,10,7,13,3,33
+C_exp1,hotpotqa,B 1.0x shared,R4,8,9,13,4,34
+C_exp1,hotpotqa,B 1.0x shared,R4P,7,8,13,4,32
+C_exp1,hotpotqa,B 1.0x shared,R5,10,7,12,4,33
+C_exp1,hover,A,R0,16,,,,16
+C_exp1,hover,A,R1,16,,,,16
+C_exp1,hover,A,R2,40,,,,40
+C_exp1,hover,A,R4,16,,,,16
+C_exp1,hover,A,R4P,13,,,,13
+C_exp1,hover,A,R5,16,,,,16
+C_exp1,hover,B 0.5x per_representation,R0,17,,,,17
+C_exp1,hover,B 0.5x per_representation,R1,20,,,,20
+C_exp1,hover,B 0.5x per_representation,R2,58,,,,58
+C_exp1,hover,B 0.5x per_representation,R4,20,,,,20
+C_exp1,hover,B 0.5x per_representation,R4P,16,,,,16
+C_exp1,hover,B 0.5x per_representation,R5,20,,,,20
+C_exp1,hover,B 0.5x shared,R0,17,,,,17
+C_exp1,hover,B 0.5x shared,R1,18,,,,18
+C_exp1,hover,B 0.5x shared,R2,55,,,,55
+C_exp1,hover,B 0.5x shared,R4,18,,,,18
+C_exp1,hover,B 0.5x shared,R4P,16,,,,16
+C_exp1,hover,B 0.5x shared,R5,18,,,,18
+C_exp1,hover,B 1.0x per_representation,R0,15,,,,15
+C_exp1,hover,B 1.0x per_representation,R1,17,,,,17
+C_exp1,hover,B 1.0x per_representation,R2,42,,,,42
+C_exp1,hover,B 1.0x per_representation,R4,17,,,,17
+C_exp1,hover,B 1.0x per_representation,R4P,16,,,,16
+C_exp1,hover,B 1.0x per_representation,R5,17,,,,17
+C_exp1,hover,B 1.0x shared,R0,16,,,,16
+C_exp1,hover,B 1.0x shared,R1,16,,,,16
+C_exp1,hover,B 1.0x shared,R2,43,,,,43
+C_exp1,hover,B 1.0x shared,R4,16,,,,16
+C_exp1,hover,B 1.0x shared,R4P,16,,,,16
+C_exp1,hover,B 1.0x shared,R5,16,,,,16
+C_exp1,musique,A,R0,18,11,43,,72
+C_exp1,musique,A,R1,16,10,43,,69
+C_exp1,musique,A,R2,60,33,122,,215
+C_exp1,musique,A,R3,15,13,48,,76
+C_exp1,musique,A,R4,19,11,41,,71
+C_exp1,musique,A,R4P,13,8,58,,79
+C_exp1,musique,A,R5,16,13,42,,71
+C_exp1,musique,B 0.5x per_representation,R0,5,5,70,10,90
+C_exp1,musique,B 0.5x per_representation,R1,6,4,70,11,91
+C_exp1,musique,B 0.5x per_representation,R2,23,12,198,36,269
+C_exp1,musique,B 0.5x per_representation,R3,6,5,70,11,92
+C_exp1,musique,B 0.5x per_representation,R4,7,5,69,11,92
+C_exp1,musique,B 0.5x per_representation,R4P,6,3,72,10,91
+C_exp1,musique,B 0.5x per_representation,R5,6,4,70,11,91
+C_exp1,musique,B 0.5x shared,R0,5,4,72,10,91
+C_exp1,musique,B 0.5x shared,R1,6,5,70,10,91
+C_exp1,musique,B 0.5x shared,R2,23,13,200,34,270
+C_exp1,musique,B 0.5x shared,R3,6,5,70,11,92
+C_exp1,musique,B 0.5x shared,R4,7,5,70,10,92
+C_exp1,musique,B 0.5x shared,R4P,6,3,73,9,91
+C_exp1,musique,B 0.5x shared,R5,6,5,70,10,91
+C_exp1,musique,B 1.0x per_representation,R0,14,12,48,1,75
+C_exp1,musique,B 1.0x per_representation,R1,15,9,48,2,74
+C_exp1,musique,B 1.0x per_representation,R2,58,43,122,10,233
+C_exp1,musique,B 1.0x per_representation,R3,11,14,47,6,78
+C_exp1,musique,B 1.0x per_representation,R4,13,8,56,6,83
+C_exp1,musique,B 1.0x per_representation,R4P,11,9,56,5,81
+C_exp1,musique,B 1.0x per_representation,R5,16,12,47,3,78
+C_exp1,musique,B 1.0x shared,R0,12,8,53,9,82
+C_exp1,musique,B 1.0x shared,R1,11,9,52,8,80
+C_exp1,musique,B 1.0x shared,R2,44,37,132,26,239
+C_exp1,musique,B 1.0x shared,R3,10,14,48,9,81
+C_exp1,musique,B 1.0x shared,R4,13,8,54,8,83
+C_exp1,musique,B 1.0x shared,R4P,9,8,57,8,82
+C_exp1,musique,B 1.0x shared,R5,12,13,48,9,82
