@@ -361,7 +361,7 @@ def render_markdown(result: dict, manifest: dict) -> str:
     if manifest["stage"] == "smoke":
         L += ["> **SMOKE TEST - software/pipeline validation only.** Sample sizes are tiny and the model is a",
               "> 0.5B development model. Nothing here is evidence for or against any hypothesis.", ""]
-    elif manifest["stage"] in ("pilot", "gpu_pilot"):
+    elif manifest["stage"] in ("pilot", "gpu_pilot", "revision"):
         L += [f"> **{manifest['stage'].upper()} - exploratory.** Estimates effect sizes and variance for planning; "
               "no confirmatory claims.", ""]
     if not result.get("consistency", {}).get("generator_settings_identical", True):

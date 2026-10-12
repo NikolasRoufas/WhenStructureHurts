@@ -186,6 +186,9 @@ def make_layout(rep: str, b: EvidenceBundle, seed: int = 0) -> Layout:
         return evidence_graphs.layout(b, rep=rep, with_edges=True)
     if rep == "R5":
         return evidence_graphs.layout(b, rep="R5", with_edges=False)
+    from ..representations.relation_controls import CONTROL_REPS, with_edges
+    if rep in CONTROL_REPS:
+        return evidence_graphs.layout(b, rep=rep, with_edges=with_edges(rep))
     raise ValueError(f"unknown representation {rep}")
 
 

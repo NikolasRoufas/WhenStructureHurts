@@ -13,10 +13,12 @@ from pydantic import BaseModel, ConfigDict, Field, model_validator
 
 from .models.policy import check_model
 
-Stage = Literal["smoke", "pilot", "gpu_pilot", "full"]
+Stage = Literal["smoke", "pilot", "gpu_pilot", "revision", "full"]
 STAGE_LIMITS = {"smoke": {"max_examples": 10, "max_generations": 2000},
                 "pilot": {"max_examples": 1000, "max_generations": 200000},
                 "gpu_pilot": {"max_examples": 1000, "max_generations": 200000},  # exploratory, frozen pilot set
+                # post-hoc exploratory analyses on already-inspected frozen sets (revision-1); never confirmatory
+                "revision": {"max_examples": 10000, "max_generations": 400000},
                 "full": {"max_examples": 100000, "max_generations": 10_000_000}}
 
 

@@ -54,15 +54,21 @@ def bundles_for(q: Question, runner: Runner) -> dict[str, EvidenceBundle | Excep
             base = _retrieved_bundle(q, runner)
     except EvidenceUnavailable as e:
         return {r: e for r in e1.representations}
+    from ..representations.relation_controls import CONTROL_REPS, control_bundle
+
     out: dict[str, EvidenceBundle | Exception] = {}
+    pred = None
+    if any(r == "R4P" or r in CONTROL_REPS for r in e1.representations):
+        pred = base.model_copy(deep=True)
+        pred.edges, stats = runner.res.relation_classifier().classify(pred.claims, q.question)
+        pred.origin = {**pred.origin, "edges": "model_predicted", "relation_stats": stats}
     for rep in e1.representations:
         if rep == "R3" and not base.path:
             out[rep] = PathUnavailable(f"{q.uid}: reasoning path unavailable ({base.path_status.value})")
         elif rep == "R4P":
-            pred = base.model_copy(deep=True)
-            pred.edges, stats = runner.res.relation_classifier().classify(pred.claims, q.question)
-            pred.origin = {**pred.origin, "edges": "model_predicted", "relation_stats": stats}
             out[rep] = pred
+        elif rep in CONTROL_REPS:
+            out[rep] = control_bundle(rep, base, pred)
         else:
             out[rep] = base
     return out
@@ -90,7 +96,8 @@ def body(runner: Runner, questions) -> None:
         for q in qs:
             bundles = bundles_for(q, runner)
             ok, bad = _variants(bundles, e1.shuffle_seeds)
-            first = next((v[2] for v in ok.values() if v[0] != "R4P"), None)
+            from ..representations.relation_controls import PREDICTED_REPS
+            first = next((v[2] for v in ok.values() if v[0] not in PREDICTED_REPS), None)
             stratum = bundle_edge_stratum(first) if first is not None else None
             settings = []
             if "A" in e1.protocols:

@@ -17,6 +17,7 @@ policy:
     smoke:     {max_params: 1.0e9, requires_authorization: false}
     pilot:     {max_params: 1.0e9, requires_authorization: false}
     gpu_pilot: {max_params: 1.0e11, requires_authorization: true}
+    revision:  {max_params: 1.0e11, requires_authorization: true}   # post-hoc exploratory (revision-1)
     full:      {max_params: 1.0e11, requires_authorization: true}
   forbidden_name_patterns_unauthorized_stages:
     - "(?i)(^|[^0-9.])(1\\.5|3|4|7|8|9|13|14|32|70|72)b"
@@ -44,7 +45,7 @@ generators:
     precision: bfloat16
     license: apache-2.0
     architecture: Qwen2ForCausalLM (qwen2; supported by transformers 5.12.1 AutoModelForCausalLM)
-    stages: [gpu_pilot, full]
+    stages: [gpu_pilot, revision, full]
   Qwen/Qwen2.5-3B-Instruct:
     revision: aa8e72537993ba99e69dfaafa59ed015b17504d1
     n_params: 3085938688

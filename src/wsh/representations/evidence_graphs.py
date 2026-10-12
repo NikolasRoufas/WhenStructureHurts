@@ -26,14 +26,17 @@ DIRECTED_LABEL = {
 
 def layout(b: EvidenceBundle, rep: str = "R4", with_edges: bool = True, max_relations: int = 40) -> Layout:
     cm = b.claim_map()
-    order = topological_order(b)
+    # relation controls (relation_controls.py) may fix the order and relabel edges; bundles without
+    # these origin keys (all R4/R4P/R5 bundles) render exactly as before
+    order = b.origin.get("fixed_order") or topological_order(b)
+    label_override = b.origin.get("relation_label_override")
     idx = {cid: i for i, cid in enumerate(order)}
     units = [claim_unit(cm[c], b.provenance_visible) for c in order]
     rels: list[tuple[int, int, str]] = []
     if with_edges:
         for e in b.edges:
             if e.source in idx and e.target in idx and len(rels) < max_relations:
-                r = (idx[e.source], idx[e.target], DIRECTED_LABEL[e.relation])
+                r = (idx[e.source], idx[e.target], label_override or DIRECTED_LABEL[e.relation])
                 if r not in rels:
                     rels.append(r)
     conflicts = []
