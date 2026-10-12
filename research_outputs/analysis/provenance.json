@@ -100,5 +100,22 @@
    "report.md": "fdca25c3d11a2041600e2cee90ea9f45d132c3cd1b95842f3c14acaca495f908",
    "summary.csv": "81a00fe6404ca44b102b48c50d35507afa0cf6391483b912e2c1cd11b2bc8b72"
   }
+ },
+ "C_exp0": {
+  "run_dir": "20261012-183032_f123f890",
+  "experiment": "exp0",
+  "stage": "gpu_pilot",
+  "config_hash": "f123f890e4e796d531d957a465e68db993d5ae85b4d063d7b5a1a07ee68145f3",
+  "git_commit": "ed7c391da5762467ca4610ca545accfd3492babb",
+  "status": "completed",
+  "n_records": 1750,
+  "files": {
+   "config.resolved.yaml": "d915ac9330a640cf4ab533c0f19de051a6a4d0c29909593e6298c80174d07eee",
+   "manifest.json": "b451e4deeb9b629e8be854232eac7a583c4f8cbc04c091084b3b2a4321e0b904",
+   "metrics.json": "000a977e5779b6ef395262704f0d41ede0d17b191c69531185825599b28393d7",
+   "predictions.jsonl": "54dd9f9d525db1f48c3cb20ba034980d9020f3657d8bd203efc8b7cc76515a03",
+   "report.md": "d5e2d5432a0443ccdbf92d662045eb53c139edc5d6f710cad5213814cd81691f",
+   "summary.csv": "e2d0596f182ca3c4c65817583c4c1c9234231af89774d8e7443ad5e80d8f31fb"
+  }
  }
 }

@@ -110,7 +110,7 @@ See `paper/REVIEWER_SELF_CRITIQUE.md`.
 
 **10. What additional work would most improve its scientific contribution?**
 
-In order of value per GPU-hour, given about 14 of the 24 authorised hours remain:
+In order of value per GPU-hour, given about 14.5 of the 24 authorised hours remain (9.53 used):
 1. **A second generator family** at a similar size (e.g. the registered Qwen3.5-9B, after its loading preflight, or a Llama/Mistral model if authorised), re-running the confirmatory Protocol A on the frozen `confirm_v1` set. Estimated 5–6 GPU-hours per model.
 2. **A pre-registered R4P ablation:** predicted relations with the CONTRADICTS lines removed, and predicted relations with the derived order. This isolates misleading relations from order and line count. It reuses the confirmatory questions and costs about 2 GPU-hours.
 3. **A no-abstention prompt variant** as a pre-specified sensitivity analysis, to separate representation effects from abstention calibration. About 3 GPU-hours.

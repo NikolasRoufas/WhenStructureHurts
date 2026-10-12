@@ -1,0 +1,41 @@
+run,dataset,contrast,metric,n_paired,delta,ci,p_boot,verdict,n_identical_evidence,coverage_delta
+C_exp0,2wikimultihopqa,B1-B0,em,100,0.03,"[-0.04, 0.11]",0.513,inconclusive (CI contains 0; not evidence of equivalence),3,0.0
+C_exp0,2wikimultihopqa,B1-B0,f1,100,0.026111111111111113,"[-0.049444444444444444, 0.10555555555555556]",0.489,inconclusive (CI contains 0; not evidence of equivalence),3,0.0
+C_exp0,2wikimultihopqa,B2-B1,em,100,-0.02,"[-0.1, 0.06]",0.746,inconclusive (CI contains 0; not evidence of equivalence),0,-0.06
+C_exp0,2wikimultihopqa,B2-B1,f1,100,-0.02705555555555556,"[-0.10333333333333333, 0.053777777777777785]",0.566,inconclusive (CI contains 0; not evidence of equivalence),0,-0.06
+C_exp0,2wikimultihopqa,B3-B2,em,100,-0.04,"[-0.11, 0.02]",0.276,inconclusive (CI contains 0; not evidence of equivalence),0,0.02
+C_exp0,2wikimultihopqa,B3-B2,f1,100,-0.03358730158730159,"[-0.10534126984126983, 0.031658730158730164]",0.322,inconclusive (CI contains 0; not evidence of equivalence),0,0.02
+C_exp0,2wikimultihopqa,B4-B2,em,100,-0.13,"[-0.21, -0.05]",0.008,b < a,0,-0.23
+C_exp0,2wikimultihopqa,B4-B2,f1,100,-0.14322222222222222,"[-0.22972222222222222, -0.055999999999999994]",0.001,b < a,0,-0.23
+C_exp0,2wikimultihopqa,B4-B1,em,100,-0.15,"[-0.23, -0.07]",0.0,b < a,0,-0.29
+C_exp0,2wikimultihopqa,B4-B1,f1,100,-0.17027777777777778,"[-0.2558333333333333, -0.08416666666666667]",0.0,b < a,0,-0.29
+C_exp0,fever,B1-B0,verdict_acc,50,0.04,"[0.0, 0.1]",0.264,inconclusive (CI contains 0; not evidence of equivalence),3,0.0
+C_exp0,fever,B2-B1,verdict_acc,50,-0.02,"[-0.06, 0.0]",0.737,inconclusive (CI contains 0; not evidence of equivalence),0,0.0
+C_exp0,fever,B3-B2,verdict_acc,50,0.0,"[-0.06, 0.06]",1.0,inconclusive (CI contains 0; not evidence of equivalence),0,0.0
+C_exp0,fever,B4-B2,verdict_acc,50,-0.02,"[-0.1, 0.04]",0.77,inconclusive (CI contains 0; not evidence of equivalence),0,0.0
+C_exp0,fever,B4-B1,verdict_acc,50,-0.04,"[-0.12, 0.04]",0.45,inconclusive (CI contains 0; not evidence of equivalence),0,0.0
+C_exp0,hotpotqa,B1-B0,em,50,0.0,"[-0.1, 0.1]",1.0,inconclusive (CI contains 0; not evidence of equivalence),1,-0.06
+C_exp0,hotpotqa,B1-B0,f1,50,-0.048603174603174606,"[-0.1543809523809524, 0.05685714285714285]",0.347,inconclusive (CI contains 0; not evidence of equivalence),1,-0.06
+C_exp0,hotpotqa,B2-B1,em,50,0.06,"[-0.06, 0.18]",0.398,inconclusive (CI contains 0; not evidence of equivalence),0,0.04
+C_exp0,hotpotqa,B2-B1,f1,50,0.068,"[-0.052000000000000005, 0.2]",0.281,inconclusive (CI contains 0; not evidence of equivalence),0,0.04
+C_exp0,hotpotqa,B3-B2,em,50,-0.08,"[-0.18, 0.02]",0.215,inconclusive (CI contains 0; not evidence of equivalence),0,-0.08
+C_exp0,hotpotqa,B3-B2,f1,50,-0.059000000000000004,"[-0.175, 0.05]",0.314,inconclusive (CI contains 0; not evidence of equivalence),0,-0.08
+C_exp0,hotpotqa,B4-B2,em,50,-0.06,"[-0.18, 0.06]",0.402,inconclusive (CI contains 0; not evidence of equivalence),0,-0.2
+C_exp0,hotpotqa,B4-B2,f1,50,-0.1300952380952381,"[-0.2641904761904762, 0.001333333333333333]",0.051,inconclusive (CI contains 0; not evidence of equivalence),0,-0.2
+C_exp0,hotpotqa,B4-B1,em,50,0.0,"[-0.12, 0.12]",1.0,inconclusive (CI contains 0; not evidence of equivalence),0,-0.16
+C_exp0,hotpotqa,B4-B1,f1,50,-0.0620952380952381,"[-0.1921904761904762, 0.0659047619047619]",0.343,inconclusive (CI contains 0; not evidence of equivalence),0,-0.16
+C_exp0,hover,B1-B0,verdict_acc,50,-0.08,"[-0.2, 0.04]",0.294,inconclusive (CI contains 0; not evidence of equivalence),5,0.0
+C_exp0,hover,B2-B1,verdict_acc,50,0.0,"[-0.1, 0.08]",1.0,inconclusive (CI contains 0; not evidence of equivalence),0,0.0
+C_exp0,hover,B3-B2,verdict_acc,50,-0.02,"[-0.1, 0.06]",0.831,inconclusive (CI contains 0; not evidence of equivalence),0,0.0
+C_exp0,hover,B4-B2,verdict_acc,50,-0.06,"[-0.22, 0.12]",0.577,inconclusive (CI contains 0; not evidence of equivalence),0,0.0
+C_exp0,hover,B4-B1,verdict_acc,50,-0.06,"[-0.22, 0.12]",0.584,inconclusive (CI contains 0; not evidence of equivalence),0,0.0
+C_exp0,musique,B1-B0,em,100,0.06,"[0.0, 0.12]",0.067,inconclusive (CI contains 0; not evidence of equivalence),0,0.1
+C_exp0,musique,B1-B0,f1,100,0.0719047619047619,"[0.009, 0.13747619047619047]",0.019,b > a,0,0.1
+C_exp0,musique,B2-B1,em,100,0.01,"[-0.05, 0.07]",0.818,inconclusive (CI contains 0; not evidence of equivalence),0,0.03
+C_exp0,musique,B2-B1,f1,100,0.006095238095238095,"[-0.04814285714285714, 0.06233333333333333]",0.795,inconclusive (CI contains 0; not evidence of equivalence),0,0.03
+C_exp0,musique,B3-B2,em,100,0.02,"[-0.04, 0.08]",0.645,inconclusive (CI contains 0; not evidence of equivalence),0,0.02
+C_exp0,musique,B3-B2,f1,100,0.0035555555555555553,"[-0.05333333333333333, 0.058888888888888886]",0.927,inconclusive (CI contains 0; not evidence of equivalence),0,0.02
+C_exp0,musique,B4-B2,em,100,-0.1,"[-0.17, -0.04]",0.002,b < a,0,-0.18
+C_exp0,musique,B4-B2,f1,100,-0.12129411764705882,"[-0.1929607843137255, -0.056333333333333326]",0.0,b < a,0,-0.18
+C_exp0,musique,B4-B1,em,100,-0.09,"[-0.15, -0.04]",0.0,b < a,0,-0.15
+C_exp0,musique,B4-B1,f1,100,-0.11519887955182073,"[-0.17814285714285713, -0.059666666666666666]",0.0,b < a,0,-0.15

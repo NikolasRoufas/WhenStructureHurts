@@ -26,9 +26,9 @@ GPU-hours are counted as the wall-clock time a run holds GPU 0 (one process at a
 | B | decision gate | `research_outputs/reports/DECISION_GATE_STAGE_B.md` | **done: proceed** | | | 0 |
 | C | Exp1, 350 questions — `gpu_pilot/exp1/20261012-120617_d4f7f61d` | `gpu_pilot.yaml` @ `ed7c391` | **completed** 12:21 UTC | 15,750 (the 200 focused questions served from cache) | 0 / 0; 500 unavailable by design (R3 on HoVer and FEVER: no reasoning path) | 932 s / **0.26** |
 | C | Exp2, 350 questions — `gpu_pilot/exp2/20261012-122150_20896430` | `gpu_pilot.yaml` @ `ed7c391` | **completed** 12:56 UTC | 14,000 | 0 / 0; 2,664 unavailable by design (P7 without verified temporal data; P2 on R1 and on questions without edges; interventions with nothing eligible) | 2,093 s / **0.58** |
-| confirmatory | Exp1, 1,744 MuSiQue + 3,232 2Wiki, Protocol A — `full/exp1/20261012-125639_49dfe135` | `confirm.yaml` @ `ed7c391` | running since 12:56 UTC (about 130 records/min) | 1,044 / 44,784 at 13:04 UTC | 0 so far | est. 5.7 (finish ≈ 18:40 UTC) |
-| C | Exp3, 350 questions | `gpu_pilot.yaml` | queued (expected: every question unavailable, since there are no human-verified annotations) | | | est. < 0.1 |
-| C | Exp0, 350 questions (the 200 already done come from cache) | `gpu_pilot.yaml` | queued last | | | est. 1.2 |
+| confirmatory | Exp1, 1,744 MuSiQue + 3,232 2Wiki, Protocol A — `full/exp1/20261012-125639_49dfe135` | `confirm.yaml` @ `ed7c391` | **completed** 18:30 UTC | 44,784 (39,741 generated) | 0 / 0 / 0 unavailable; 42 answers cut at max_new_tokens (scored) | 20,014 s / **5.56** |
+| C | Exp3, 350 questions — `gpu_pilot/exp3/20261012-183018_f702b552` | `gpu_pilot.yaml` @ `ed7c391` | **completed** 18:30 UTC | 1,750, all unavailable by design (no human-verified annotations) | 0 / 0 | 13 s / **0.00** |
+| C | Exp0, 350 questions — `gpu_pilot/exp0/20261012-183032_f123f890` | `gpu_pilot.yaml` @ `ed7c391` | **completed** 19:24 UTC | 1,750 (MuSiQue/2Wiki from cache) | 0 / 0; 34 cut at max_new_tokens, 3 context overflows (scored) | 3,244 s / **0.90** |
 
 ## GPU-hour ledger
 
@@ -39,13 +39,18 @@ GPU-hours are counted as the wall-clock time a run holds GPU 0 (one process at a
 | Stage A Exp0 | 1.61 |
 | Stage C Exp1 | 0.26 |
 | Stage C Exp2 | 0.58 |
-| **total completed** | **≈ 3.1** |
-| projected total once every queued item finishes | ≈ 10 (ceiling 24) |
+| Confirmatory Exp1 | 5.56 |
+| Stage C Exp3 | 0.00 |
+| Stage C Exp0 | 0.90 |
+| **total (campaign complete)** | **≈ 9.53 of 24** |
 
 **Analysis outputs:**
 - `research_outputs/analysis/` (A_exp1, A_exp0, C_exp1, C_exp2) and `research_outputs/figures/`.
 - `results/analysis/FOCUSED_PILOT_REPORT.md`.
-- Built at commit `33bbbd8` from the run directories listed in `research_outputs/experiments/runs.json`.
+- Built from the run directories listed in `research_outputs/experiments/runs.json` (labels A_exp1, A_exp0, C_exp1, C_exp2, C_exp3, C_exp0, F_exp1).
+- Paper: `paper/main.pdf`. Final assessment: `docs/FINAL_RESEARCH_ASSESSMENT.md`.
+
+**All authorised work is complete. No GPU job is queued.**
 
 ## Frozen artefacts used
 

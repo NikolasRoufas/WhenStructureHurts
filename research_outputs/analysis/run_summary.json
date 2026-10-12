@@ -96,5 +96,22 @@
   "unavailable_reasons": {
    "ConditionUnavailable": 1750
   }
+ },
+ "C_exp0": {
+  "experiment": "exp0",
+  "stage": "gpu_pilot",
+  "n_records": 1750,
+  "n_unavailable": 0,
+  "n_generation_error": 0,
+  "n_pipeline_error": 0,
+  "finish_reasons": {
+   "eos": 1713,
+   "length": 34,
+   "skipped_overflow": 3
+  },
+  "consistency": true,
+  "wall_clock_s": 3230.5,
+  "status": "completed",
+  "unavailable_reasons": {}
  }
 }
