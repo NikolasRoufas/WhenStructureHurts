@@ -147,6 +147,10 @@ class Exp1Config(Strict):
     representations: list[str] = ["R0", "R1", "R2", "R3", "R4", "R4P", "R5"]
     evidence_source: Literal["gold", "retrieved"] = "gold"
     evidence_scope: Literal["gold_passages", "gold_sentences"] = "gold_passages"
+    # structure for evidence_source == "retrieved": the title-mention heuristic (default, unchanged), or the
+    # dataset-annotation edges restricted to the retrieved sentences (oracle structure on real retrieval;
+    # revision-1). Evidence selection itself never uses gold labels.
+    retrieved_edges: Literal["heuristic", "annotation_restricted"] = "heuristic"
     # Protocol A = information-controlled (identical fact sets, natural lengths);
     # Protocol B = budget-controlled (whole-fact selection under a token budget). The old
     # 'min_matched' end-truncation mode was retired (see docs/METHODOLOGICAL_AUDIT.md).

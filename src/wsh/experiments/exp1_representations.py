@@ -38,8 +38,21 @@ def _retrieved_bundle(q: Question, runner: Runner) -> EvidenceBundle:
     passages = [r.passage for r in got]
     claims, _ = SentenceClaimExtractor().extract(passages, gold_units(q))
     b = bundle_from_passages(q, passages, claims, {"evidence_source": "retrieved", "retrieval": "bm25+rerank",
-                                                    "claims": "sentence units"})
-    b.edges = heuristic_depends_on(claims, q.question)
+                                                    "claims": "sentence units",
+                                                    "retrieved_passage_ids": [p.passage_id for p in passages]})
+    if cfg.exp1.retrieved_edges == "annotation_restricted":
+        # oracle STRUCTURE on real retrieval: annotation-derived edges whose two endpoints were retrieved
+        ids = {c.claim_id for c in claims}
+        try:
+            gold = gold_bundle(q, cfg.exp1.evidence_scope)
+            b.edges = [e for e in gold.edges if e.source in ids and e.target in ids]
+            n_gold_edges = len(gold.edges)
+        except EvidenceUnavailable:
+            b.edges, n_gold_edges = [], 0
+        b.origin = {**b.origin, "edges": "annotation_derived_restricted_to_retrieved",
+                    "n_annotation_edges_total": n_gold_edges, "n_annotation_edges_kept": len(b.edges)}
+    else:
+        b.edges = heuristic_depends_on(claims, q.question)
     predicted_path(b, q.question)
     return b
 
