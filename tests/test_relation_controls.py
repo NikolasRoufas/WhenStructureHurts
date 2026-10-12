@@ -101,3 +101,15 @@ def test_control_bundle_refuses_different_facts(toy_question):
     pred.claims = pred.claims[:-1]
     with pytest.raises(ValueError):
         control_bundle("R4P_FO", derived, pred)
+
+
+def test_fixed_order_survives_budget_restriction(toy_question):
+    """Protocol B drops facts; the fixed order must be kept for the remaining facts only."""
+    from wsh.representations.protocols import restrict_bundle
+    derived, pred = _bundles(toy_question)
+    b = control_bundle("R4P_FO", derived, pred)
+    keep = [c.claim_id for c in b.claims][1:-1]
+    sub = restrict_bundle(b, set(keep))
+    lay = make_layout("R4P_FO", sub)
+    full_order = b.origin["fixed_order"]
+    assert [u.claim_ids[0] for u in lay.units] == [c for c in full_order if c in set(keep)]

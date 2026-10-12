@@ -28,7 +28,9 @@ def layout(b: EvidenceBundle, rep: str = "R4", with_edges: bool = True, max_rela
     cm = b.claim_map()
     # relation controls (relation_controls.py) may fix the order and relabel edges; bundles without
     # these origin keys (all R4/R4P/R5 bundles) render exactly as before
-    order = b.origin.get("fixed_order") or topological_order(b)
+    fixed = b.origin.get("fixed_order")
+    # under a budget (Protocol B) a control bundle keeps only some facts: keep the fixed order, restricted
+    order = [c for c in fixed if c in cm] if fixed else topological_order(b)
     label_override = b.origin.get("relation_label_override")
     idx = {cid: i for i, cid in enumerate(order)}
     units = [claim_unit(cm[c], b.provenance_visible) for c in order]
