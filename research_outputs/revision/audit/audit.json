@@ -1,0 +1,1007 @@
+{
+ "runs": {
+  "A_exp1": {
+   "dir": "/data/roufas/wsh_campaign/results/gpu_pilot/exp1/20261012-095222_797a0644",
+   "stage": "gpu_pilot",
+   "experiment": "exp1",
+   "status": "completed",
+   "git_commit": "dea50b3bd774221e010f25c6dc8863a01063feb8",
+   "started_at": "2026-10-12T09:52:22+0000",
+   "finished_at": "2026-10-12T10:29:25+0000",
+   "wall_clock_s": 2222.3,
+   "gpu_hours": 0.617,
+   "n_lines_in_file": 9000,
+   "n_unique_keys": 9000,
+   "duplicate_lines": 0,
+   "questions_per_dataset": {
+    "2wikimultihopqa": 100,
+    "musique": 100
+   },
+   "n_unavailable": 0,
+   "n_generation_error": 0,
+   "finish_reasons": {
+    "eos": 9000
+   },
+   "n_cached": 4044,
+   "distinct_generator_signatures": 1,
+   "generator_signatures": [
+    {
+     "dec": {
+      "batch_size": 1,
+      "device": "cuda",
+      "do_sample": false,
+      "dtype": "bfloat16",
+      "max_time_s": 60.0,
+      "num_beams": 1
+     },
+     "m": "Qwen/Qwen2.5-7B-Instruct",
+     "p": "qa-v2",
+     "rev": "a09a35458c702b33eeacc393d103063234e8bc28"
+    }
+   ],
+   "device": "cuda",
+   "gpu_pci_bus": 1,
+   "mps_pipe": null,
+   "predictions_sha256": "b9e0187c5ef8d9bf115ae34931808302d193615a6b6b7801110431247b4663b4",
+   "prompts_with_divergent_outputs": 0
+  },
+  "A_exp0": {
+   "dir": "/data/roufas/wsh_campaign/results/gpu_pilot/exp0/20261012-102947_8dad35aa",
+   "stage": "gpu_pilot",
+   "experiment": "exp0",
+   "status": "completed",
+   "git_commit": "dea50b3bd774221e010f25c6dc8863a01063feb8",
+   "started_at": "2026-10-12T10:29:47+0000",
+   "finished_at": "2026-10-12T12:06:02+0000",
+   "wall_clock_s": 5774.48,
+   "gpu_hours": 1.604,
+   "n_lines_in_file": 1000,
+   "n_unique_keys": 1000,
+   "duplicate_lines": 0,
+   "questions_per_dataset": {
+    "2wikimultihopqa": 100,
+    "musique": 100
+   },
+   "n_unavailable": 0,
+   "n_generation_error": 0,
+   "finish_reasons": {
+    "eos": 968,
+    "length": 30,
+    "skipped_overflow": 2
+   },
+   "n_cached": 3,
+   "distinct_generator_signatures": 1,
+   "generator_signatures": [
+    {
+     "dec": {
+      "batch_size": 1,
+      "device": "cuda",
+      "do_sample": false,
+      "dtype": "bfloat16",
+      "max_time_s": 60.0,
+      "num_beams": 1
+     },
+     "m": "Qwen/Qwen2.5-7B-Instruct",
+     "p": "qa-v2",
+     "rev": "a09a35458c702b33eeacc393d103063234e8bc28"
+    }
+   ],
+   "device": "cuda",
+   "gpu_pci_bus": 1,
+   "mps_pipe": null,
+   "predictions_sha256": "7704fff8551902e0a7c6f0e25d52eac0a6708e9ce1e5b3706ed4108b42cdb4ad",
+   "prompts_with_divergent_outputs": 0
+  },
+  "C_exp1": {
+   "dir": "/data/roufas/wsh_campaign/results/gpu_pilot/exp1/20261012-120617_d4f7f61d",
+   "stage": "gpu_pilot",
+   "experiment": "exp1",
+   "status": "completed",
+   "git_commit": "ed7c391da5762467ca4610ca545accfd3492babb",
+   "started_at": "2026-10-12T12:06:17+0000",
+   "finished_at": "2026-10-12T12:21:17+0000",
+   "wall_clock_s": 899.67,
+   "gpu_hours": 0.25,
+   "n_lines_in_file": 15750,
+   "n_unique_keys": 15750,
+   "duplicate_lines": 0,
+   "questions_per_dataset": {
+    "2wikimultihopqa": 100,
+    "fever": 50,
+    "hotpotqa": 50,
+    "hover": 50,
+    "musique": 100
+   },
+   "n_unavailable": 500,
+   "n_generation_error": 0,
+   "finish_reasons": {
+    "eos": 15250
+   },
+   "n_cached": 13312,
+   "distinct_generator_signatures": 1,
+   "generator_signatures": [
+    {
+     "dec": {
+      "batch_size": 1,
+      "device": "cuda",
+      "do_sample": false,
+      "dtype": "bfloat16",
+      "max_time_s": 60.0,
+      "num_beams": 1
+     },
+     "m": "Qwen/Qwen2.5-7B-Instruct",
+     "p": "qa-v2",
+     "rev": "a09a35458c702b33eeacc393d103063234e8bc28"
+    }
+   ],
+   "device": "cuda",
+   "gpu_pci_bus": 1,
+   "mps_pipe": null,
+   "predictions_sha256": "7e7e58a842bf73f8be9cd6c7123668f11ad504eeb3ceb0a4043b7ce95ee2c61f",
+   "prompts_with_divergent_outputs": 0
+  },
+  "C_exp2": {
+   "dir": "/data/roufas/wsh_campaign/results/gpu_pilot/exp2/20261012-122150_20896430",
+   "stage": "gpu_pilot",
+   "experiment": "exp2",
+   "status": "completed",
+   "git_commit": "ed7c391da5762467ca4610ca545accfd3492babb",
+   "started_at": "2026-10-12T12:21:50+0000",
+   "finished_at": "2026-10-12T12:56:30+0000",
+   "wall_clock_s": 2079.32,
+   "gpu_hours": 0.578,
+   "n_lines_in_file": 14000,
+   "n_unique_keys": 14000,
+   "duplicate_lines": 0,
+   "questions_per_dataset": {
+    "2wikimultihopqa": 100,
+    "fever": 50,
+    "hotpotqa": 50,
+    "hover": 50,
+    "musique": 100
+   },
+   "n_unavailable": 2664,
+   "n_generation_error": 0,
+   "finish_reasons": {
+    "eos": 11333,
+    "length": 3
+   },
+   "n_cached": 6984,
+   "distinct_generator_signatures": 1,
+   "generator_signatures": [
+    {
+     "dec": {
+      "batch_size": 1,
+      "device": "cuda",
+      "do_sample": false,
+      "dtype": "bfloat16",
+      "max_time_s": 60.0,
+      "num_beams": 1
+     },
+     "m": "Qwen/Qwen2.5-7B-Instruct",
+     "p": "qa-v2",
+     "rev": "a09a35458c702b33eeacc393d103063234e8bc28"
+    }
+   ],
+   "device": "cuda",
+   "gpu_pci_bus": 1,
+   "mps_pipe": null,
+   "predictions_sha256": "efa88c4129f6f9948332e21787bea3f88fec76b74f1ac20dd089ec1cc38523ed",
+   "prompts_with_divergent_outputs": 0
+  },
+  "F_exp1": {
+   "dir": "/data/roufas/wsh_campaign/results/full/exp1/20261012-125639_49dfe135",
+   "stage": "full",
+   "experiment": "exp1",
+   "status": "completed",
+   "git_commit": "ed7c391da5762467ca4610ca545accfd3492babb",
+   "started_at": "2026-10-12T12:56:39+0000",
+   "finished_at": "2026-10-12T18:28:46+0000",
+   "wall_clock_s": 19925.97,
+   "gpu_hours": 5.535,
+   "n_lines_in_file": 44784,
+   "n_unique_keys": 44784,
+   "duplicate_lines": 0,
+   "questions_per_dataset": {
+    "2wikimultihopqa": 3232,
+    "musique": 1744
+   },
+   "n_unavailable": 0,
+   "n_generation_error": 0,
+   "finish_reasons": {
+    "eos": 44742,
+    "length": 42
+   },
+   "n_cached": 5043,
+   "distinct_generator_signatures": 1,
+   "generator_signatures": [
+    {
+     "dec": {
+      "batch_size": 1,
+      "device": "cuda",
+      "do_sample": false,
+      "dtype": "bfloat16",
+      "max_time_s": 60.0,
+      "num_beams": 1
+     },
+     "m": "Qwen/Qwen2.5-7B-Instruct",
+     "p": "qa-v2",
+     "rev": "a09a35458c702b33eeacc393d103063234e8bc28"
+    }
+   ],
+   "device": "cuda",
+   "gpu_pci_bus": 1,
+   "mps_pipe": null,
+   "predictions_sha256": "6c90773ba31824a4b0b7bd383578aa19154f0d6d010cc31458958e24a95fbfb7",
+   "prompts_with_divergent_outputs": 0
+  },
+  "C_exp3": {
+   "dir": "/data/roufas/wsh_campaign/results/gpu_pilot/exp3/20261012-183018_f702b552",
+   "stage": "gpu_pilot",
+   "experiment": "exp3",
+   "status": "completed",
+   "git_commit": "ed7c391da5762467ca4610ca545accfd3492babb",
+   "started_at": "2026-10-12T18:30:18+0000",
+   "finished_at": "2026-10-12T18:30:21+0000",
+   "wall_clock_s": 2.81,
+   "gpu_hours": 0.001,
+   "n_lines_in_file": 1750,
+   "n_unique_keys": 1750,
+   "duplicate_lines": 0,
+   "questions_per_dataset": {
+    "2wikimultihopqa": 100,
+    "fever": 50,
+    "hotpotqa": 50,
+    "hover": 50,
+    "musique": 100
+   },
+   "n_unavailable": 1750,
+   "n_generation_error": 0,
+   "finish_reasons": {},
+   "n_cached": 0,
+   "distinct_generator_signatures": 0,
+   "generator_signatures": [],
+   "device": "cuda",
+   "gpu_pci_bus": 1,
+   "mps_pipe": null,
+   "predictions_sha256": "babc5d023bbbcbfd51b296b33c5ec70d9a2bfe49abe0b1fcd7c7152732b06ee8",
+   "prompts_with_divergent_outputs": 0
+  },
+  "C_exp0": {
+   "dir": "/data/roufas/wsh_campaign/results/gpu_pilot/exp0/20261012-183032_f123f890",
+   "stage": "gpu_pilot",
+   "experiment": "exp0",
+   "status": "completed",
+   "git_commit": "ed7c391da5762467ca4610ca545accfd3492babb",
+   "started_at": "2026-10-12T18:30:32+0000",
+   "finished_at": "2026-10-12T19:24:23+0000",
+   "wall_clock_s": 3230.5,
+   "gpu_hours": 0.897,
+   "n_lines_in_file": 1750,
+   "n_unique_keys": 1750,
+   "duplicate_lines": 0,
+   "questions_per_dataset": {
+    "2wikimultihopqa": 100,
+    "fever": 50,
+    "hotpotqa": 50,
+    "hover": 50,
+    "musique": 100
+   },
+   "n_unavailable": 0,
+   "n_generation_error": 0,
+   "finish_reasons": {
+    "eos": 1713,
+    "length": 34,
+    "skipped_overflow": 3
+   },
+   "n_cached": 1009,
+   "distinct_generator_signatures": 1,
+   "generator_signatures": [
+    {
+     "dec": {
+      "batch_size": 1,
+      "device": "cuda",
+      "do_sample": false,
+      "dtype": "bfloat16",
+      "max_time_s": 60.0,
+      "num_beams": 1
+     },
+     "m": "Qwen/Qwen2.5-7B-Instruct",
+     "p": "qa-v2",
+     "rev": "a09a35458c702b33eeacc393d103063234e8bc28"
+    }
+   ],
+   "device": "cuda",
+   "gpu_pci_bus": 1,
+   "mps_pipe": null,
+   "predictions_sha256": "54dd9f9d525db1f48c3cb20ba034980d9020f3657d8bd203efc8b7cc76515a03",
+   "prompts_with_divergent_outputs": 0
+  }
+ },
+ "checks": {
+  "disjointness": {
+   "pilot_set_size": 350,
+   "confirm_set_size": 4976,
+   "pilot_vs_confirm_overlap": 0,
+   "smoke_vs_confirm_overlap": 0,
+   "smoke_vs_pilot_overlap": 0,
+   "F_exp1_questions_equal_confirm_set": true,
+   "F_exp1_vs_pilot_overlap": 0,
+   "C_exp1_questions_equal_pilot_set": true,
+   "confirm_unique_ids": true,
+   "splits": [
+    "dev"
+   ],
+   "pilot_sha256": "67e815648caf9bbcacd3928904b84205097f84df0e475d5a4b591ccb4b786f58",
+   "confirm_sha256": "d7b49cb3771728821266401ecf543cdab33b1a84015bf852fdda8e18b69d5256"
+  },
+  "protocolA_fact_identity": {
+   "C_exp1": {
+    "questions": 350,
+    "questions_with_more_than_one_fact_digest": 0,
+    "records_with_passage_chars_outside_facts_by_rep": {}
+   },
+   "F_exp1": {
+    "questions": 4976,
+    "questions_with_more_than_one_fact_digest": 0,
+    "records_with_passage_chars_outside_facts_by_rep": {}
+   }
+  },
+  "confirmatory_primary": [
+   {
+    "dataset": "musique",
+    "contrast": "R1-R0",
+    "n": 1744,
+    "delta": -0.0005733944954128441,
+    "ci95_frozen": [
+     -0.013761467889908258,
+     0.013761467889908258
+    ],
+    "ci95_numpy_indep": [
+     -0.013761467889908258,
+     0.01261467889908257
+    ],
+    "p_boot": 0.974,
+    "ci90": [
+     -0.012041284403669725,
+     0.010894495412844037
+    ],
+    "equiv_bootstrap90_within_0.02": true,
+    "tost_p_normal": 0.002169534148315999,
+    "mcnemar_p": 1.0,
+    "b_better": 70,
+    "a_better": 71,
+    "p_holm": 0.974,
+    "tost_p_holm": 0.010847670741579996
+   },
+   {
+    "dataset": "musique",
+    "contrast": "R5-R1",
+    "n": 1744,
+    "delta": -0.011467889908256881,
+    "ci95_frozen": [
+     -0.025802752293577983,
+     0.0034403669724770644
+    ],
+    "ci95_numpy_indep": [
+     -0.02522935779816514,
+     0.0028669724770642203
+    ],
+    "p_boot": 0.122,
+    "ci90": [
+     -0.022935779816513763,
+     0.0005733944954128441
+    ],
+    "equiv_bootstrap90_within_0.02": false,
+    "tost_p_normal": 0.11665251100999585,
+    "mcnemar_p": 0.12793767570364561,
+    "b_better": 68,
+    "a_better": 88,
+    "p_holm": 0.535,
+    "tost_p_holm": 0.2333050220199917
+   },
+   {
+    "dataset": "musique",
+    "contrast": "R4-R5",
+    "n": 1744,
+    "delta": 0.010321100917431193,
+    "ci95_frozen": [
+     -0.0028669724770642203,
+     0.02408256880733945
+    ],
+    "ci95_numpy_indep": [
+     -0.0028669724770642203,
+     0.023509174311926607
+    ],
+    "p_boot": 0.117,
+    "ci90": [
+     -0.0005733944954128441,
+     0.021788990825688075
+    ],
+    "equiv_bootstrap90_within_0.02": false,
+    "tost_p_normal": 0.07080405868747885,
+    "mcnemar_p": 0.13866800643810315,
+    "b_better": 75,
+    "a_better": 57,
+    "p_holm": 0.535,
+    "tost_p_holm": 0.21241217606243656
+   },
+   {
+    "dataset": "2wikimultihopqa",
+    "contrast": "R1-R0",
+    "n": 3232,
+    "delta": -0.01670792079207921,
+    "ci95_frozen": [
+     -0.028774752475247526,
+     -0.004641089108910891
+    ],
+    "ci95_numpy_indep": [
+     -0.029084158415841586,
+     -0.004022277227722772
+    ],
+    "p_boot": 0.003,
+    "ci90": [
+     -0.026918316831683168,
+     -0.006497524752475247
+    ],
+    "equiv_bootstrap90_within_0.02": false,
+    "tost_p_normal": 0.3025101274493236,
+    "mcnemar_p": 0.009972873782872529,
+    "b_better": 185,
+    "a_better": 239,
+    "p_holm": 0.018000000000000002,
+    "tost_p_holm": 0.3025101274493236
+   },
+   {
+    "dataset": "2wikimultihopqa",
+    "contrast": "R5-R1",
+    "n": 3232,
+    "delta": -0.008044554455445545,
+    "ci95_frozen": [
+     -0.017945544554455444,
+     0.0018564356435643563
+    ],
+    "ci95_numpy_indep": [
+     -0.018254950495049504,
+     0.002165841584158416
+    ],
+    "p_boot": 0.107,
+    "ci90": [
+     -0.01639851485148515,
+     0.0
+    ],
+    "equiv_bootstrap90_within_0.02": true,
+    "tost_p_normal": 0.010225019163781712,
+    "mcnemar_p": 0.13362446761788777,
+    "b_better": 126,
+    "a_better": 152,
+    "p_holm": 0.535,
+    "tost_p_holm": 0.04090007665512685
+   },
+   {
+    "dataset": "2wikimultihopqa",
+    "contrast": "R4-R5",
+    "n": 3232,
+    "delta": 0.005878712871287129,
+    "ci95_frozen": [
+     -0.0024752475247524753,
+     0.014542079207920793
+    ],
+    "ci95_numpy_indep": [
+     -0.0024752475247524753,
+     0.014232673267326733
+    ],
+    "p_boot": 0.174,
+    "ci90": [
+     -0.0012376237623762376,
+     0.012995049504950494
+    ],
+    "equiv_bootstrap90_within_0.02": true,
+    "tost_p_normal": 0.00042190655789031695,
+    "mcnemar_p": 0.1879332627414171,
+    "b_better": 103,
+    "a_better": 84,
+    "p_holm": 0.535,
+    "tost_p_holm": 0.0025314393473419017
+   }
+  ],
+  "confirmatory_absolute": {
+   "musique/R0": {
+    "n_q": 1744,
+    "em": 0.2855504587155963,
+    "coverage": 0.5298165137614679
+   },
+   "musique/R1": {
+    "n_q": 1744,
+    "em": 0.2849770642201835,
+    "coverage": 0.5389908256880734
+   },
+   "musique/R2": {
+    "n_q": 1744,
+    "em": 0.2983562691131499,
+    "coverage": 0.5802752293577982
+   },
+   "musique/R3": {
+    "n_q": 1744,
+    "em": 0.26605504587155965,
+    "coverage": 0.5275229357798165
+   },
+   "musique/R4": {
+    "n_q": 1744,
+    "em": 0.2838302752293578,
+    "coverage": 0.5464449541284404
+   },
+   "musique/R4P": {
+    "n_q": 1744,
+    "em": 0.23910550458715596,
+    "coverage": 0.45756880733944955
+   },
+   "musique/R5": {
+    "n_q": 1744,
+    "em": 0.2735091743119266,
+    "coverage": 0.5424311926605505
+   },
+   "2wikimultihopqa/R0": {
+    "n_q": 3232,
+    "em": 0.40779702970297027,
+    "coverage": 0.8112623762376238
+   },
+   "2wikimultihopqa/R1": {
+    "n_q": 3232,
+    "em": 0.3910891089108911,
+    "coverage": 0.7589727722772277
+   },
+   "2wikimultihopqa/R2": {
+    "n_q": 3232,
+    "em": 0.3667491749174917,
+    "coverage": 0.7419554455445545
+   },
+   "2wikimultihopqa/R3": {
+    "n_q": 3232,
+    "em": 0.37933168316831684,
+    "coverage": 0.7314356435643564
+   },
+   "2wikimultihopqa/R4": {
+    "n_q": 3232,
+    "em": 0.38892326732673266,
+    "coverage": 0.7357673267326733
+   },
+   "2wikimultihopqa/R4P": {
+    "n_q": 3232,
+    "em": 0.3530321782178218,
+    "coverage": 0.6745049504950495
+   },
+   "2wikimultihopqa/R5": {
+    "n_q": 3232,
+    "em": 0.38304455445544555,
+    "coverage": 0.7465965346534653
+   }
+  },
+  "confirmatory_secondary": [
+   {
+    "dataset": "musique",
+    "contrast": "R4P-R4",
+    "n": 1744,
+    "delta": -0.04472477064220184,
+    "ci95": [
+     -0.060206422018348624,
+     -0.02981651376146789
+    ],
+    "coverage_delta": -0.08887614678899082
+   },
+   {
+    "dataset": "musique",
+    "contrast": "R2-R1",
+    "n": 1744,
+    "delta": 0.013379204892966354,
+    "ci95": [
+     -0.0011467889908256946,
+     0.027714067278287454
+    ],
+    "coverage_delta": 0.04128440366972476
+   },
+   {
+    "dataset": "musique",
+    "contrast": "R3-R5",
+    "n": 1744,
+    "delta": -0.007454128440366973,
+    "ci95": [
+     -0.016055045871559634,
+     0.0017201834862385322
+    ],
+    "coverage_delta": -0.014908256880733946
+   },
+   {
+    "dataset": "2wikimultihopqa",
+    "contrast": "R4P-R4",
+    "n": 3232,
+    "delta": -0.03589108910891089,
+    "ci95": [
+     -0.04486386138613861,
+     -0.026918316831683168
+    ],
+    "coverage_delta": -0.06126237623762376
+   },
+   {
+    "dataset": "2wikimultihopqa",
+    "contrast": "R2-R1",
+    "n": 3232,
+    "delta": -0.02433993399339935,
+    "ci95": [
+     -0.036406765676567664,
+     -0.012376237623762385
+    ],
+    "coverage_delta": -0.017017326732673276
+   },
+   {
+    "dataset": "2wikimultihopqa",
+    "contrast": "R3-R5",
+    "n": 3232,
+    "delta": -0.0037128712871287127,
+    "ci95": [
+     -0.01639851485148515,
+     0.007735148514851485
+    ],
+    "coverage_delta": -0.01516089108910891
+   }
+  ],
+  "protocolB_accounting": {
+   "2wikimultihopqa|content:0.5|per_representation|R0": {
+    "n": 100,
+    "kept": 0.38756149495499304,
+    "answer_bearing_dropped": 0.59,
+    "overhead_tokens": 21.44
+   },
+   "2wikimultihopqa|content:0.5|per_representation|R1": {
+    "n": 100,
+    "kept": 0.31682426611056624,
+    "answer_bearing_dropped": 0.62,
+    "overhead_tokens": 51.74
+   },
+   "2wikimultihopqa|content:0.5|per_representation|R2": {
+    "n": 300,
+    "kept": 0.3168242661105664,
+    "answer_bearing_dropped": 0.62,
+    "overhead_tokens": 51.72666666666667
+   },
+   "2wikimultihopqa|content:0.5|per_representation|R3": {
+    "n": 100,
+    "kept": 0.2998528223582402,
+    "answer_bearing_dropped": 0.63,
+    "overhead_tokens": 56.34
+   },
+   "2wikimultihopqa|content:0.5|per_representation|R4": {
+    "n": 100,
+    "kept": 0.3123631801377156,
+    "answer_bearing_dropped": 0.62,
+    "overhead_tokens": 52.36
+   },
+   "2wikimultihopqa|content:0.5|per_representation|R4P": {
+    "n": 100,
+    "kept": 0.3049965800711155,
+    "answer_bearing_dropped": 0.62,
+    "overhead_tokens": 54.39
+   },
+   "2wikimultihopqa|content:0.5|per_representation|R5": {
+    "n": 100,
+    "kept": 0.31682426611056624,
+    "answer_bearing_dropped": 0.62,
+    "overhead_tokens": 51.74
+   },
+   "2wikimultihopqa|content:0.5|shared|R0": {
+    "n": 100,
+    "kept": 0.29398629868583415,
+    "answer_bearing_dropped": 0.63,
+    "overhead_tokens": 19.67
+   },
+   "2wikimultihopqa|content:0.5|shared|R1": {
+    "n": 100,
+    "kept": 0.29398629868583415,
+    "answer_bearing_dropped": 0.63,
+    "overhead_tokens": 48.28
+   },
+   "2wikimultihopqa|content:0.5|shared|R2": {
+    "n": 300,
+    "kept": 0.2939862986858341,
+    "answer_bearing_dropped": 0.63,
+    "overhead_tokens": 48.266666666666666
+   },
+   "2wikimultihopqa|content:0.5|shared|R3": {
+    "n": 100,
+    "kept": 0.29398629868583415,
+    "answer_bearing_dropped": 0.63,
+    "overhead_tokens": 54.91
+   },
+   "2wikimultihopqa|content:0.5|shared|R4": {
+    "n": 100,
+    "kept": 0.29398629868583415,
+    "answer_bearing_dropped": 0.63,
+    "overhead_tokens": 49.68
+   },
+   "2wikimultihopqa|content:0.5|shared|R4P": {
+    "n": 100,
+    "kept": 0.29398629868583415,
+    "answer_bearing_dropped": 0.63,
+    "overhead_tokens": 53.53
+   },
+   "2wikimultihopqa|content:0.5|shared|R5": {
+    "n": 100,
+    "kept": 0.29398629868583415,
+    "answer_bearing_dropped": 0.63,
+    "overhead_tokens": 48.28
+   },
+   "2wikimultihopqa|content:1.0|per_representation|R0": {
+    "n": 100,
+    "kept": 0.8335546687488633,
+    "answer_bearing_dropped": 0.11,
+    "overhead_tokens": 27.83
+   },
+   "2wikimultihopqa|content:1.0|per_representation|R1": {
+    "n": 100,
+    "kept": 0.6441980260279796,
+    "answer_bearing_dropped": 0.33,
+    "overhead_tokens": 103.83
+   },
+   "2wikimultihopqa|content:1.0|per_representation|R2": {
+    "n": 300,
+    "kept": 0.644198026027978,
+    "answer_bearing_dropped": 0.33,
+    "overhead_tokens": 103.82
+   },
+   "2wikimultihopqa|content:1.0|per_representation|R3": {
+    "n": 100,
+    "kept": 0.6250473809214518,
+    "answer_bearing_dropped": 0.36,
+    "overhead_tokens": 110.7
+   },
+   "2wikimultihopqa|content:1.0|per_representation|R4": {
+    "n": 100,
+    "kept": 0.6318394486576373,
+    "answer_bearing_dropped": 0.34,
+    "overhead_tokens": 108.19
+   },
+   "2wikimultihopqa|content:1.0|per_representation|R4P": {
+    "n": 100,
+    "kept": 0.6100069145251031,
+    "answer_bearing_dropped": 0.36,
+    "overhead_tokens": 116.28
+   },
+   "2wikimultihopqa|content:1.0|per_representation|R5": {
+    "n": 100,
+    "kept": 0.6441980260279796,
+    "answer_bearing_dropped": 0.33,
+    "overhead_tokens": 103.83
+   },
+   "2wikimultihopqa|content:1.0|shared|R0": {
+    "n": 100,
+    "kept": 0.6039592954774841,
+    "answer_bearing_dropped": 0.39,
+    "overhead_tokens": 25.69
+   },
+   "2wikimultihopqa|content:1.0|shared|R1": {
+    "n": 100,
+    "kept": 0.6039592954774841,
+    "answer_bearing_dropped": 0.39,
+    "overhead_tokens": 97.48
+   },
+   "2wikimultihopqa|content:1.0|shared|R2": {
+    "n": 300,
+    "kept": 0.6039592954774838,
+    "answer_bearing_dropped": 0.39,
+    "overhead_tokens": 97.47333333333333
+   },
+   "2wikimultihopqa|content:1.0|shared|R3": {
+    "n": 100,
+    "kept": 0.6039592954774841,
+    "answer_bearing_dropped": 0.39,
+    "overhead_tokens": 106.36
+   },
+   "2wikimultihopqa|content:1.0|shared|R4": {
+    "n": 100,
+    "kept": 0.6039592954774841,
+    "answer_bearing_dropped": 0.39,
+    "overhead_tokens": 102.88
+   },
+   "2wikimultihopqa|content:1.0|shared|R4P": {
+    "n": 100,
+    "kept": 0.6039592954774841,
+    "answer_bearing_dropped": 0.39,
+    "overhead_tokens": 115.69
+   },
+   "2wikimultihopqa|content:1.0|shared|R5": {
+    "n": 100,
+    "kept": 0.6039592954774841,
+    "answer_bearing_dropped": 0.39,
+    "overhead_tokens": 97.48
+   },
+   "musique|content:0.5|per_representation|R0": {
+    "n": 100,
+    "kept": 0.34357095668461585,
+    "answer_bearing_dropped": 0.71,
+    "overhead_tokens": 23.43
+   },
+   "musique|content:0.5|per_representation|R1": {
+    "n": 100,
+    "kept": 0.2977512737445768,
+    "answer_bearing_dropped": 0.77,
+    "overhead_tokens": 37.63
+   },
+   "musique|content:0.5|per_representation|R2": {
+    "n": 300,
+    "kept": 0.29775127374457727,
+    "answer_bearing_dropped": 0.77,
+    "overhead_tokens": 37.63666666666666
+   },
+   "musique|content:0.5|per_representation|R3": {
+    "n": 100,
+    "kept": 0.2740345231039132,
+    "answer_bearing_dropped": 0.8,
+    "overhead_tokens": 42.73
+   },
+   "musique|content:0.5|per_representation|R4": {
+    "n": 100,
+    "kept": 0.2913828692022593,
+    "answer_bearing_dropped": 0.79,
+    "overhead_tokens": 39.34
+   },
+   "musique|content:0.5|per_representation|R4P": {
+    "n": 100,
+    "kept": 0.29351851133790136,
+    "answer_bearing_dropped": 0.78,
+    "overhead_tokens": 39.54
+   },
+   "musique|content:0.5|per_representation|R5": {
+    "n": 100,
+    "kept": 0.2977512737445768,
+    "answer_bearing_dropped": 0.77,
+    "overhead_tokens": 37.63
+   },
+   "musique|content:0.5|shared|R0": {
+    "n": 100,
+    "kept": 0.2733678564372465,
+    "answer_bearing_dropped": 0.8,
+    "overhead_tokens": 21.32
+   },
+   "musique|content:0.5|shared|R1": {
+    "n": 100,
+    "kept": 0.2733678564372465,
+    "answer_bearing_dropped": 0.8,
+    "overhead_tokens": 35.04
+   },
+   "musique|content:0.5|shared|R2": {
+    "n": 300,
+    "kept": 0.2733678564372471,
+    "answer_bearing_dropped": 0.8,
+    "overhead_tokens": 35.04666666666667
+   },
+   "musique|content:0.5|shared|R3": {
+    "n": 100,
+    "kept": 0.2733678564372465,
+    "answer_bearing_dropped": 0.8,
+    "overhead_tokens": 42.64
+   },
+   "musique|content:0.5|shared|R4": {
+    "n": 100,
+    "kept": 0.2733678564372465,
+    "answer_bearing_dropped": 0.8,
+    "overhead_tokens": 37.51
+   },
+   "musique|content:0.5|shared|R4P": {
+    "n": 100,
+    "kept": 0.2733678564372465,
+    "answer_bearing_dropped": 0.8,
+    "overhead_tokens": 37.6
+   },
+   "musique|content:0.5|shared|R5": {
+    "n": 100,
+    "kept": 0.2733678564372465,
+    "answer_bearing_dropped": 0.8,
+    "overhead_tokens": 35.04
+   },
+   "musique|content:1.0|per_representation|R0": {
+    "n": 100,
+    "kept": 0.8057615576456264,
+    "answer_bearing_dropped": 0.19,
+    "overhead_tokens": 31.95
+   },
+   "musique|content:1.0|per_representation|R1": {
+    "n": 100,
+    "kept": 0.6538666216768079,
+    "answer_bearing_dropped": 0.28,
+    "overhead_tokens": 80.65
+   },
+   "musique|content:1.0|per_representation|R2": {
+    "n": 300,
+    "kept": 0.6538666216768083,
+    "answer_bearing_dropped": 0.28,
+    "overhead_tokens": 80.65
+   },
+   "musique|content:1.0|per_representation|R3": {
+    "n": 100,
+    "kept": 0.6256178022277596,
+    "answer_bearing_dropped": 0.33,
+    "overhead_tokens": 88.63
+   },
+   "musique|content:1.0|per_representation|R4": {
+    "n": 100,
+    "kept": 0.6201019292118867,
+    "answer_bearing_dropped": 0.35,
+    "overhead_tokens": 88.28
+   },
+   "musique|content:1.0|per_representation|R4P": {
+    "n": 100,
+    "kept": 0.6226823356624976,
+    "answer_bearing_dropped": 0.34,
+    "overhead_tokens": 87.86
+   },
+   "musique|content:1.0|per_representation|R5": {
+    "n": 100,
+    "kept": 0.6538666216768079,
+    "answer_bearing_dropped": 0.28,
+    "overhead_tokens": 80.63
+   },
+   "musique|content:1.0|shared|R0": {
+    "n": 100,
+    "kept": 0.6046273906075527,
+    "answer_bearing_dropped": 0.38,
+    "overhead_tokens": 30.34
+   },
+   "musique|content:1.0|shared|R1": {
+    "n": 100,
+    "kept": 0.6046273906075527,
+    "answer_bearing_dropped": 0.38,
+    "overhead_tokens": 75.25
+   },
+   "musique|content:1.0|shared|R2": {
+    "n": 300,
+    "kept": 0.6046273906075528,
+    "answer_bearing_dropped": 0.38,
+    "overhead_tokens": 75.25333333333333
+   },
+   "musique|content:1.0|shared|R3": {
+    "n": 100,
+    "kept": 0.6046273906075527,
+    "answer_bearing_dropped": 0.38,
+    "overhead_tokens": 86.06
+   },
+   "musique|content:1.0|shared|R4": {
+    "n": 100,
+    "kept": 0.6046273906075527,
+    "answer_bearing_dropped": 0.38,
+    "overhead_tokens": 86.06
+   },
+   "musique|content:1.0|shared|R4P": {
+    "n": 100,
+    "kept": 0.6046273906075527,
+    "answer_bearing_dropped": 0.38,
+    "overhead_tokens": 86.14
+   },
+   "musique|content:1.0|shared|R5": {
+    "n": 100,
+    "kept": 0.6046273906075527,
+    "answer_bearing_dropped": 0.38,
+    "overhead_tokens": 75.23
+   }
+  },
+  "timeline": {
+   "pilot_protocol_first_commit": "7311217 2026-10-11T00:05:22+03:00",
+   "pilot_set_first_commit": "7311217 2026-10-11T00:05:22+03:00",
+   "confirm_protocol_first_commit": "0850982 2026-10-12T13:36:01+03:00",
+   "confirm_set_first_commit": "508b199 2026-10-12T13:36:48+03:00",
+   "confirm_config_first_commit": "508b199 2026-10-12T13:36:48+03:00",
+   "run_starts": {
+    "A_exp1": "2026-10-12T09:52:22+0000",
+    "A_exp0": "2026-10-12T10:29:47+0000",
+    "C_exp1": "2026-10-12T12:06:17+0000",
+    "C_exp2": "2026-10-12T12:21:50+0000",
+    "F_exp1": "2026-10-12T12:56:39+0000",
+    "C_exp3": "2026-10-12T18:30:18+0000",
+    "C_exp0": "2026-10-12T18:30:32+0000"
+   },
+   "pilot_protocol_changes_after_first_pilot_run": "",
+   "confirm_protocol_changes": "508b199 2026-10-12T13:36:48+03:00 Confirmatory sample frozen (seed 2, disjoint from pilot and smoke) and its config\n0850982 2026-10-12T13:36:01+03:00 Freeze the confirmatory protocol before drawing its sample"
+  },
+  "gpu_hours_total": 9.482
+ },
+ "claims": []
+}

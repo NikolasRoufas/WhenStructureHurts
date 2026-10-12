@@ -1,0 +1,13 @@
+location,claim,paper_value,recomputed,abs_diff,matches_to_rounding
+Abstract/§6.1,2Wiki R1-R0 ΔEM,-0.017,-0.0167,0.0003,True
+Abstract/§6.1,2Wiki R1-R0 CI low,-0.029,-0.0288,0.0002,True
+Abstract/§6.1,2Wiki R1-R0 CI high,-0.005,-0.0046,0.0004,True
+§6.1,2Wiki R1-R0 p_Holm,0.018,0.018,0.0,True
+§6.1,MuSiQue R1-R0 ΔEM,-0.001,-0.0006,0.0004,True
+§6.1,MuSiQue R5-R1 ΔEM,-0.011,-0.0115,0.0005,True
+§6.1,2Wiki R5-R1 ΔEM,-0.008,-0.008,0.0,True
+§6.1,MuSiQue R4-R5 ΔEM,0.01,0.0103,0.0003,True
+§6.1,2Wiki R4-R5 ΔEM,0.006,0.0059,0.0001,True
+§6.3/abstract,2Wiki R4P-R4 ΔEM,-0.036,-0.0359,0.0001,True
+§6.3/abstract,MuSiQue R4P-R4 ΔEM,-0.045,-0.0447,0.0003,True
+§6.3,2Wiki R2-R1 ΔEM,-0.024,-0.0243,0.0003,True

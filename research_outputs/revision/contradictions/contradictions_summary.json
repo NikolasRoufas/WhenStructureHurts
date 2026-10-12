@@ -1,0 +1,35 @@
+{
+ "n_edges": 12816,
+ "n_edges_shown_to_reader": 12372,
+ "n_contradicts_lines_rendered_by_dataset": {
+  "2wikimultihopqa": 9697,
+  "musique": 2675
+ },
+ "n_pairs": 9750,
+ "n_questions_with_contradicts": 3044,
+ "by_dataset": {
+  "2wikimultihopqa": 10141,
+  "musique": 2675
+ },
+ "auto_category_pairs": {
+  "auto:same_title_different_years": 1962,
+  "auto:same_title_other": 2526,
+  "auto:same_title_pronoun_initial": 734,
+  "auto:different_source_titles": 3857,
+  "auto:same_title_different_numbers": 671
+ },
+ "same_passage_pairs": 5870,
+ "nli_confidence_quartiles": {
+  "min": 0.9,
+  "q25": 0.9605,
+  "median": 0.9849,
+  "q75": 0.9945,
+  "max": 0.9998,
+  "n": 12816
+ },
+ "human_package": {
+  "n_items": 240,
+  "n_high_impact_oversampled": 120,
+  "sha256_pairs_csv": "4c5c32a064596887affb8f0dd9edbb7e1cea425efbf6a5a1fac4e66fbba90cb4"
+ }
+}
