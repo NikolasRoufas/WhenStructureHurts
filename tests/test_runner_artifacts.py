@@ -66,6 +66,15 @@ def test_resume_refuses_changed_config(cfg, toy_question):
         RunContext(other, "unit", resume_dir=str(ctx.dir))
 
 
+def test_resume_accepts_raised_execution_cap_only(cfg, toy_question):
+    ctx = RunContext(cfg, "unit")
+    raised = cfg.model_copy(update={"max_generations": (cfg.max_generations or 10) * 2, "max_wall_clock_s": 99.0})
+    assert RunContext(raised, "unit", resume_dir=str(ctx.dir)).dir == ctx.dir
+    changed = cfg.model_copy(update={"model": cfg.model.model_copy(update={"batch_size": cfg.model.batch_size + 1})})
+    with pytest.raises(RunExistsError):  # anything that changes outputs still refuses
+        RunContext(changed, "unit", resume_dir=str(ctx.dir))
+
+
 def test_new_run_never_reuses_directory(cfg, monkeypatch):
     import wsh.artifacts as art
 

@@ -84,13 +84,18 @@ def environment() -> dict[str, Any]:
     return env
 
 
+UNHASHED_CONFIG_KEYS = ("results_root", "cache_path", "max_generations", "max_wall_clock_s")
+
+
 class RunContext:
     def __init__(self, cfg, experiment: str, resume_dir: str | None = None, argv: list[str] | None = None):
         self.cfg = cfg
         self.experiment = experiment
         cfg_dict = cfg.model_dump(mode="json")
-        # machine-specific paths do not change what is computed, so they are not hashed
-        hashed = {k: v for k, v in cfg_dict.items() if k not in ("results_root", "cache_path")}
+        # machine-specific paths and execution caps do not change what is computed (records are
+        # keyed; a cap only decides how many are written before a clean stop), so they are not
+        # hashed: a capped run can be resumed on another mount point or with a raised cap.
+        hashed = {k: v for k, v in cfg_dict.items() if k not in UNHASHED_CONFIG_KEYS}
         self.config_hash = stable_hash({"experiment": experiment, "config": hashed})
         if resume_dir:
             self.dir = Path(resume_dir)

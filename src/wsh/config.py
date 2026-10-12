@@ -204,6 +204,7 @@ class ExperimentConfig(Strict):
     cache_path: str = "cache/wsh_cache.sqlite"
     verified_annotations: str | None = None  # output of `wsh annotations import` (human-verified)
     excluded_questions: str | None = "configs/excluded_questions.json"  # smoke / prompt-dev questions
+    # Execution caps (not hashed either: a stopped run resumes with a raised cap).
     max_generations: int | None = None  # hard cap per experiment run (in addition to stage cap)
     max_wall_clock_s: float | None = None
 

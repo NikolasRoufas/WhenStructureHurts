@@ -7,7 +7,11 @@
 #   --set model.model_id=Qwen/Qwen2.5-7B-Instruct   (default below)
 #   --set model.model_id=Qwen/Qwen2.5-3B-Instruct
 #   --set model.model_id=Qwen/Qwen3.5-9B
-# batch_size: verify batched == unbatched on the server first (`wsh preflight --batch-check`).
+# batch_size 1: on the server (RTX 5000 Ada, CUDA 13.0, bf16) batched greedy outputs differed
+# from unbatched ones (Qwen2.5-7B 5/8 identical, 0.5B 27/30; fp32 30/30, so padding/masks are
+# correct - bf16 kernels are batch-shape dependent). Unbatched bf16 is run-to-run identical.
+# Per docs/PILOT_PROTOCOL.md section 11 the pilot therefore uses batch_size 1
+# (docs/GPU_PREFLIGHT_REPORT.md). Raise it only if `wsh preflight --batch-check` passes.
 stage: gpu_pilot
 name: gpu-pilot-v1
 seed: 0
@@ -25,7 +29,7 @@ model:
   max_new_tokens: 64
   max_input_tokens: 4096
   max_time_s: 60
-  batch_size: 8
+  batch_size: 1
 retrieval: {method: bm25, top_k: 4, rerank_pool: 10, corpus_prefilter: 50}
 extraction: {method: llm, on_empty: drop, min_lexical_support: 0.6, max_new_tokens: 96}
 egrag: {token_budget: 450, max_claims: 12, selector: greedy_connected}
