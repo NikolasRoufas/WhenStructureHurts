@@ -56,7 +56,18 @@ def run_preflight(config_path: str, authorized_flag: bool = False, tiny_generati
         if d == "cuda":
             import torch
 
+            from .artifacts import mps_control_pipe
+
+            pipe = mps_control_pipe()
+            if pipe and not os.environ.get("WSH_ALLOW_MPS"):
+                raise RuntimeError(f"CUDA clients would be routed through the MPS daemon at {pipe} (a shared "
+                                   "GPU on this machine). Bypass it with CUDA_MPS_PIPE_DIRECTORY=<unused dir>, "
+                                   "or set WSH_ALLOW_MPS=1 if that GPU is meant for this run.")
             torch.zeros(1, device="cuda").sum().item()  # actually touch the GPU
+            props = torch.cuda.get_device_properties(torch.cuda.current_device())
+            return {"device": d, "name": props.name, "pci_bus_id": getattr(props, "pci_bus_id", None),
+                    "total_mem_gb": round(props.total_memory / 1e9, 1), "mps_control_pipe": pipe,
+                    "CUDA_VISIBLE_DEVICES": os.environ.get("CUDA_VISIBLE_DEVICES")}
         return d
 
     _check(report, "device", device)

@@ -47,6 +47,16 @@ def git_commit() -> str | None:
         return None
 
 
+def mps_control_pipe(environ: dict | None = None) -> str | None:
+    """The NVIDIA MPS control pipe this process's CUDA clients will connect to, or None.
+    With an MPS daemon running, CUDA clients are routed through it and see only the GPUs that
+    daemon serves (on a shared server possibly another workload's GPU), whatever
+    CUDA_VISIBLE_DEVICES says. Set CUDA_MPS_PIPE_DIRECTORY to an unused path to bypass it."""
+    environ = os.environ if environ is None else environ
+    pipe = Path(environ.get("CUDA_MPS_PIPE_DIRECTORY") or "/tmp/nvidia-mps")
+    return str(pipe) if (pipe / "control").exists() else None
+
+
 def environment() -> dict[str, Any]:
     pk = {}
     for name in ("torch", "transformers", "sentence-transformers", "numpy", "pydantic", "rank-bm25", "pandas",
@@ -65,11 +75,15 @@ def environment() -> dict[str, Any]:
             env["cuda"] = {"torch_cuda_version": torch.version.cuda, "cudnn": torch.backends.cudnn.version(),
                            "devices": [{"name": torch.cuda.get_device_name(i),
                                         "capability": list(torch.cuda.get_device_capability(i)),
-                                        "total_mem_bytes": torch.cuda.get_device_properties(i).total_memory}
+                                        "total_mem_bytes": torch.cuda.get_device_properties(i).total_memory,
+                                        "pci_bus_id": getattr(torch.cuda.get_device_properties(i), "pci_bus_id", None)}
                                        for i in range(torch.cuda.device_count())],
-                           "CUDA_VISIBLE_DEVICES": os.environ.get("CUDA_VISIBLE_DEVICES")}
+                           "CUDA_VISIBLE_DEVICES": os.environ.get("CUDA_VISIBLE_DEVICES"),
+                           "CUDA_DEVICE_ORDER": os.environ.get("CUDA_DEVICE_ORDER"),
+                           "mps_control_pipe": mps_control_pipe()}
             try:
-                smi = subprocess.run(["nvidia-smi", "--query-gpu=name,driver_version,memory.total", "--format=csv,noheader"],
+                smi = subprocess.run(["nvidia-smi", "--query-gpu=index,pci.bus_id,name,driver_version,memory.total,compute_mode",
+                                      "--format=csv,noheader"],
                                      capture_output=True, text=True, timeout=10)
                 env["cuda"]["nvidia_smi"] = smi.stdout.strip() if smi.returncode == 0 else None
             except Exception:

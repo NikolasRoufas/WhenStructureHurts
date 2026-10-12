@@ -91,3 +91,11 @@ def test_torn_last_line_is_tolerated(cfg, toy_question):
         f.write('{"record_key": "x", "partial')
     ctx2 = RunContext(cfg, "unit", resume_dir=str(ctx.dir))
     assert not ctx2.is_done("x")
+
+
+def test_mps_control_pipe_detection(tmp_path):
+    from wsh.artifacts import mps_control_pipe
+
+    assert mps_control_pipe({"CUDA_MPS_PIPE_DIRECTORY": str(tmp_path / "none")}) is None
+    (tmp_path / "control").touch()  # a running MPS daemon exposes a control socket here
+    assert mps_control_pipe({"CUDA_MPS_PIPE_DIRECTORY": str(tmp_path)}) == str(tmp_path)
