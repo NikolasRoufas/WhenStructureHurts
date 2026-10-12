@@ -1,0 +1,35 @@
+# REVISION-1, PENDING AUTHORISATION: second reader (different family) on the confirmatory questions. Runs the six
+# primary contrasts (R0,R1,R5,R4) and the fixed-order relation controls with the frozen prompt qa-v2. A protocol
+# must be committed before generation (docs/REVISION_PROTOCOL.md §4). Switch the reader with
+#   --set model.model_id=allenai/OLMo-2-1124-7B-Instruct
+# Requires: the model fetched (`wsh models fetch <id> --stage revision --authorized-compute`) after authorisation.
+stage: revision
+name: rev-second-reader-v1
+seed: 0
+datasets:
+  - {name: musique, split: dev, qids_file: configs/question_sets/confirm_v1.json}
+  - {name: 2wikimultihopqa, split: dev, qids_file: configs/question_sets/confirm_v1.json}
+model:
+  model_id: mistralai/Mistral-7B-Instruct-v0.3
+  revision: pinned
+  device: cuda
+  dtype: bfloat16
+  max_new_tokens: 64
+  max_input_tokens: 4096
+  max_time_s: 60
+  batch_size: 1
+retrieval: {method: bm25, top_k: 4, rerank_pool: 10, corpus_prefilter: 50}
+extraction: {method: llm, on_empty: drop, min_lexical_support: 0.6, max_new_tokens: 96}
+egrag: {token_budget: 450, max_claims: 12, selector: greedy_connected}
+excluded_questions: configs/excluded_confirmatory.json
+verified_annotations: null
+exp1:
+  representations: [R0, R1, R5, R4, R4P, R4P_FO, R4P_FO_NC, R4N_FO]
+  evidence_source: gold
+  evidence_scope: gold_passages
+  protocols: [A]
+  budgets: ["content:1.0"]        # unused with protocols [A]
+  selection: [relevance]
+  budget_policies: [shared]
+  shuffle_seeds: [0]
+max_generations: 200000

@@ -71,6 +71,26 @@ generators:
     chat_template_kwargs: {enable_thinking: false}   # default template opens a <think> block
     stages: [gpu_pilot, full]
 
+  # Revision-1 second-reader candidates (different model families). Registered with Hub-verified revisions and
+  # parameter counts (2026-10-13); NOT downloaded. Running either requires explicit investigator authorisation
+  # (download + compute) in addition to WSH_COMPUTE_AUTHORIZED=1 and --authorized-compute.
+  mistralai/Mistral-7B-Instruct-v0.3:
+    revision: c170c708c41dac9275d15a8fff4eca08d52bab71
+    n_params: 7248023552
+    weight_bytes: 14496047104      # bf16
+    precision: bfloat16
+    license: apache-2.0 (ungated)
+    architecture: MistralForCausalLM; chat template folds the system message into the first user turn
+    stages: [revision]
+  allenai/OLMo-2-1124-7B-Instruct:
+    revision: 470b1fba1ae01581f270116362ee4aa1b97f4c84
+    n_params: 7298617344
+    weight_bytes: 14597234688      # bf16
+    precision: bfloat16
+    license: apache-2.0 (ungated)
+    architecture: Olmo2ForCausalLM; native system role in the chat template
+    stages: [revision]
+
 encoders:   # auxiliary models (retrieval, reranking, NLI); also capped at 1e9 params
   BAAI/bge-small-en-v1.5:
     revision: 5c38ec7c405ec4b44b94cc5a9bb96e735b38267a

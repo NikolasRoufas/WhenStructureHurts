@@ -33,6 +33,13 @@ R3 & R1 grouped under \texttt{Step $k$:} in reasoning order\\
 R5 & R1 in graph-derived (topological) order\\
 R4 & R5 plus a \texttt{Relations:} block of derived dependencies\\
 R4P & R4 with model-predicted relations and order\\
+\midrule
+\multicolumn{2}{@{}l}{\emph{Fixed-order controls (exploratory)}}\\
+R4P\_FO & R5 order + predicted relation lines\\
+R4P\_FO\_NC & R4P\_FO without \texttt{CONTRADICTS} lines\\
+R4N\_FO & R4P\_FO pairs, neutral label \texttt{RELATED\_TO}\\
+R5P & predicted order, no relation lines\\
+R4P\_NC & R4P without \texttt{CONTRADICTS} lines\\
 \bottomrule
 \end{tabular}
 \caption{Representations. Every item carries a per-prompt identifier (\texttt{[E1]}, \dots) and its source title.}
@@ -41,6 +48,15 @@ R4P & R4 with model-predicted relations and order\\
 
 \paragraph{Selection, generation and evaluation.}
 Under Protocol~A every representation shows the complete fact set; under Protocol~B the budget is $\beta\in\{1.0, 0.5\}$ times the content tokens. A budget of $1.0\times$ the content tokens is already smaller than the full rendering of any representation that spends tokens on identifiers, titles or relation lines. The prompt (Appendix~\ref{app:prompts}) is identical for every representation, asks for an answer and the identifiers of the items used, and allows the answer \emph{insufficient evidence}. A guard checks for every record that the prompt equals the template filled with the evidence block and the question, so no gold answer can enter the prompt through another channel. Exact match (EM) after SQuAD normalisation \citep{rajpurkar2016squad}, maximised over aliases, is the primary metric for QA, and verdict accuracy for HoVer and FEVER. Secondary metrics are token F1, coverage (the fraction of questions with a parsed, non-abstaining answer), answer-in-evidence, and evidence and overhead tokens. Every attempted question stays in the denominator.
+
+\paragraph{Fixed-order relation controls (added after the confirmatory test).}
+R4P differs from R4 in three ways at once: its relation lines are predicted rather than derived, there are more of them, and its item order is recomputed from the predicted graph. To separate these factors we built five further representations of the same facts (Table~\ref{tab:reps}, lower part). R4P\_FO shows the predicted relation lines at the derived order of R5 and R4; R4P\_FO\_NC removes only the predicted \texttt{CONTRADICTS} lines from it; R4N\_FO keeps exactly the predicted pairs and number of lines but replaces every label with the neutral \texttt{RELATED\_TO}; R5P uses the predicted order without any lines; and R4P\_NC is R4P without its contradiction lines. Each pairwise contrast between these conditions changes one factor on identical facts and an identical prompt template. Because they were designed after the confirmatory result and run on the confirmatory questions, we treat them as exploratory interventions.
+
+\paragraph{Retrieved evidence (added after the confirmatory test).}
+To test whether the presentation effects persist when retrieval is imperfect, we drew a fresh sample of 500 MuSiQue and 500 2WikiMultiHopQA questions, disjoint from all earlier samples. For each question a shared, gold-free retrieval stage (BM25 over the question's pool, cross-encoder reranking of the top ten, top four kept) fixes the passages before any representation is built, and every representation renders exactly their sentences. R4 and R5 use the annotation-derived edges whose two endpoints were retrieved, so they test correct structure on incomplete evidence; R4P, R4P\_NC and R4P\_FO use predicted relations. Gold labels are used only afterwards, to stratify questions by whether retrieval returned all, some or none of the supporting sentences.
+
+\paragraph{Prompt factor (added after the confirmatory test).}
+Because the answer instruction offers \emph{insufficient evidence}, abstention may mediate representation effects. On a fixed random subset of 1{,}000 confirmatory 2WikiMultiHopQA questions we repeated R0, R1, R4 and R4P with the same prompt minus that sentence, and analyse the prompt as a separate factor.
 
 \paragraph{Perturbations (Experiment~2).}
 Interventions applied to the R1 and R4 renderings of the gold evidence remove required facts (P1), retype or flip relations (P2), permute positions (P3), insert non-gold sentences from the question's own pool as distractors (P4), strip source titles (P5), or delete a negation or replace an entity with a pronoun (P6). Temporal-conflict interventions (P7) require verified temporal data and are unavailable. The component-attribution experiment (Experiment~3) requires human-verified structure and was not executed, and we did not evaluate an adaptive representation selector (see Limitations).
