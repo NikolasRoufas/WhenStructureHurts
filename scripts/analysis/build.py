@@ -188,6 +188,10 @@ def exp1_contrasts(records: list[dict], stage: str, run: str) -> list[dict]:
                 xs = [r for r in xs if f"edge_stratum={(r.get('info') or {}).get('question_edge_stratum')}" == edge]
             return em_map(xs, c["metric"])
         extra = paired_extra(sel(c["a"]), sel(c["b"]))
+        # pre-specified secondary equivalence check (CONFIRMATORY_PROTOCOL §3): 90% CI vs +-0.02
+        ci90 = None
+        if s == "A" and edge == "all" and c["role"] == "primary":
+            ci90 = paired_bootstrap(sel(c["a"]), sel(c["b"]), alpha=0.10).get("ci")
         out.append({"run": run, "dataset": c["dataset"], "setting": s, "edge_stratum": edge, "contrast": f"{c['b']}-{c['a']}",
                     "a": c["a"], "b": c["b"], "metric": c["metric"], "role": c["role"], "n_paired": c["n_paired"],
                     "n_only_a": c["n_only_a"], "n_only_b": c["n_only_b"], "delta": c["delta"], "ci": c["ci"],
@@ -197,7 +201,8 @@ def exp1_contrasts(records: list[dict], stage: str, run: str) -> list[dict]:
                     "informative_n": c["informative_pairs"]["n_paired"], "informative_delta": c["informative_pairs"]["delta"],
                     "informative_ci": c["informative_pairs"]["ci"], "coverage_delta": c["coverage_delta"]["delta"],
                     "coverage_ci": c["coverage_delta"]["ci"], "d_z": extra["d_z"], "mcnemar_p_secondary": extra["mcnemar_p"],
-                    "confirmatory": c["confirmatory"]})
+                    "confirmatory": c["confirmatory"], "p_holm": c.get("p_holm"), "ci90": ci90,
+                    "equivalent_within_0.02": (None if not ci90 else (-0.02 <= ci90[0] and ci90[1] <= 0.02))})
     return out
 
 
