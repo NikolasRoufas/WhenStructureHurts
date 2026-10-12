@@ -1,57 +1,68 @@
-# Reviewer self-critique
+# Reviewer self-critique (revision-1, 2026-10-13)
 
-This critique is written as a sceptical ACL/EMNLP reviewer would write it, against the draft of 2026-10-12.
+Three simulated ACL/EMNLP reviewers read the revised draft (`paper/main.pdf`, 8 pages + appendix). Each scores on the ARR scale (soundness 1–5, excitement 1–5) and gives the strongest argument for rejection. Afterwards we list what we changed in response and what cannot be fixed without new data or authorisation.
 
-## Summary of the submission
+## Reviewer A: methodology
 
-The paper presents the gold evidence of multi-hop questions in seven representations under an information-controlled protocol and a budget-controlled protocol. It pre-registers six contrasts and tests them on 4,976 held-out questions with one 7B reader. Results:
-- derived structure has no detectable effect;
-- sentence items slightly lower EM on one dataset, through abstention;
-- predicted relations hurt, concentrated where the predictor asserts spurious contradictions.
+**Summary.** The paper holds gold evidence fixed and varies its presentation; a pre-specified test on 4,976 questions finds no effect of order or derived relation lines and a small abstention-driven cost of sentence items; exploratory fixed-order controls attribute the cost of predicted relations to contradiction lines.
 
-## Strengths
+**Strengths.** Per-question fact-identity verification; byte-identical pair counts; one-factor controls (on/off contradiction lines at fixed order; typed vs neutral labels at the same pairs and line count) are proper interventions, not correlational strata; the zero-contradiction stratum acts as a built-in placebo (exactly 0 change).
 
-- **Clean design.** Fact identity is verified per question. The budget is controlled with a fixed, gold-free ranking. Identical-evidence pairs are counted.
-- **Statistical discipline that is rare in this area.** A frozen pilot, a pre-registered confirmatory protocol committed before sampling, sample sizes from the pilot variance, Holm correction, an equivalence margin, and an explicit exploratory/confirmatory split.
-- **Mechanistic insight that is checkable.** The abstention decomposition, and the spurious-contradiction analysis with concrete examples.
-- **Honest reporting.** Null results, the pilot overestimate (−0.07 vs −0.017), unexecuted experiments, and analyses added post hoc are all disclosed.
+**Weaknesses.**
+1. *Single reader.* Every effect is from Qwen2.5-7B-Instruct. The mechanism (abstention) is plausibly model- and instruction-specific; the prompt-factor experiment shows it largely is.
+2. *Are the contradictions false?* The paper argues the harm comes from asserting conflicts the sources do not contain, but the falsity is established only by heuristic triage. If many predicted conflicts are real (e.g. different dates of one event), the finding becomes "showing conflicts makes the model cautious", which is less surprising.
+3. *Derived structure is the "good structure".* With 25–33 % fallback anchors and no human verification, the null for derived relations is a null for *this* structure, not for correct structure.
+4. *Retrieved evidence.* The replication is 500 questions/dataset, and annotation structure almost never survives retrieval, so "correct structure on incomplete evidence" is untested.
 
-## Weaknesses
+**Soundness 3.5 / Excitement 3.** **Strongest rejection argument:** the main positive finding is an abstention artefact of one model under one instruction, demonstrated on post-hoc controls.
 
-1. **Novelty versus the closest prior work.**
-   - GraphRAG-Bench (Xiang et al., ICLR 2026), the RAG vs GraphRAG study (Han et al.) and the unified graph-RAG analysis (Zhou et al., PVLDB) already show that graphs do not uniformly help.
-   - Our addition is the controlled, fact-identical comparison and the measured cost of noisy relations. That is a clear but narrow increment. A reviewer may see "structure has no effect when the facts are complete" as expected.
-   - The strongest novel finding, that spurious contradictions cause abstention, rests on a *secondary* contrast. Its mechanism comes from an analysis added after the result.
-2. **Single generator and single prompt.**
-   - Every effect is mediated by abstention under a prompt that offers *insufficient evidence*.
-   - Without a second model family, or a no-abstention prompt, the findings may be a property of Qwen2.5-7B-Instruct plus this template. This is the most likely reason for rejection.
-3. **Gold evidence only for the controlled experiments.** The setting in which structure plausibly helps (scattered, partial, retrieved evidence) is tested only in the 100-question pilot (Exp0). So the null result says little about real graph-RAG pipelines.
-4. **Derived, unverified structure.**
-   - 25–33 % of primary questions have fallback-anchored edges.
-   - The human-verification package is untouched, so "correct structure has no effect" is not established, only "derived structure of this quality".
-   - Exp3 (component attribution) was not run.
-5. **R4P confound.** R4P changes the relation *types*, the *number* of relation lines and the *order* at once. The "misleading relations" interpretation is plausible and supported by the P2 pilot perturbation, but it is not isolated. A clean test would remove only the CONTRADICTS lines from R4P.
-6. **Baseline fairness (Exp0).**
-   - B2/B3 see about 3× the tokens of B0/B1.
-   - B4 is our reconstruction with many self-chosen components, a 450-token budget and at most 12 claims.
-   - Exp0 is pilot-only (n = 100 per dataset).
-   - Its conclusions (B4 loses evidence at selection) should not be read as statements about the original EG-RAG.
-7. **Statistical power of the pilot-only parts.** Protocol B, Exp0 and Exp2 are n = 100 or 50 with about 50 cells in Exp2. Several "significant" cells are expected by chance. The paper says so, but the budget finding (H4) rests on deterministic accounting plus inconclusive EM differences.
-8. **Metric.** Exact match with SQuAD normalisation and no diacritic folding is strict. A secondary check shows little impact. The NLI groundedness metric looks broken for short answers and is reported but not interpreted; a reviewer may ask why it is computed at all.
-9. **Presentation.** The paper is dense. Six tables and four figures moved to the appendix to meet 8 pages. Several numbers that support Discussion claims live only in appendix tables.
+## Reviewer B: novelty and positioning
 
-## Is the evidence sufficient for an ACL/EMNLP main-track paper?
+**Summary.** A controlled study of evidence presentation in RAG, positioned against GraphRAG analyses.
 
-**Not yet.** In its current form it is a solid Findings or workshop paper: rigorous and honest, with one confirmed small effect, informative nulls and an interesting secondary mechanism. For the main track, a reviewer would most likely require:
-1. at least one more generator family (and ideally a larger model);
-2. a no-abstention prompt variant, or a reader without an abstention option, to show the effects are not just abstention calibration;
-3. the clean R4P ablation (predicted relations without CONTRADICTS lines, and with the derived order held fixed), run as a pre-specified test;
-4. a retrieved-evidence version of Protocol A at scale;
-5. completion of the human verification, so that correct structure can be tested.
+**Strengths.** The closest work (Nishida et al., TACL 2026) measures extraction noise through the retrieval pipeline; this paper isolates the *presentation* of incorrect relations next to fixed, correct evidence. That is a distinct, cleanly separated question. The budget accounting (formatting overhead as evidence loss) is useful and seldom reported.
 
-## Questions a reviewer will ask
+**Weaknesses.**
+1. "Structure does not help when the facts are complete" may be seen as expected; GraphRAG-Bench and Han et al. already report task-dependent or absent gains.
+2. "Noisy relations hurt" is known in spirit (Nishida et al.; LinearRAG's motivation). The incremental claim is the *channel* (abstention) and the *locus* (contradiction labels, not order or line count).
+3. The NLI relation predictor is a weak, simple choice; modern GraphRAG systems extract relations with LLMs. Would LLM-extracted relations show the same contradiction behaviour?
+4. Sentence units are not propositions; the title promises more about "transformations" than sentence segmentation delivers.
 
-- Why should practitioners care about representation effects of ±1 EM point when retrieval differences are an order of magnitude larger?
-- Does the abstention effect survive if abstentions are excluded? (The paper reports the decomposition; conditional accuracy is nearly unchanged.)
-- Are the CONTRADICTS predictions an artefact of the xsmall NLI model? Would a stronger relation classifier avoid them?
-- How were the six contrasts chosen? (They are fixed in the pilot protocol before any generation, and the paper says so.)
+**Soundness 3.5 / Excitement 2.5.** **Strongest rejection argument:** a careful but narrow increment over Nishida et al. 2026 and GraphRAG-Bench, with a weak relation predictor that practitioners do not use.
+
+## Reviewer C: statistics and reproducibility
+
+**Strengths.** Confirmatory family fixed before sampling and committed to version control; power from the pilot; Holm correction; equivalence margin fixed in advance and now checked with Holm-TOST too; exploratory work labelled as such throughout; paired bootstrap with recorded seed; every number mapped to a file and run with prediction hashes; raw predictions retained.
+
+**Weaknesses.**
+1. "Pre-specified", not pre-registered with a third party; the paper says this correctly.
+2. The fixed-order controls reuse the confirmatory questions after their R4P−R4 result was seen; their CIs are not multiplicity-corrected (about 12 contrasts). The main contradiction contrast would survive any reasonable correction (CI upper bound −0.023 / −0.025), but the smaller ones (order-only +0.018 on MuSiQue) would not be safe.
+3. The prompt × representation interactions are inconclusive (CIs touch or include 0), so "largely vanished" rests on point estimates of within-prompt contrasts. The paper should say "shrank" and give the intervals (it does).
+4. The pilot overestimated the confirmed effect fourfold; pilot-only results (Protocol B, Exp0, Exp2) should carry little weight. They are in the appendix.
+5. Greedy decoding at batch size 1 is deterministic for this reader, but other hardware may differ slightly; the preflight shows batching changed 3 of 8 outputs.
+
+**Soundness 4 / Excitement 3.** **Strongest rejection argument:** none on statistics alone; the reviewer would defer to A on generality.
+
+## Meta-review simulation
+
+Likely outcome at a main track: *borderline, leaning Findings*. The design and reporting are above average; generality (one reader) and the unverified falsity of the contradictions are the decisive concerns.
+
+## What we changed in response (this revision)
+
+| concern | change |
+|---|---|
+| R4P confounds order, line count and labels | fixed-order controls R4P_FO, R4P_FO_NC, R4N_FO, R5P, R4P_NC run (§6.3, Table 3, Fig. 4) |
+| Effects may be abstention artefacts | transition analysis (Table 12); prompt factor without the abstention line (§6.5, Table 14); claims rephrased as conditional on the instruction |
+| Gold evidence only | retrieved-evidence replication on 1,000 fresh, disjoint questions (§6.4, Tables 4, 16, 17) |
+| Exp0 unequal budgets | budgets and costs explicit (Table 18); no architectural conclusion drawn |
+| Novelty vs Nishida et al. 2026 | cited and positioned in Intro and Related Work; claim narrowed to presentation of relations with content fixed |
+| "Propositions" overclaim | text says *sentence items*; Limitations "Sentence units, not propositions" |
+| Equivalence wording | per-test 90 % CI rule (pre-specified) plus Holm-TOST (added; agrees) |
+| Overfull boxes, crowded appendix | fixed; long source paths break; three appendix tables widened |
+
+## What cannot be fixed without new data or authorisation
+
+1. **Second reader.** Configured (`configs/revision_second_reader.yaml`; Mistral-7B-Instruct-v0.3 or OLMo-2-1124-7B-Instruct, pinned revisions) but needs explicit authorisation to download and about 5.5 GPU-hours (≈ 12 h of the 24 h ceiling remain).
+2. **Human labels** for the 240 blinded contradiction pairs and the structure-verification package (`docs/REMAINING_HUMAN_VERIFICATION.md`). Until then, "the contradictions are false" stays an inference.
+3. **LLM-extracted relations** in place of the NLI predictor (Reviewer B.3): a new experiment, not yet designed.
+4. **A genuinely confirmatory test** of the contradiction effect would need a fresh sample and a new pre-specified protocol.

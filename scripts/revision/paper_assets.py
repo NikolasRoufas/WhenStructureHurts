@@ -3,6 +3,7 @@
 <revision_dir> contains audit/, controls/, analysis/, retrieval/, noabst/ (whatever exists)."""
 import csv
 import json
+import re
 import sys
 from pathlib import Path
 
@@ -32,6 +33,8 @@ def ci(x, nd=3):
 
 
 def emit(name, header, body, caption, label, colspec, star=True, size="\\footnotesize"):
+    # let long source paths in captions break after each slash
+    caption = re.sub(r"\\texttt\{([^}]*/[^}]*)\}", lambda m: "\\texttt{" + m.group(1).replace("/", "/\\allowbreak ") + "}", caption)
     env = "table*" if star else "table"
     t = [f"\\begin{{{env}}}[t]", "\\centering", size, "\\begin{adjustbox}{max width=\\linewidth}", f"\\begin{{tabular}}{{{colspec}}}",
          "\\toprule", " & ".join(header) + " \\\\", "\\midrule"]
@@ -78,7 +81,7 @@ if ctrl:
     emit("tab_controls_strata", ["Data", "Contradiction lines", "$n$", "$\\Delta$EM", "95\\% CI", "$\\Delta$Abst.", "95\\% CI"], body[:-1],
          "Effect of showing the predicted \\texttt{CONTRADICTS} lines (R4P\\_FO$-$R4P\\_FO\\_NC) by the number of such lines in the "
          "prompt (exploratory). With no contradiction lines the two prompts are identical. Source: "
-         "\\texttt{revision/controls/relation\\_control\\_strata.csv}.", "tab:controls-strata", "@{}llrrlrl@{}", star=False)
+         "\\texttt{revision/controls/relation\\_control\\_strata.csv}.", "tab:controls-strata", "@{}llrrlrl@{}", star=True)
 
     import matplotlib
     matplotlib.use("Agg")
@@ -102,8 +105,9 @@ if ctrl:
         ax.set_title(title, fontsize=8)
         ax.grid(axis="x", lw=0.3, alpha=0.5)
     axes[0].set_yticks(range(len(CTRL)), labels[::-1], fontsize=6.5)
-    axes[0].legend(fontsize=6.5, frameon=False, loc="lower left")
-    fig.tight_layout()
+    h, l = axes[0].get_legend_handles_labels()
+    fig.legend(h, l, loc="lower center", ncol=2, fontsize=7, frameon=False, bbox_to_anchor=(0.55, -0.04))
+    fig.tight_layout(rect=(0, 0.05, 1, 1))
     fig.savefig(P / "figures" / "fig_controls.pdf", bbox_inches="tight")
     fig.savefig(P / "figures" / "fig_controls.png", bbox_inches="tight", dpi=200)
     plt.close(fig)
@@ -152,6 +156,17 @@ if rc:
          "\\texttt{revision/retrieval/retrieval\\_contrasts.csv}.", "tab:retrieval", "@{}lllrrrlrr@{}")
     body = []
     for ds in ("musique", "2wikimultihopqa"):
+        for con, nm in names.items():
+            r = next((x for x in rc if x["dataset"] == ds and x["setting"] == "A" and x["contrast"] == con and x["stratum"] == "all"), None)
+            if r:
+                body.append([DSN[ds], nm, r["n_identical_prompts"], f(r["d_em"]), ci(r["d_em_ci"]), f(r["d_abst"])])
+        body.append("MID")
+    emit("tab_retrieval_main", ["Data", "Contrast", "Ident.", "$\\Delta$EM", "95\\% CI", "$\\Delta$Abst."], body[:-1],
+         "Retrieved evidence, Protocol~A (exploratory; fresh disjoint sample, $n$=500 per dataset; all representations render the "
+         "same four reranked passages). Ident.: byte-identical prompt pairs. Full table with Protocol~B in Appendix~\\ref{app:revision}. "
+         "Source: \\texttt{revision/retrieval/retrieval\\_contrasts.csv}.", "tab:retrieval-main", "@{}llrrlr@{}", star=False)
+    body = []
+    for ds in ("musique", "2wikimultihopqa"):
         for con in ("R1-R0", "R4P-R4P_NC"):
             for st in ("retrieval=complete", "retrieval=partial", "retrieval=none", "distractor_heavy=True", "long_evidence=True"):
                 r = next((x for x in rc if x["dataset"] == ds and x["setting"] == "A" and x["contrast"] == con and x["stratum"] == st), None)
@@ -167,12 +182,14 @@ if rc:
 # ------------------------------------------------------------------ prompt variant
 nb = rows("noabst/noabst_contrasts.csv")
 if nb:
-    body = [[r["prompt"], r["contrast"].replace("-", "$-$").replace("_", "\\_"), r["n"], f(r["d_em"]), ci(r["d_em_ci"]), f(r["d_abst"])]
-            for r in nb]
+    body = [[r["prompt"].replace("qa-v2", "\\texttt{qa-v2}").replace("noabst", "\\texttt{noabst}"),
+             r["contrast"].replace("-", "$-$").replace("_", "\\_").replace("noabst", "\\texttt{noabst}").replace("qa$-$v2", "\\texttt{qa-v2}"),
+             r["n"], f(r["d_em"]), ci(r["d_em_ci"]), f(r["d_abst"])]
+            for r in nb if not r["contrast"].startswith("absolute")]
     emit("tab_noabst", ["Prompt", "Contrast", "$n$", "$\\Delta$EM", "95\\% CI", "$\\Delta$Abst."], body,
          "Prompt factor (exploratory, 1{,}000 confirmatory 2Wiki questions): the frozen prompt \\texttt{qa-v2} and the same prompt "
          "without the line offering \\emph{insufficient evidence} (\\texttt{noabst}); last rows give the prompt $\\times$ representation "
-         "interaction. Source: \\texttt{revision/noabst/noabst\\_contrasts.csv}.", "tab:noabst", "@{}llrrlr@{}", star=False)
+         "interaction. Source: \\texttt{revision/noabst/noabst\\_contrasts.csv}.", "tab:noabst", "@{}llrrlr@{}", star=True)
 
 # ------------------------------------------------------------------ Exp0 costs
 c0 = rows("analysis/C_exp0_costs.csv")
@@ -193,3 +210,22 @@ if c0:
          "extraction (original-call latency for cached calls). CONTRA share: fraction of B4's predicted relations labelled "
          "\\texttt{CONTRADICTS}. Source: \\texttt{revision/analysis/C\\_exp0\\_costs.csv}.", "tab:exp0-costs", "@{}llrrrrrrrrr@{}")
 print("assets written:", sorted(x.name for x in (P / "tables").glob("tab_*") if x.suffix == ".tex"))
+
+# ------------------------------------------------------------------ contradiction triage (automatic, not judgements)
+cs = R / "contradictions/contradictions_summary.json"
+if cs.exists():
+    d = json.loads(cs.read_text())
+    tot = d["n_pairs"]
+    names = {"auto:different_source_titles": "different source titles (different entities)",
+             "auto:same_title_different_years": "same title, different years",
+             "auto:same_title_different_numbers": "same title, different numbers",
+             "auto:same_title_pronoun_initial": "same title, pronoun-initial sentence",
+             "auto:same_title_other": "same title, other"}
+    body = [[names[k], f"{d['auto_category_pairs'][k]:,}", f"{100 * d['auto_category_pairs'][k] / tot:.0f}\\%"] for k in names]
+    body.append("MID")
+    body.append(["all predicted contradiction pairs", f"{tot:,}", "100\\%"])
+    emit("tab_contra_triage", ["Automatic triage (heuristic, not a judgement)", "Pairs", "Share"], body,
+         f"Predicted \\texttt{{CONTRADICTS}} pairs on the confirmatory sample (R4P; {d['n_edges']:,} directed edges, "
+         f"{d['n_edges_shown_to_reader']:,} rendered, {d['n_questions_with_contradicts']:,} questions). NLI confidence $\\geq$0.90 "
+         f"(median {d['nli_confidence_quartiles']['median']:.3f}). Categories are heuristic triage for prioritising human "
+         "verification. Source: \\texttt{revision/contradictions/contradictions\\_summary.json}.", "tab:contra-triage", "@{}lrr@{}", star=True)

@@ -1,0 +1,24 @@
+\begin{table*}[t]
+\centering
+\footnotesize
+\begin{adjustbox}{max width=\linewidth}
+\begin{tabular}{@{}llrrlr@{}}
+\toprule
+Prompt & Contrast & $n$ & $\Delta$EM & 95\% CI & $\Delta$Abst. \\
+\midrule
+\texttt{qa-v2} & R1$-$R0 & 1000 & -0.023 & [-0.044, -0.002] & +0.059 \\
+\texttt{qa-v2} & R4P$-$R4 & 1000 & -0.036 & [-0.054, -0.020] & +0.054 \\
+\texttt{noabst} & R1$-$R0 & 1000 & -0.004 & [-0.026, +0.018] & +0.002 \\
+\texttt{noabst} & R4P$-$R4 & 1000 & -0.017 & [-0.035, +0.000] & +0.003 \\
+prompt effect & \texttt{noabst}$-$\texttt{qa-v2} (R0) & 1000 & +0.078 & [+0.055, +0.101] & -0.196 \\
+prompt effect & \texttt{noabst}$-$\texttt{qa-v2} (R1) & 1000 & +0.097 & [+0.072, +0.123] & -0.253 \\
+prompt effect & \texttt{noabst}$-$\texttt{qa-v2} (R4) & 1000 & +0.109 & [+0.084, +0.135] & -0.268 \\
+prompt effect & \texttt{noabst}$-$\texttt{qa-v2} (R4P) & 1000 & +0.128 & [+0.103, +0.153] & -0.319 \\
+interaction & (R1$-$R0) \texttt{noabst} minus \texttt{qa-v2} & 1000 & +0.019 & [-0.006, +0.045] & -0.057 \\
+interaction & (R4P$-$R4) \texttt{noabst} minus \texttt{qa-v2} & 1000 & +0.019 & [-0.001, +0.040] & -0.051 \\
+\bottomrule
+\end{tabular}
+\end{adjustbox}
+\caption{Prompt factor (exploratory, 1{,}000 confirmatory 2Wiki questions): the frozen prompt \texttt{qa-v2} and the same prompt without the line offering \emph{insufficient evidence} (\texttt{noabst}); last rows give the prompt $\times$ representation interaction. Source: \texttt{revision/\allowbreak noabst/\allowbreak noabst\_contrasts.csv}.}
+\label{tab:noabst}
+\end{table*}

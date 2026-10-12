@@ -1,7 +1,15 @@
 \appendix
 
-\section{Prompts}
+\section{Pipeline and prompts}
 \label{app:prompts}
+
+\begin{figure*}[t]
+\centering
+\resizebox{\textwidth}{!}{\input{figures/fig1_pipeline.tex}}
+\caption{The evidence pipeline. Experiment~1 starts from the gold passages and varies only the representation (Protocol~A), or the representation under a fixed fact ranking and token budget (Protocol~B). Experiment~0 runs the retrieved-evidence pipeline for five systems; Experiment~2 corrupts the evidence of two representations. Dashed boxes are used only by some conditions.}
+\label{fig:pipeline}
+\end{figure*}
+
 
 Every Experiment~0--2 answer uses the same prompt (version \texttt{qa-v2}); only the evidence block differs between representations. The system message is \emph{You answer using only the evidence you are given.} The user message is:
 
@@ -166,4 +174,30 @@ Table~\ref{tab:absolute} gives the absolute scores of every representation under
 \includegraphics[width=0.85\textwidth]{figures/fig3_accuracy_vs_tokens.pdf}
 \caption{Exploratory pilot: exact match against the mean number of evidence tokens shown, for Protocol~A (natural length) and Protocol~B (budget $1.0\times$ or $0.5\times$ the content tokens; shared or per-representation policy).}
 \label{fig:budget}
+\end{figure*}
+
+\section{Revision experiments: supplementary tables}
+\label{app:revision}
+
+Table~\ref{tab:controls-strata} stratifies the contradiction-line effect by the number of such lines. Table~\ref{tab:contra-triage} summarises the predicted contradictions. Table~\ref{tab:retrieval} gives the retrieved-evidence contrasts under both protocols, and Table~\ref{tab:retrieval-strata} by retrieval outcome. Table~\ref{tab:exp0-costs} makes the budgets and costs of Experiment~0 explicit. All of these are exploratory. The blinded human-verification packages and their importers are described in the repository (\texttt{docs/REMAINING\_HUMAN\_VERIFICATION.md}).
+
+\input{tables/tab_transitions}
+\begin{figure*}[t]
+\centering
+\includegraphics[width=0.9\textwidth]{figures/fig_controls.pdf}
+\caption{Fixed-order relation controls on the confirmatory questions (exploratory). Each row changes one factor on identical facts; points are paired differences with 95\% CIs.}
+\label{fig:controls}
+\end{figure*}
+\input{tables/tab_controls_strata}
+\input{tables/tab_noabst}
+\input{tables/tab_contra_triage}
+\input{tables/tab_retrieval}
+\input{tables/tab_retrieval_strata}
+\input{tables/tab_exp0_costs}
+
+\begin{figure*}[t]
+\centering
+\includegraphics[width=0.85\textwidth]{figures/fig5_contrasts_pilot_vs_confirmatory.pdf}
+\caption{Protocol~A contrasts in the exploratory pilot ($n$=100 per dataset) and on the disjoint confirmatory sample. The pilot estimate of R1$-$R0 on 2WikiMultiHopQA ($-0.07$) overstated the confirmed effect ($-0.017$) by a factor of four.}
+\label{fig:forest}
 \end{figure*}

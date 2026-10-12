@@ -1,0 +1,27 @@
+\begin{table}[t]
+\centering
+\footnotesize
+\begin{adjustbox}{max width=\linewidth}
+\begin{tabular}{@{}llrrlr@{}}
+\toprule
+Data & Contrast & Ident. & $\Delta$EM & 95\% CI & $\Delta$Abst. \\
+\midrule
+MuSiQue & R1$-$R0 & 0 & +0.014 & [+0.000, +0.028] & -0.006 \\
+MuSiQue & R5$-$R1 & 451 & +0.010 & [+0.000, +0.020] & -0.008 \\
+MuSiQue & R4$-$R5 & 342 & +0.002 & [-0.012, +0.016] & -0.002 \\
+MuSiQue & R4P$-$R4 & 72 & -0.036 & [-0.056, -0.020] & +0.068 \\
+MuSiQue & contradiction lines on$-$off & 131 & -0.022 & [-0.038, -0.008] & +0.040 \\
+MuSiQue & R4P\_FO$-$R5 & 86 & -0.022 & [-0.038, -0.008] & +0.052 \\
+\midrule
+2Wiki & R1$-$R0 & 5 & -0.026 & [-0.054, +0.002] & +0.072 \\
+2Wiki & R5$-$R1 & 498 & +0.000 & [+0.000, +0.000] & +0.000 \\
+2Wiki & R4$-$R5 & 322 & +0.010 & [-0.008, +0.028] & -0.006 \\
+2Wiki & R4P$-$R4 & 84 & -0.030 & [-0.054, -0.008] & +0.066 \\
+2Wiki & contradiction lines on$-$off & 110 & -0.024 & [-0.046, -0.004] & +0.068 \\
+2Wiki & R4P\_FO$-$R5 & 66 & -0.016 & [-0.042, +0.010] & +0.052 \\
+\bottomrule
+\end{tabular}
+\end{adjustbox}
+\caption{Retrieved evidence, Protocol~A (exploratory; fresh disjoint sample, $n$=500 per dataset; all representations render the same four reranked passages). Ident.: byte-identical prompt pairs. Full table with Protocol~B in Appendix~\ref{app:revision}. Source: \texttt{revision/\allowbreak retrieval/\allowbreak retrieval\_contrasts.csv}.}
+\label{tab:retrieval-main}
+\end{table}

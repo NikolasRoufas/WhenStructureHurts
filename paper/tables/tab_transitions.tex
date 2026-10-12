@@ -1,0 +1,25 @@
+\begin{table*}[t]
+\centering
+\footnotesize
+\begin{adjustbox}{max width=\linewidth}
+\begin{tabular}{@{}llrrrrlrrr@{}}
+\toprule
+Data & Change (second vs.\ first) & $n$ & $\Delta$EM & $\Delta$Abst. & $\Delta$Wrong & $\Delta$Acc.\ | both answered & C$\to$A / A$\to$C & C$\to$W / W$\to$C & W$\to$A / A$\to$W \\
+\midrule
+2Wiki & sentence items vs.\ passages & 3232 & -0.017 & +0.052 & -0.036 & +0.002 [-0.013, +0.017] & 87/29 & 152/156 & 163/52 \\
+2Wiki & graph order vs.\ dataset order & 3232 & -0.008 & +0.012 & -0.004 & -0.006 [-0.018, +0.005] & 57/45 & 95/81 & 113/85 \\
+2Wiki & derived relation lines vs.\ none & 3232 & +0.006 & +0.011 & -0.017 & +0.014 [+0.005, +0.024] & 42/29 & 42/74 & 81/59 \\
+2Wiki & R4P vs.\ R4 (original) & 3232 & -0.036 & +0.061 & -0.025 & -0.017 [-0.027, -0.007] & 97/17 & 80/44 & 160/42 \\
+2Wiki & contradiction lines on vs.\ off & 3232 & -0.033 & +0.061 & -0.028 & -0.013 [-0.022, -0.004] & 89/9 & 64/36 & 137/20 \\
+\midrule
+MuSiQue & sentence items vs.\ passages & 1744 & -0.001 & -0.009 & +0.010 & -0.004 [-0.020, +0.014] & 42/44 & 29/26 & 52/66 \\
+MuSiQue & graph order vs.\ dataset order & 1744 & -0.011 & -0.003 & +0.015 & -0.025 [-0.045, -0.006] & 45/46 & 43/22 & 53/58 \\
+MuSiQue & derived relation lines vs.\ none & 1744 & +0.010 & -0.004 & -0.006 & +0.013 [-0.007, +0.031] & 28/35 & 29/40 & 54/54 \\
+MuSiQue & R4P vs.\ R4 (original) & 1744 & -0.045 & +0.089 & -0.044 & -0.012 [-0.037, +0.011] & 93/24 & 43/34 & 125/39 \\
+MuSiQue & contradiction lines on vs.\ off & 1744 & -0.033 & +0.062 & -0.029 & -0.009 [-0.020, +0.003] & 52/2 & 14/7 & 64/6 \\
+\bottomrule
+\end{tabular}
+\end{adjustbox}
+\caption{Question-level outcome transitions (C correct, W answered and wrong, A not answered) between paired conditions on the confirmatory questions (exploratory decomposition). $\Delta$Acc.\ | both answered: accuracy difference among questions answered under both conditions, with 95\% CI. Sources: \texttt{revision/\allowbreak analysis/\allowbreak F\_exp1\_transitions.csv}, \texttt{revision/\allowbreak controls/\allowbreak controls\_transitions.csv}.}
+\label{tab:transitions}
+\end{table*}

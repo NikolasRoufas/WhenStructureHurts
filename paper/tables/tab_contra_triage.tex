@@ -1,0 +1,21 @@
+\begin{table*}[t]
+\centering
+\footnotesize
+\begin{adjustbox}{max width=\linewidth}
+\begin{tabular}{@{}lrr@{}}
+\toprule
+Automatic triage (heuristic, not a judgement) & Pairs & Share \\
+\midrule
+different source titles (different entities) & 3,857 & 40\% \\
+same title, different years & 1,962 & 20\% \\
+same title, different numbers & 671 & 7\% \\
+same title, pronoun-initial sentence & 734 & 8\% \\
+same title, other & 2,526 & 26\% \\
+\midrule
+all predicted contradiction pairs & 9,750 & 100\% \\
+\bottomrule
+\end{tabular}
+\end{adjustbox}
+\caption{Predicted \texttt{CONTRADICTS} pairs on the confirmatory sample (R4P; 12,816 directed edges, 12,372 rendered, 3,044 questions). NLI confidence $\geq$0.90 (median 0.985). Categories are heuristic triage for prioritising human verification. Source: \texttt{revision/\allowbreak contradictions/\allowbreak contradictions\_summary.json}.}
+\label{tab:contra-triage}
+\end{table*}

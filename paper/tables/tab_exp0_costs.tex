@@ -1,0 +1,25 @@
+\begin{table*}[t]
+\centering
+\footnotesize
+\begin{adjustbox}{max width=\linewidth}
+\begin{tabular}{@{}llrrrrrrrrr@{}}
+\toprule
+Data & Sys. & EM & Cov. & Tok. & Units & Gold-pass.\ rec. & Ans.\ in ev. & Extr.\ calls & Latency (s) & CONTRA share \\
+\midrule
+MuSiQue & B0 & 0.06 & 0.23 & 493 & 4.0 & 0.44 & 0.34 & 0.0 & 0.4 & -- \\
+MuSiQue & B1 & 0.12 & 0.33 & 538 & 4.0 & 0.53 & 0.44 & 0.0 & 0.4 & -- \\
+MuSiQue & B2 & 0.13 & 0.36 & 1390 & 57.1 & 0.53 & 0.44 & 15.3 & 24.3 & -- \\
+MuSiQue & B3 & 0.15 & 0.38 & 1667 & 57.1 & 0.53 & 0.44 & 15.3 & 24.4 & -- \\
+MuSiQue & B4 & 0.03 & 0.18 & 442 & 11.9 & 0.55 & 0.31 & 15.1 & 23.8 & 0.55 \\
+\midrule
+2Wiki & B0 & 0.23 & 0.54 & 506 & 4.0 & 0.76 & 0.69 & 0.0 & 0.4 & -- \\
+2Wiki & B1 & 0.26 & 0.54 & 501 & 4.0 & 0.80 & 0.78 & 0.0 & 0.4 & -- \\
+2Wiki & B2 & 0.24 & 0.48 & 1436 & 56.4 & 0.80 & 0.78 & 14.7 & 23.9 & -- \\
+2Wiki & B3 & 0.20 & 0.50 & 1711 & 56.4 & 0.80 & 0.78 & 14.7 & 23.9 & -- \\
+2Wiki & B4 & 0.11 & 0.25 & 489 & 11.9 & 0.80 & 0.56 & 14.7 & 23.8 & 0.62 \\
+\bottomrule
+\end{tabular}
+\end{adjustbox}
+\caption{Experiment~0 with budgets and costs made explicit (pilot, $n$=100 per dataset). Budgets are \emph{not} matched: B2/B3 show about three times the tokens of B0/B1; B4 selects at most 12 claims within 450 tokens. Latency includes LLM claim extraction (original-call latency for cached calls). CONTRA share: fraction of B4's predicted relations labelled \texttt{CONTRADICTS}. Source: \texttt{revision/\allowbreak analysis/\allowbreak C\_exp0\_costs.csv}.}
+\label{tab:exp0-costs}
+\end{table*}

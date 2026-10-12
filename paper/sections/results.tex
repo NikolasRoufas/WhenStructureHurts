@@ -1,41 +1,52 @@
 \section{Results}
 \label{sec:results}
 
-We report the confirmatory test first, because it is the only part of the study designed to support a claim, and then the exploratory pilot results that contextualise it. Unless stated otherwise, intervals are paired 95\% bootstrap intervals over questions, and differences are stated as the first-named representation minus the second-named one.
+We first report the confirmatory test, the only part of the study designed to support a claim, and then the exploratory analyses added after it. Intervals are paired 95\% bootstrap intervals over questions, and every difference is stated as the first-named condition minus the second.
 
-\subsection{Confirmatory test of the primary contrasts}
+\subsection{Confirmatory test}
 
-Table~\ref{tab:confirmatory} reports the six pre-specified tests on the disjoint confirmatory sample of 1{,}744 MuSiQue and 3{,}232 2WikiMultiHopQA questions. All 44{,}784 records were generated without errors, with information equivalence verified for every question.
+Table~\ref{tab:confirmatory} reports the six pre-specified tests on 1{,}744 MuSiQue and 3{,}232 2WikiMultiHopQA questions. All 44{,}784 records were generated without errors, and the fact sets were verified identical across representations for every question.
 
-One of the six tests rejects the null hypothesis after Holm correction. On 2WikiMultiHopQA, presenting the gold passages as sentence items (R1) instead of passages (R0) lowers exact match by 0.017 (95\% CI $[-0.029, -0.005]$, $p_{\text{Holm}}=0.018$); the paired coverage difference is $-0.052$. On MuSiQue the same contrast is $-0.001$ $[-0.014, +0.014]$, and its 90\% interval lies inside the pre-specified equivalence margin of $\pm0.02$.
+\paragraph{Sentence items.} One test rejects its null hypothesis after Holm correction. On 2WikiMultiHopQA, presenting the gold passages as sentence items (R1) rather than passages (R0) lowers exact match by 0.017 (95\% CI $[-0.029, -0.005]$, $p_{\text{Holm}}=0.018$). On MuSiQue the same contrast is $-0.001$ $[-0.014, +0.014]$ and equivalent to zero within $\pm0.02$.
 
-Neither structural contrast is significant on either dataset. Graph-derived ordering (R5$-$R1) gives $-0.011$ $[-0.026, +0.003]$ on MuSiQue and $-0.008$ $[-0.018, +0.002]$ on 2WikiMultiHopQA, and explicit relation lines at a fixed order (R4$-$R5) give $+0.010$ $[-0.003, +0.024]$ and $+0.006$ $[-0.002, +0.015]$. On 2WikiMultiHopQA both structural contrasts are equivalent to zero within $\pm0.02$. On MuSiQue neither interval excludes zero, but neither lies inside the margin either, so we can only call them inconclusive.
+\paragraph{Order and relation lines.} Neither structural contrast is significant on either dataset. The graph-derived order (R5$-$R1) gives $-0.011$ and $-0.008$, and the derived relation lines at a fixed order (R4$-$R5) give $+0.010$ and $+0.006$ (MuSiQue, 2WikiMultiHopQA). On 2WikiMultiHopQA both are equivalent to zero within $\pm0.02$; on MuSiQue they are inconclusive.
 
-Two features of the data qualify the structural contrasts. First, many pairs are byte-identical: R5 equals R1 for 1{,}858 of 3{,}232 2WikiMultiHopQA questions and 522 of 1{,}744 MuSiQue questions, and R4 equals R5 for the 879 2WikiMultiHopQA questions without derived edges. Restricted to the pairs whose evidence differs, the estimates are $-0.019$ (2Wiki, R5$-$R1), $-0.016$ (MuSiQue, R5$-$R1) and $+0.008$ (2Wiki, R4$-$R5). Second, all structure is derived from dataset annotations, not verified by humans, so a null result concerns derived structure of this quality.
+\paragraph{Caveats.} Many pairs are byte-identical (R5 = R1 for 1{,}858 of 3{,}232 2WikiMultiHopQA questions); on the remaining pairs the structural estimates stay within $\pm0.02$. All structure here is derived from annotations, not human-verified.
 
 \input{tables/tab_confirmatory}
 
-\subsection{Where the confirmed effect comes from}
+\subsection{Abstention, not accuracy, carries the confirmed effect}
 
-Table~\ref{tab:decomposition-main} splits each paired difference according to which of the two conditions produced an answer. This decomposition was added after we saw the confirmatory result and is exploratory. For R1$-$R0 on 2WikiMultiHopQA, the questions that both representations answered contribute $+0.001$; the effect comes almost entirely from questions answered under only one representation, where the model abstained under the sentence format on 250 questions that it answered under passages, against 81 in the other direction.
-In other words, for this generator the sentence format did not make answered questions less accurate. It made the model more likely to reply \emph{insufficient evidence} when given exactly the same facts. Abstention is pervasive in general: with complete gold evidence, 710 of 1{,}744 MuSiQue questions and 529 of 3{,}232 2WikiMultiHopQA questions are answered under neither R0 nor R1.
+Each question's outcome is correct (C), answered but wrong (W), or not answered (A). Table~\ref{tab:transitions} (Appendix~\ref{app:revision}) decomposes each paired difference into transitions between these states. On 2WikiMultiHopQA the sentence format raises the abstention rate by 5.2 points $[4.1, 6.3]$, while accuracy among questions answered under both formats is unchanged ($+0.002$, $[-0.013, +0.017]$). The new abstentions fall on previously correct answers (87) and, more often, on previously wrong ones (163), and the net is the confirmed $-0.017$.
 
-\input{tables/tab_decomposition_main}
-
-\subsection{Secondary contrasts on the confirmatory sample}
-
-The confirmatory run also generated the secondary representations, whose contrasts were pre-specified as secondary and are therefore descriptive (Figure~\ref{fig:forest}; Table~\ref{tab:confirm-secondary} in Appendix~\ref{app:tables}).
-
-Replacing derived relations with model-predicted relations (R4P$-$R4) lowers exact match on both datasets: by 0.036 $[-0.045, -0.027]$ on 2WikiMultiHopQA and 0.045 $[-0.060, -0.030]$ on MuSiQue, with coverage differences of $-0.061$ and $-0.089$. The effect of shuffling the sentence items (R2$-$R1) depends on the dataset: $-0.024$ $[-0.036, -0.012]$ on 2WikiMultiHopQA but $+0.013$ $[-0.001, +0.028]$ on MuSiQue. Grouping items under reasoning steps (R3$-$R5) makes no detectable difference ($-0.004$ and $-0.007$).
-
-\begin{figure*}[t]
-\centering
-\includegraphics[width=0.92\textwidth]{figures/fig5_contrasts_pilot_vs_confirmatory.pdf}
-\caption{Protocol~A contrasts in the exploratory pilot ($n$=100 per dataset) and on the disjoint confirmatory sample. The pilot estimate of R1$-$R0 on 2WikiMultiHopQA ($-0.07$) overstated the confirmed effect ($-0.017$). Contrasts marked \emph{sec.} are secondary.}
-\label{fig:forest}
-\end{figure*}
+The derived relation lines show a mirror image on 2WikiMultiHopQA. They raise accuracy among answered questions ($+0.014$, $[+0.005, +0.024]$) but also raise abstention by 1.1 points, and the two offset each other in exact match. Abstention is common in general: with complete gold evidence the model leaves 47\% of MuSiQue and 19\% of 2WikiMultiHopQA questions unanswered under R0.
 
 
-\subsection{Exploratory pilot results}
+\subsection{Fixed-order controls: contradiction lines, not order (exploratory)}
 
-Protocol~B, the retrieved-evidence baselines and the perturbations were run only on the exploratory pilot ($n=100$ per primary dataset). Appendix~\ref{app:pilot} gives the details and Appendix~\ref{app:tables} the tables. \emph{Budget (Protocol~B).} Under a budget equal to the content tokens of the fact set, with each representation keeping as much of the shared ranking as it can afford, R0 keeps 0.83 (2WikiMultiHopQA) and 0.81 (MuSiQue) of the facts, against 0.62--0.65 for R1, R4 and R5, whose identifiers, titles and relation lines cost 2.5 to 4 times as many overhead tokens. The answer string consequently remains in 0.85 of R0 blocks on 2WikiMultiHopQA but only 0.64--0.66 of the others; the accuracy differences are smaller than these losses and inconclusive at this $n$. \emph{Retrieved evidence (Experiment~0).} Extracted claims and predicted paths are indistinguishable from reranked passages in exact match, at about three times the tokens. Our EG-RAG reconstruction, at a similar token count to reranked passages, is less accurate ($-0.15$ on 2WikiMultiHopQA and $-0.09$ on MuSiQue), because its budgeted selection keeps the answer string less often and it abstains more. \emph{Perturbations (Experiment~2).} Removing required facts mainly raises abstention, hard distractors lower exact match in every QA cell (by up to 0.16), and retyping 40\% of the derived relations lowers 2WikiMultiHopQA exact match by 0.10 $[-0.18, -0.01]$. Reordering and stripping titles have small effects of inconsistent sign.
+The secondary contrast R4P$-$R4 on the confirmatory sample, predicted relations instead of derived ones, costs 3.6 (2WikiMultiHopQA) and 4.5 (MuSiQue) points. Because R4P also changes the order and the number of lines, we ran the fixed-order controls of \S\ref{sec:framework} on the same questions (Table~\ref{tab:controls}; Figure~\ref{fig:controls} in Appendix~\ref{app:revision}).
+
+\paragraph{The relation labels carry the effect.} With the order fixed, showing the predicted \texttt{CONTRADICTS} lines rather than removing them costs 3.3 points on both datasets and raises abstention by 6 points. Replacing every predicted label by a neutral \texttt{RELATED\_TO} at the same pairs and the same number of lines recovers a similar amount (3.7 and 3.0 points).
+
+\paragraph{Order and line count do not.} The predicted order itself changes nothing on 2WikiMultiHopQA and helps slightly on MuSiQue ($+0.018$). Neutral lines alone cost nothing on 2WikiMultiHopQA and 1.5 points on MuSiQue.
+
+\paragraph{The effect is specific to contradiction lines.} In questions whose predicted block contains no contradiction line, relabelling the other predicted relations to neutral changes exact match by $-0.003$ on both datasets. Among questions with one or two contradiction lines, showing them costs 5--7 points (Appendix~\ref{app:revision}). Contradiction lines turned 89 correct 2WikiMultiHopQA answers into abstentions and only 9 the other way (MuSiQue: 52 and 2). These contrasts are interventions on identical facts, but they were designed after the confirmatory result and run on its questions.
+
+\input{tables/tab_controls}
+
+
+\subsection{Retrieved evidence (exploratory, fresh questions)}
+
+Table~\ref{tab:retrieval-main} repeats the contrasts on 1{,}000 fresh questions, where every representation renders the same four reranked passages.
+
+\paragraph{The relation effects replicate.} Predicted relations lower exact match by 3.6 (MuSiQue) and 3.0 (2WikiMultiHopQA) points, and contradiction lines by 2.2 and 2.4 points, with 4--7 points more abstention. Both effects are largest when retrieval returned all supporting sentences: R4P$-$R4 is $-0.094$ on MuSiQue and $-0.042$ on 2WikiMultiHopQA in that stratum. When nothing relevant was retrieved, no representation matters.
+
+\paragraph{Sentence items are inconclusive.} R1$-$R0 is $-0.026$ $[-0.054, +0.002]$ on 2WikiMultiHopQA, the direction of the confirmed effect, and $+0.014$ on MuSiQue.
+
+\paragraph{Derived structure rarely survives retrieval.} An annotation edge needs both endpoint sentences retrieved, so R5 equals R1 for 498 of 500 2WikiMultiHopQA questions. Correct structure on incomplete evidence therefore remains untested here.
+
+\input{tables/tab_retrieval_main}
+
+\subsection{The prompt factor (exploratory)}
+
+Table~\ref{tab:noabst} (Appendix~\ref{app:revision}) repeats R0, R1, R4 and R4P on 1{,}000 confirmatory 2WikiMultiHopQA questions without the sentence that offers \emph{insufficient evidence}. Abstention falls from 20--33\% to under 1\%, and exact match rises by 8--13 points for every representation. Within this prompt, the sentence-item contrast is $-0.004$ $[-0.026, +0.018]$, and predicted relations cost $-0.017$ $[-0.035, 0.000]$, now through wrong answers rather than abstentions. The prompt$\times$representation interactions ($+0.019$ for both contrasts) have intervals that touch or include zero. The representation effects of the main study are therefore conditional on an instruction that lets the model decline, and most of them act through that option.

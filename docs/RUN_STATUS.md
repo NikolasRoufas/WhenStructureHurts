@@ -42,7 +42,11 @@ GPU-hours are counted as the wall-clock time a run holds GPU 0 (one process at a
 | Confirmatory Exp1 | 5.56 |
 | Stage C Exp3 | 0.00 |
 | Stage C Exp0 | 0.90 |
-| **total (campaign complete)** | **≈ 9.53 of 24** |
+| total, original campaign | ≈ 9.53 |
+| revision-1 fixed-order controls `revision/exp1/20261012-200925_a2e6e3a8` | 1.01 |
+| revision-1 retrieved evidence `revision/exp1/20261012-210958_37616258` | 1.00 |
+| revision-1 prompt factor `revision/exp1/20261012-221036_8a903b43` | 0.45 |
+| **total (2026-10-13)** | **≈ 11.99 of 24** |
 
 **Analysis outputs:**
 - `research_outputs/analysis/` (A_exp1, A_exp0, C_exp1, C_exp2) and `research_outputs/figures/`.
@@ -50,7 +54,7 @@ GPU-hours are counted as the wall-clock time a run holds GPU 0 (one process at a
 - Built from the run directories listed in `research_outputs/experiments/runs.json` (labels A_exp1, A_exp0, C_exp1, C_exp2, C_exp3, C_exp0, F_exp1).
 - Paper: `paper/main.pdf`. Final assessment: `docs/FINAL_RESEARCH_ASSESSMENT.md`.
 
-**All authorised work is complete. No GPU job is queued.**
+**Revision-1 (2026-10-12/13):** three exploratory runs, details in `docs/REVISION_EXPERIMENT_LOG.md`. The second-reader run is configured but not started: downloading a new model needs explicit authorisation. No GPU job is queued.
 
 ## Frozen artefacts used
 
