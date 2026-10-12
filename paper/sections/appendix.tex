@@ -1,0 +1,114 @@
+\appendix
+
+\section{Prompts}
+\label{app:prompts}
+
+Every Experiment~0--2 answer uses the same prompt (version \texttt{qa-v2}); only the evidence block differs between representations. The system message is \emph{You answer using only the evidence you are given.} The user message is:
+
+\begin{footnotesize}
+\begin{verbatim}
+Use only the evidence below to answer the question.
+Each evidence item has an ID such as [E1]. Items may
+be grouped into steps or followed by a list of
+relations between items.
+
+Evidence:
+{evidence}
+
+Question: {question}
+
+Reply in exactly two lines:
+Answer: <short answer: a name, date, number, short
+phrase, or yes/no>
+Evidence: <IDs of the items you used, e.g. E1, E2>
+If the evidence is not sufficient, reply
+"Answer: insufficient evidence".
+\end{verbatim}
+\end{footnotesize}
+
+\noindent The assistant turn is prefilled with \texttt{Answer:}. HoVer and FEVER use the same template with \emph{Claim} in place of \emph{Question}, ask for one of the dataset's labels, and have no abstention line. The claim extractor of Experiment~0 (version \texttt{extract-v2}) uses the system message \emph{You split sentences into short, simple facts.} and asks for one fact per line, naming the subject instead of using pronouns and using only information stated in the sentence. Its output is prefilled with \texttt{- }.
+
+\section{Serialisation examples}
+\label{app:serialisation}
+
+The following renderings are produced by the experiment code for a MuSiQue development question that was used only during prompt development and is excluded from every reported run: \emph{What character in Princess Diaries does the actress play who was also a cast member in On Golden Pond?} (gold: \emph{Queen dowager Clarisse Renaldi}). Long sentences are abbreviated here with ``\dots''.
+
+\paragraph{R0 (passages).}
+\begin{footnotesize}
+\begin{verbatim}
+[E1] (source: The Princess Diaries (film)) The Princess
+Diaries is a 2001 American teen romantic comedy ...
+It stars Anne Hathaway ... ruled by her grandmother
+Queen dowager Clarisse Renaldi (Julie Andrews). ...
+[E2] (source: On Golden Pond (2001 film)) On Golden Pond
+is a 2001 American television adaptation of the play
+starring Julie Andrews and Christopher Plummer. ...
+\end{verbatim}
+\end{footnotesize}
+
+\paragraph{R1 (sentences, dataset order).}
+\begin{footnotesize}
+\begin{verbatim}
+[E1] (source: The Princess Diaries (film)) The Princess
+Diaries is a 2001 American teen romantic comedy ...
+[E2] (source: The Princess Diaries (film)) It stars
+Anne Hathaway ... Queen dowager Clarisse Renaldi
+(Julie Andrews).
+[E3] (source: The Princess Diaries (film)) The film
+also stars Heather Matarazzo, ...
+[E4] (source: On Golden Pond (2001 film)) On Golden Pond
+is a 2001 American television adaptation of the play
+starring Julie Andrews and Christopher Plummer.
+[E5] ... [E6] ...
+\end{verbatim}
+\end{footnotesize}
+
+\noindent Item E2 begins with a pronoun. Separated from its passage, its subject is recoverable only through the source title that every item carries. We record such context-dependent facts per question; they are one way in which an information-equivalent transformation can still change what is easy to read.
+
+\paragraph{R3 (steps), R5 (graph order) and R4 (graph order plus relations).}
+R3 groups the same six items under \texttt{Step 1:} (the three \emph{On Golden Pond} sentences) and \texttt{Step 2:} (the three \emph{Princess Diaries} sentences), following the MuSiQue decomposition. R5 lists the same items in the same order without step headers. R4 is R5 followed by
+\begin{footnotesize}
+\begin{verbatim}
+Relations:
+E5 DEPENDS_ON E1
+\end{verbatim}
+\end{footnotesize}
+\noindent i.e.\ the sentence naming the character depends on the sentence establishing that Julie Andrews was in \emph{On Golden Pond}. This edge is derived from the MuSiQue decomposition with an exact anchor; it is not human-verified.
+
+\section{Reconstruction of the EG-RAG baseline}
+\label{app:reconstruction}
+
+B4 follows the stage order of the EG-RAG algorithm: hybrid retrieval, reranking, claim extraction, relation prediction, belief and utility propagation, conflict resolution, budgeted subgraph selection and serialisation. Every component that the original description leaves unspecified is our choice:
+\begin{itemize}
+\item BM25 plus bge-small-en-v1.5 with min--max normalisation and equal weights;
+\item ms-marco-MiniLM-L6-v2 reranking;
+\item the 7B generator as claim extractor, with a lexical-support filter;
+\item nli-deberta-v3-xsmall for support, contradiction and duplication, with thresholds 0.7 and 0.9;
+\item a title-mention heuristic for dependencies;
+\item years as the only temporal signal;
+\item our own feature weights, a 450-token budget and at most 12 claims;
+\item greedy connected selection.
+\end{itemize}
+The full ledger is in the repository (\texttt{docs/NOVELTY\_AND\_BASELINES.md}). B4 is therefore a reconstruction under our choices. Its results say nothing about the original implementation, and no result of the original paper is reused.
+
+\section{Perturbations}
+\label{app:perturbations}
+
+Experiment~2 applies each intervention to the R1 and R4 renderings of the gold evidence with a recorded seed (0). The rates are $\{0.2, 0.4\}$ for P1--P4 and $0.4$ for P5 and P6, each against the same question's rate-0 record, and $k=\lceil \text{rate}\cdot n_{\text{eligible}}\rceil$ items are affected.
+\begin{itemize}
+\item \textbf{P1} removes required (gold-support) facts.
+\item \textbf{P2} retypes or flips derived relations (R4 only).
+\item \textbf{P3} permutes item positions.
+\item \textbf{P4} inserts real non-gold sentences from the question's own candidate pool, chosen by BM25 similarity (\emph{hard}), and never sentences containing a gold answer.
+\item \textbf{P5} strips source titles.
+\item \textbf{P6} deletes a negation, or replaces an entity in a fact with \emph{it}.
+\end{itemize}
+Every changed item is recorded before and after. P1 and P6 can remove the answer and are therefore not label-preserving; we report their answer-change and abstention rates but no accuracy change. An intervention is unavailable when nothing is eligible:
+\begin{itemize}
+\item P2 on R1 or on questions without edges;
+\item P3 with a single item;
+\item P4 on HoVer and FEVER, which have no candidate pool;
+\item P6 when no fact contains a negation;
+\item P7 everywhere, since no verified temporal data exist.
+\end{itemize}
+These cases are counted and never scored as zero.

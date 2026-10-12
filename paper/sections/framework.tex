@@ -1,0 +1,55 @@
+\section{Experimental Framework}
+\label{sec:framework}
+
+Figure~\ref{fig:pipeline} shows the pipeline in the order in which a question passes through it. We describe each stage before the experiments that use it.
+
+\begin{figure*}[t]
+\centering
+\resizebox{\textwidth}{!}{\input{figures/fig1_pipeline.tex}}
+\caption{The evidence pipeline. Experiment~1 starts from the gold passages and varies only the representation (Protocol~A) or the representation under a fixed fact ranking and token budget (Protocol~B). Experiment~0 runs the full retrieved-evidence pipeline for five systems, Experiment~2 corrupts the evidence of two representations, and Experiment~3 substitutes predicted components into an oracle pipeline. Dashed boxes are components that only some conditions use.}
+\label{fig:pipeline}
+\end{figure*}
+
+\paragraph{Dataset preparation.}
+Questions come from a frozen sample of the development splits, drawn with a fixed seed before any generation and stored with the hashes of the dataset files they were drawn from. Questions used during prompt development are excluded, and the pipeline refuses to run on any question outside the frozen file. Structure is taken from dataset annotations where it exists: the MuSiQue decomposition gives an order of reasoning steps, and the 2WikiMultiHopQA evidence triples give one after deterministic alignment. Dependencies between claims are \emph{derived} from these annotations by rule. Where a dependency can be anchored to a claim by an exact string match, we call the edge \emph{exact-anchor derived}; where the rule falls back to a heuristic choice of claim, we call it \emph{fallback-anchor derived}. Neither kind is human-verified. A 50-question human verification package is prepared but not yet completed, so no edge in this study is labelled human-verified.
+
+\paragraph{Retrieval (Experiment 0 only).}
+In the distractor setting each question comes with its own pool of passages (20 for MuSiQue, 10 for 2WikiMultiHopQA and HotpotQA). B0 ranks the pool with BM25 \citep{robertson2009bm25} and keeps the top four passages; B1 reranks the top ten BM25 passages with a cross-encoder and keeps four. FEVER retrieves from a shared corpus.
+
+\paragraph{Extraction (Experiment 0 only).}
+B2--B4 rewrite every sentence of the retrieved passages into short facts with the same generator, one call per sentence, and drop facts whose words are not sufficiently supported by the source sentence. In Experiment~1 no extraction model is used: facts are the sentences of the gold passages.
+
+\paragraph{Representation construction.}
+Table~\ref{tab:reps} defines the representations. R0 shows one item per passage in dataset order. R1 shows one item per sentence, in the same order. R2 shuffles R1 with three recorded seeds, which we average within a question. R3 groups the R1 items under \texttt{Step $k$:} headers following the dataset's reasoning order. R5 orders the R1 items by a topological order of the derived dependency graph at passage level, and R4 adds to R5 a \texttt{Relations:} block listing the derived dependencies between item identifiers. R4P renders the same facts with relations predicted instead of derived: typed relations (support, contradiction, duplication, supersession) from a natural-language-inference cross-encoder over candidate pairs, plus dependencies from a title-mention heuristic, with the order recomputed from the predicted graph. R5 is therefore R4 without its relation lines, and the contrast R5$-$R4 measures the contribution of explicit relations at a fixed order, while R1$-$R5 measures the effect of the graph-derived order without any relation lines.
+
+\begin{table}[t]
+\centering
+\small
+\begin{tabular}{@{}lp{0.73\columnwidth}@{}}
+\toprule
+ID & Rendering of the same fact set\\
+\midrule
+R0 & one item per gold passage, dataset order\\
+R1 & one item per sentence, dataset order\\
+R2 & R1 shuffled (seeds 0, 1, 2; averaged per question)\\
+R3 & R1 grouped under \texttt{Step $k$:} in reasoning order\\
+R5 & R1 in graph-derived (topological) order\\
+R4 & R5 plus a \texttt{Relations:} block of derived dependencies\\
+R4P & R4 with model-predicted relations and order\\
+\bottomrule
+\end{tabular}
+\caption{Representations. Every item carries a per-prompt identifier (\texttt{[E1]}, \texttt{[E2]}, \dots) and its source title.}
+\label{tab:reps}
+\end{table}
+
+\paragraph{Evidence selection.}
+Under Protocol~A every representation shows the complete fact set at its natural length. Under Protocol~B the facts are ranked by BM25 against the question, without gold labels and without looking at the representation, and each condition keeps the longest prefix whose rendering fits in $\beta\in\{1.0, 0.5\}$ times the content tokens of the full fact set, under the shared and per-representation policies of \S\ref{sec:problem}. A budget of $1.0\times$ the content tokens is smaller than the full rendering whenever a representation spends tokens on identifiers, titles, step headers or relation lines, so even this budget drops facts from the more verbose representations.
+
+\paragraph{Generation.}
+The prompt asks for two lines, an answer and the identifiers of the items used, and allows the answer \emph{insufficient evidence}; the assistant turn is prefilled with \texttt{Answer:}. The instruction text is identical for every representation (Appendix~\ref{app:prompts}). A guard checks for every record that the prompt equals the template filled with the evidence block and the question, so no gold answer or annotation can enter the prompt through another channel.
+
+\paragraph{Evaluation.}
+Exact match (EM) after SQuAD normalisation \citep{rajpurkar2016squad}, maximised over answer aliases, is the primary metric for QA; verdict accuracy is the primary metric for HoVer and FEVER and is never pooled with EM. Secondary metrics are token F1, coverage (the fraction of questions with a parsed, non-abstaining answer), the lexical sufficiency proxy, answer-in-evidence, evidence and overhead tokens, and latency. Every attempted question stays in the denominator; an unanswered question scores zero.
+
+\paragraph{Experiments.}
+\emph{Experiment~0} compares five retrieved-evidence systems: BM25 passages (B0), reranked passages (B1), extracted claims from the B1 passages (B2), a predicted reasoning path over those claims (B3), and our reconstruction of the EG-RAG evidence-graph pipeline (B4), which retrieves with a hybrid sparse--dense score, extracts claims, predicts typed relations, propagates belief and selects a token-budgeted subgraph. \emph{Experiment~1} is the primary experiment: the seven representations of the gold evidence under Protocols~A and~B. \emph{Experiment~2} applies controlled interventions to the R1 and R4 renderings of the gold evidence: removing required facts (P1), retyping or flipping relations (P2), permuting positions (P3), inserting real non-gold sentences from the question's own pool as distractors (P4), stripping or duplicating provenance (P5), and corrupting facts by deleting negations, qualifiers or dates, or replacing an entity with a pronoun (P6). Temporal-conflict interventions (P7) require verified temporal data, which do not exist for these datasets, so P7 is reported as unavailable. \emph{Experiment~3} substitutes predicted components (extraction, dependencies, selection) into an oracle pipeline; it is restricted by protocol to questions whose structure is human-verified, and is therefore not executed in this study (\S\ref{sec:limitations}). An adaptive representation selector (\emph{Experiment~4}) is not evaluated.
