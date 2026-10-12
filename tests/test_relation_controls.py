@@ -113,3 +113,15 @@ def test_fixed_order_survives_budget_restriction(toy_question):
     lay = make_layout("R4P_FO", sub)
     full_order = b.origin["fixed_order"]
     assert [u.claim_ids[0] for u in lay.units] == [c for c in full_order if c in set(keep)]
+
+
+def test_noabst_prompt_variant_only_drops_the_abstention_line(toy_question):
+    from wsh.models.prompts import assert_prompt_composition
+    a = build_request(toy_question, "[E1] x", 64)
+    b = build_request(toy_question, "[E1] x", 64, "qa-v2-noabst")
+    assert a.user.startswith(b.user) and a.user != b.user
+    assert a.user[len(b.user):] == '\nIf the evidence is not sufficient, reply "Answer: insufficient evidence".'
+    assert (a.system, a.prefill) == (b.system, b.prefill)
+    assert_prompt_composition(toy_question, b, "[E1] x", "qa-v2-noabst")
+    with pytest.raises(Exception):
+        assert_prompt_composition(toy_question, b, "[E1] x")  # a variant prompt never passes as qa-v2

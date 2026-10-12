@@ -234,7 +234,7 @@ class Runner:
             "dataset_source": q.source.model_dump(), "question": q.question, "gold_answers": q.answers,
             "task": q.task, "question_type": q.question_type, "hop_count": q.hop_count,
             "model_id": self.cfg.model.model_id, "model_revision": self.cfg.model.revision, "seed": self.cfg.seed,
-            "prompt_version": prompt_version(), "timestamp": time.strftime("%Y-%m-%dT%H:%M:%S%z"),
+            "prompt_version": prompt_version(self.cfg.model.prompt_variant), "timestamp": time.strftime("%Y-%m-%dT%H:%M:%S%z"),
             **(extra or {}),
         }
         try:
@@ -252,10 +252,11 @@ class Runner:
             self.ctx.write(rec)
             self.n_written += 1
             return rec
-        req = build_request(q, ser.text, self.cfg.model.max_new_tokens)
-        assert_prompt_composition(q, req, ser.text)
+        pv = self.cfg.model.prompt_variant
+        req = build_request(q, ser.text, self.cfg.model.max_new_tokens, pv)
+        assert_prompt_composition(q, req, ser.text, pv)
         gen = self.res.generator
-        overhead = gen.prompt_tokens(build_request(q, "", self.cfg.model.max_new_tokens))
+        overhead = gen.prompt_tokens(build_request(q, "", self.cfg.model.max_new_tokens, pv))
         item = {"key": key, "q": q, "base": base, "info": info, "bundle": bundle, "ser": ser, "req": req,
                 "overhead": overhead}
         if self.batch_size > 1 and hasattr(gen, "generate_batch"):

@@ -1,0 +1,33 @@
+# REVISION-1, EXPLORATORY: abstention-instruction variant (docs/REVISION_PROTOCOL.md §3). Same generator and
+# evidence as the confirmatory run; the prompt omits its last line offering 'insufficient evidence'.
+# Compared with the qa-v2 records of the same 1,000 questions in the confirmatory run; never pooled.
+stage: revision
+name: rev-noabst-v1
+seed: 0
+datasets:
+  - {name: 2wikimultihopqa, split: dev, qids_file: configs/question_sets/confirm_v1_2wiki_sub1000.json}
+model:
+  model_id: Qwen/Qwen2.5-7B-Instruct
+  revision: pinned
+  device: cuda
+  dtype: bfloat16
+  max_new_tokens: 64
+  max_input_tokens: 4096
+  max_time_s: 60
+  batch_size: 1
+  prompt_variant: qa-v2-noabst
+retrieval: {method: bm25, top_k: 4, rerank_pool: 10, corpus_prefilter: 50}
+extraction: {method: llm, on_empty: drop, min_lexical_support: 0.6, max_new_tokens: 96}
+egrag: {token_budget: 450, max_claims: 12, selector: greedy_connected}
+excluded_questions: configs/excluded_confirmatory.json
+verified_annotations: null
+exp1:
+  representations: [R0, R1, R4, R4P]
+  evidence_source: gold
+  evidence_scope: gold_passages
+  protocols: [A]
+  budgets: ["content:1.0"]        # unused with protocols [A]
+  selection: [relevance]
+  budget_policies: [shared]
+  shuffle_seeds: [0]
+max_generations: 200000

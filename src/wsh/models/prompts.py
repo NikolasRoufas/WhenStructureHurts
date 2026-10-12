@@ -36,9 +36,20 @@ Evidence: <IDs of the items you used, e.g. E1, E2>"""
 ANSWER_PREFILL = "Answer:"
 
 
-def build_request(question, evidence_text: str, max_new_tokens: int) -> GenerationRequest:
+_ABSTENTION_LINE = '\nIf the evidence is not sufficient, reply "Answer: insufficient evidence".'
+PROMPT_VARIANTS = ("qa-v2", "qa-v2-noabst")
+
+
+def build_request(question, evidence_text: str, max_new_tokens: int, variant: str = "qa-v2") -> GenerationRequest:
+    """`variant` qa-v2 = the frozen prompt; qa-v2-noabst (revision-1, separate factor) = the same prompt
+    without its last line offering 'insufficient evidence' (QA only)."""
+    if variant not in PROMPT_VARIANTS:
+        raise ValueError(f"unknown prompt variant {variant}")
     if question.task == "qa":
         user = _QA.format(evidence=evidence_text, question=question.question)
+        if variant == "qa-v2-noabst":
+            assert user.endswith(_ABSTENTION_LINE)
+            user = user[: -len(_ABSTENTION_LINE)]
     else:
         labels = ", ".join(lab.replace("_", " ") for lab in question.label_set)
         user = _VERIFY.format(evidence=evidence_text, question=question.question, labels=labels)
@@ -46,19 +57,19 @@ def build_request(question, evidence_text: str, max_new_tokens: int) -> Generati
                              prefill=ANSWER_PREFILL)
 
 
-def prompt_version() -> str:
-    return PROMPT_VERSION
+def prompt_version(variant: str = "qa-v2") -> str:
+    return PROMPT_VERSION if variant == "qa-v2" else variant
 
 
 class PromptCompositionError(RuntimeError):
     pass
 
 
-def assert_prompt_composition(question, req: GenerationRequest, evidence_text: str) -> None:
+def assert_prompt_composition(question, req: GenerationRequest, evidence_text: str, variant: str = "qa-v2") -> None:
     """Leakage guard: the prompt must be exactly the fixed template filled with the evidence
     block and the question/claim text, so no gold answer, label or annotation can enter it
     through any other channel. (The template itself is identical for every question and
     representation; gold answers can only be present inside the evidence, by design.)"""
-    expected = build_request(question, evidence_text, req.max_new_tokens)
+    expected = build_request(question, evidence_text, req.max_new_tokens, variant)
     if (req.system, req.user, req.prefill) != (expected.system, expected.user, expected.prefill):
         raise PromptCompositionError(f"{question.uid}: prompt differs from template(evidence, question)")
