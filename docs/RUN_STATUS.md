@@ -19,16 +19,16 @@ GPU-hours are counted as the wall-clock time a run holds GPU 0 (one process at a
 
 ## Stages
 
-| stage | run | config | status | records | errors | wall clock / GPU-h |
+| stage | run | config @ commit | status | records | errors | wall clock / GPU-h |
 |---|---|---|---|---|---|---|
-| A | Exp1, focused 200 questions — `gpu_pilot/exp1/20261012-095222_797a0644` | `configs/gpu_pilot_focused.yaml` @ `dea50b3` | **completed** 10:29 UTC | 9,000 / 9,000 (4,956 generated, the rest identical prompts served from cache) | 0 generation, 0 pipeline, 0 unavailable; 9,000 × EOS | 2,243 s / **0.62** |
-| A | Exp0, focused 200 questions — `gpu_pilot/exp0/20261012-102947_8dad35aa` | `configs/gpu_pilot_focused.yaml` @ `dea50b3` | running since 10:29 UTC (about 40 s per question) | 122 / 1,000 at 10:43 UTC | 0 so far | est. 2.2–2.5 |
+| A | Exp1, focused 200 questions — `gpu_pilot/exp1/20261012-095222_797a0644` | `gpu_pilot_focused.yaml` @ `dea50b3` | **completed** 10:29 UTC | 9,000 (4,956 generated, the rest identical prompts served from cache) | 0 generation / 0 pipeline / 0 unavailable | 2,243 s / **0.62** |
+| A | Exp0, focused 200 questions — `gpu_pilot/exp0/20261012-102947_8dad35aa` | `gpu_pilot_focused.yaml` @ `dea50b3` | **completed** 12:06 UTC | 1,000 | 0 generation / 0 pipeline; 30 answers cut at max_new_tokens, 2 context overflows (both scored, kept in the denominator) | 5,783 s / **1.61** |
 | B | decision gate | `research_outputs/reports/DECISION_GATE_STAGE_B.md` | **done: proceed** | | | 0 |
-| C | Exp1, 350 questions | `configs/gpu_pilot.yaml` | queued (window `stageC`) | | | est. 0.4 |
-| C | Exp2, 350 questions | `configs/gpu_pilot.yaml` | queued | | | est. 1.5 |
-| confirmatory | Exp1, 1,744 MuSiQue + 3,232 2Wiki, Protocol A | `configs/confirm.yaml` (stage `full`) | queued | | | est. 4–6 |
-| C | Exp3, 350 questions | `configs/gpu_pilot.yaml` | queued (expected: every question unavailable, since there are no human-verified annotations) | | | est. < 0.1 |
-| C | Exp0, 350 questions (the 200 already done come from cache) | `configs/gpu_pilot.yaml` | queued last (first to cut if the budget tightens) | | | est. 1.8 |
+| C | Exp1, 350 questions — `gpu_pilot/exp1/20261012-120617_d4f7f61d` | `gpu_pilot.yaml` @ `ed7c391` | **completed** 12:21 UTC | 15,750 (the 200 focused questions served from cache) | 0 / 0; 500 unavailable by design (R3 on HoVer and FEVER: no reasoning path) | 932 s / **0.26** |
+| C | Exp2, 350 questions — `gpu_pilot/exp2/20261012-122150_20896430` | `gpu_pilot.yaml` @ `ed7c391` | **completed** 12:56 UTC | 14,000 | 0 / 0; 2,664 unavailable by design (P7 without verified temporal data; P2 on R1 and on questions without edges; interventions with nothing eligible) | 2,093 s / **0.58** |
+| confirmatory | Exp1, 1,744 MuSiQue + 3,232 2Wiki, Protocol A — `full/exp1/20261012-125639_49dfe135` | `confirm.yaml` @ `ed7c391` | running since 12:56 UTC (about 130 records/min) | 1,044 / 44,784 at 13:04 UTC | 0 so far | est. 5.7 (finish ≈ 18:40 UTC) |
+| C | Exp3, 350 questions | `gpu_pilot.yaml` | queued (expected: every question unavailable, since there are no human-verified annotations) | | | est. < 0.1 |
+| C | Exp0, 350 questions (the 200 already done come from cache) | `gpu_pilot.yaml` | queued last | | | est. 1.2 |
 
 ## GPU-hour ledger
 
@@ -36,9 +36,16 @@ GPU-hours are counted as the wall-clock time a run holds GPU 0 (one process at a
 |---|---|
 | preflight (2026-10-12, bounded) | < 0.1 |
 | Stage A Exp1 | 0.62 |
-| Stage A Exp0 | running |
-| **total completed** | **≈ 0.7** |
-| projected total for every queued item | ≈ 11–13 (ceiling 24) |
+| Stage A Exp0 | 1.61 |
+| Stage C Exp1 | 0.26 |
+| Stage C Exp2 | 0.58 |
+| **total completed** | **≈ 3.1** |
+| projected total once every queued item finishes | ≈ 10 (ceiling 24) |
+
+**Analysis outputs:**
+- `research_outputs/analysis/` (A_exp1, A_exp0, C_exp1, C_exp2) and `research_outputs/figures/`.
+- `results/analysis/FOCUSED_PILOT_REPORT.md`.
+- Built at commit `33bbbd8` from the run directories listed in `research_outputs/experiments/runs.json`.
 
 ## Frozen artefacts used
 
