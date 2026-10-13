@@ -1,0 +1,302 @@
+{
+ "run_dir": "/data/roufas/wsh_campaign/results/full/exp1/20261013-005305_1ded82bb",
+ "protocol": "docs/CONFIRMATORY_PROTOCOL_2.md",
+ "datasets": {
+  "2wikimultihopqa": {
+   "n_questions": 2600,
+   "n_complete_pairs": 2600,
+   "n_primary_population": 1490,
+   "n_identical_prompts": 1110,
+   "n_generation_errors": 0,
+   "mean_contradiction_lines_primary": 3.808053691275168,
+   "transitions_primary (off->on)": {
+    "C->C": 435,
+    "A->A": 386,
+    "W->W": 417,
+    "C->W": 73,
+    "W->A": 78,
+    "A->C": 4,
+    "C->A": 67,
+    "W->C": 21,
+    "A->W": 9
+   },
+   "primary_em": {
+    "n_paired": 1490,
+    "n_only_a": 0,
+    "n_only_b": 0,
+    "delta": -0.07718120805369127,
+    "ci": [
+     -0.09463087248322148,
+     -0.0610738255033557
+    ],
+    "p_boot": 0.0,
+    "n_boot": 2000,
+    "seed": 0,
+    "n_b_better": 25,
+    "n_a_better": 140,
+    "n_tied": 1325,
+    "verdict": "b < a",
+    "power_note": "adequate n for a confirmatory test only if pre-registered",
+    "p_holm": 0.0
+   },
+   "secondary_abstention": {
+    "n_paired": 1490,
+    "n_only_a": 0,
+    "n_only_b": 0,
+    "delta": 0.08859060402684564,
+    "ci": [
+     0.07248322147651007,
+     0.1040268456375839
+    ],
+    "p_boot": 0.0,
+    "n_boot": 2000,
+    "seed": 0,
+    "n_b_better": 145,
+    "n_a_better": 13,
+    "n_tied": 1332,
+    "verdict": "b > a",
+    "power_note": "adequate n for a confirmatory test only if pre-registered",
+    "p_holm": 0.0
+   },
+   "secondary_em_all_questions": {
+    "n_paired": 2600,
+    "n_only_a": 0,
+    "n_only_b": 0,
+    "delta": -0.04423076923076923,
+    "ci": [
+     -0.05384615384615385,
+     -0.03538461538461538
+    ],
+    "p_boot": 0.0,
+    "n_boot": 2000,
+    "seed": 0,
+    "n_b_better": 25,
+    "n_a_better": 140,
+    "n_tied": 2435,
+    "verdict": "b < a",
+    "power_note": "adequate n for a confirmatory test only if pre-registered"
+   },
+   "stratum_em_1-2": {
+    "n_paired": 803,
+    "n_only_a": 0,
+    "n_only_b": 0,
+    "delta": -0.07970112079701121,
+    "ci": [
+     -0.10211706102117062,
+     -0.05603985056039851
+    ],
+    "p_boot": 0.0,
+    "n_boot": 2000,
+    "seed": 0,
+    "n_b_better": 12,
+    "n_a_better": 76,
+    "n_tied": 715,
+    "verdict": "b < a",
+    "power_note": "adequate n for a confirmatory test only if pre-registered"
+   },
+   "stratum_em_3-5": {
+    "n_paired": 435,
+    "n_only_a": 0,
+    "n_only_b": 0,
+    "delta": -0.08045977011494253,
+    "ci": [
+     -0.1103448275862069,
+     -0.052873563218390804
+    ],
+    "p_boot": 0.0,
+    "n_boot": 2000,
+    "seed": 0,
+    "n_b_better": 4,
+    "n_a_better": 39,
+    "n_tied": 392,
+    "verdict": "b < a",
+    "power_note": "adequate n for a confirmatory test only if pre-registered"
+   },
+   "stratum_em_6+": {
+    "n_paired": 252,
+    "n_only_a": 0,
+    "n_only_b": 0,
+    "delta": -0.06349206349206349,
+    "ci": [
+     -0.10714285714285714,
+     -0.01984126984126984
+    ],
+    "p_boot": 0.004,
+    "n_boot": 2000,
+    "seed": 0,
+    "n_b_better": 9,
+    "n_a_better": 25,
+    "n_tied": 218,
+    "verdict": "b < a",
+    "power_note": "adequate n for a confirmatory test only if pre-registered"
+   },
+   "acc_given_both_answered": {
+    "n_paired": 946,
+    "n_only_a": 0,
+    "n_only_b": 0,
+    "delta": -0.05496828752642706,
+    "ci": [
+     -0.07610993657505286,
+     -0.035940803382663845
+    ],
+    "p_boot": 0.0,
+    "n_boot": 2000,
+    "seed": 0,
+    "n_b_better": 21,
+    "n_a_better": 73,
+    "n_tied": 852,
+    "verdict": "b < a",
+    "power_note": "adequate n for a confirmatory test only if pre-registered"
+   },
+   "decision": "confirmed (EM lower with contradiction lines)"
+  },
+  "hotpotqa": {
+   "n_questions": 3800,
+   "n_complete_pairs": 3800,
+   "n_primary_population": 1295,
+   "n_identical_prompts": 2505,
+   "n_generation_errors": 0,
+   "mean_contradiction_lines_primary": 1.986100386100386,
+   "transitions_primary (off->on)": {
+    "A->A": 159,
+    "C->C": 549,
+    "W->W": 426,
+    "W->C": 13,
+    "C->A": 46,
+    "C->W": 37,
+    "W->A": 59,
+    "A->C": 1,
+    "A->W": 5
+   },
+   "primary_em": {
+    "n_paired": 1295,
+    "n_only_a": 0,
+    "n_only_b": 0,
+    "delta": -0.05328185328185328,
+    "ci": [
+     -0.06718146718146718,
+     -0.03861003861003861
+    ],
+    "p_boot": 0.0,
+    "n_boot": 2000,
+    "seed": 0,
+    "n_b_better": 14,
+    "n_a_better": 83,
+    "n_tied": 1198,
+    "verdict": "b < a",
+    "power_note": "adequate n for a confirmatory test only if pre-registered",
+    "p_holm": 0.0
+   },
+   "secondary_abstention": {
+    "n_paired": 1295,
+    "n_only_a": 0,
+    "n_only_b": 0,
+    "delta": 0.07644787644787644,
+    "ci": [
+     0.061003861003861,
+     0.0918918918918919
+    ],
+    "p_boot": 0.0,
+    "n_boot": 2000,
+    "seed": 0,
+    "n_b_better": 105,
+    "n_a_better": 6,
+    "n_tied": 1184,
+    "verdict": "b > a",
+    "power_note": "adequate n for a confirmatory test only if pre-registered",
+    "p_holm": 0.0
+   },
+   "secondary_em_all_questions": {
+    "n_paired": 3800,
+    "n_only_a": 0,
+    "n_only_b": 0,
+    "delta": -0.018157894736842106,
+    "ci": [
+     -0.023157894736842106,
+     -0.013157894736842105
+    ],
+    "p_boot": 0.0,
+    "n_boot": 2000,
+    "seed": 0,
+    "n_b_better": 14,
+    "n_a_better": 83,
+    "n_tied": 3703,
+    "verdict": "b < a",
+    "power_note": "adequate n for a confirmatory test only if pre-registered"
+   },
+   "stratum_em_1-2": {
+    "n_paired": 1046,
+    "n_only_a": 0,
+    "n_only_b": 0,
+    "delta": -0.055449330783938815,
+    "ci": [
+     -0.07074569789674952,
+     -0.03919694072657744
+    ],
+    "p_boot": 0.0,
+    "n_boot": 2000,
+    "seed": 0,
+    "n_b_better": 10,
+    "n_a_better": 68,
+    "n_tied": 968,
+    "verdict": "b < a",
+    "power_note": "adequate n for a confirmatory test only if pre-registered"
+   },
+   "stratum_em_3-5": {
+    "n_paired": 222,
+    "n_only_a": 0,
+    "n_only_b": 0,
+    "delta": -0.04954954954954955,
+    "ci": [
+     -0.08558558558558559,
+     -0.013513513513513514
+    ],
+    "p_boot": 0.014,
+    "n_boot": 2000,
+    "seed": 0,
+    "n_b_better": 4,
+    "n_a_better": 15,
+    "n_tied": 203,
+    "verdict": "b < a",
+    "power_note": "adequate n for a confirmatory test only if pre-registered"
+   },
+   "stratum_em_6+": {
+    "n_paired": 27,
+    "n_only_a": 0,
+    "n_only_b": 0,
+    "delta": 0.0,
+    "ci": [
+     0.0,
+     0.0
+    ],
+    "p_boot": 1.0,
+    "n_boot": 2000,
+    "seed": 0,
+    "n_b_better": 0,
+    "n_a_better": 0,
+    "n_tied": 27,
+    "verdict": "inconclusive (CI contains 0; not evidence of equivalence)",
+    "power_note": "underpowered/exploratory"
+   },
+   "acc_given_both_answered": {
+    "n_paired": 1025,
+    "n_only_a": 0,
+    "n_only_b": 0,
+    "delta": -0.023414634146341463,
+    "ci": [
+     -0.037073170731707315,
+     -0.00975609756097561
+    ],
+    "p_boot": 0.0,
+    "n_boot": 2000,
+    "seed": 0,
+    "n_b_better": 13,
+    "n_a_better": 37,
+    "n_tied": 975,
+    "verdict": "b < a",
+    "power_note": "adequate n for a confirmatory test only if pre-registered"
+   },
+   "decision": "confirmed (EM lower with contradiction lines)"
+  }
+ }
+}
