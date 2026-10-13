@@ -27,6 +27,10 @@ The same 1,000 `confirm_v1` 2Wiki questions and representations (R0, R1, R4, R4P
 - **Representations:** R0, R1, R5, R4 (the six primary contrasts) and R4P_FO, R4P_FO_NC (predicted lines at fixed order; contradiction lines on/off).
 - **Analysis:** the same contrasts as for Qwen, with paired bootstrap CIs. It is a **cross-model replication on the same questions**, exploratory for the controls, and a replication (not a new confirmation) of the primary contrasts. A model × representation comparison is descriptive: two readers do not support claims about model families in general.
 
+**Smoke result (2026-10-13, 6 excluded questions × 6 representations, run `revision/exp1/20261013-005215_27027ee0`, 33 s):** GPU 0 (bus 01:00.0, no MPS), bf16, 0 errors; format followed; abstentions parsed. Mistral often answers in a full sentence ("Hayneville is the capital of Lowndes County") and sometimes repeats the prefix ("Answer: Answer: …"), which strict EM scores as wrong in every representation alike.
+
+**Metrics fixed before the full run (after the smoke, before any confirm_v1 generation with Mistral):** the frozen parser and EM are unchanged and remain the primary metric. Pre-specified secondary metrics, applied identically to both readers' records: token F1, and *lenient match* = 1 if a normalised gold alias is contained in the normalised parsed answer after stripping a repeated leading `Answer:` (abstentions score 0). Cross-model comparisons report all three. Estimated cost: about 26,000 unique prompts at about 0.6 s, i.e. about 4.5 GPU-hours; campaign total after all revision-2 runs about 20.5 of 24.
+
 ## 4. Analyses on existing records (no generation)
 
 - Exact-anchor vs fallback-anchor derived edges: R4−R5 stratified by `info.question_edge_stratum`.
