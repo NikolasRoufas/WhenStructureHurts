@@ -72,8 +72,8 @@ generators:
     stages: [gpu_pilot, full]
 
   # Revision-1 second-reader candidates (different model families). Registered with Hub-verified revisions and
-  # parameter counts (2026-10-13); NOT downloaded. Running either requires explicit investigator authorisation
-  # (download + compute) in addition to WSH_COMPUTE_AUTHORIZED=1 and --authorized-compute.
+  # parameter counts (2026-10-13). Mistral was downloaded on 2026-10-13 after explicit investigator authorisation
+  # (sharded safetensors only); OLMo-2 is NOT downloaded. Running requires WSH_COMPUTE_AUTHORIZED=1 and --authorized-compute.
   mistralai/Mistral-7B-Instruct-v0.3:
     revision: c170c708c41dac9275d15a8fff4eca08d52bab71
     n_params: 7248023552
