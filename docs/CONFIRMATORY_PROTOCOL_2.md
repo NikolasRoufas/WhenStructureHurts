@@ -59,4 +59,5 @@ About 9,700 uncached generations plus relation prediction: about 2 GPU-hours on 
 
 ## 8. Changes after freezing
 
-(none)
+- **2026-10-13, after sampling, before any generation.** `confirm2_v1.json` (sha256 `53fecd59…`): the 2Wiki *inference* type had only 217 eligible unused questions, so the sampler filled the 2,600 from the other types (795 bridge-comparison, 794 comparison, 794 compositional, 217 inference) instead of 650 per type. The sample size, seed and all analyses are unchanged. 0 overlap with every earlier set.
+- The analysis script was executed once on the revision-1 exploratory run (`20261012-200925_a2e6e3a8`) as a code check, before any generation on `confirm2_v1`; that output was deleted.
