@@ -11,7 +11,7 @@ Same questions (`confirm_v1`) and facts as the revision-1 controls. The order is
 | R4P_FO | all predicted lines | — |
 | R4P_FO_NC | predicted lines minus CONTRADICTS (revision-1) | the contradiction lines, but also their tokens and line count |
 | **R4P_FO_CN** (new, A4) | the same lines, pairs and positions; only CONTRADICTS relabelled `RELATED_TO` | the contradiction *label* alone (same pairs, count, positions; about 2 tokens per line less) |
-| **R4P_FO_NCPAD** (new, A5) | each CONTRADICTS line replaced in place by the non-relational line `(line intentionally left blank)` | contradiction content at the same line count and nearly the same length; residual token difference reported per question |
+| **R4P_FO_NCPAD** (new, A5) | each CONTRADICTS line replaced in place by the non-relational line `(this line is intentionally left blank)` (7 Qwen tokens vs 8–9 for a contradiction line) | contradiction content at the same line count and nearly the same length; residual token difference reported per question |
 
 The "error" status of the relabelled lines is not known: the intervention targets *every* predicted contradiction line, not only those **automatically identified** as likely false, and no line is human-verified. Analysis: `scripts/revision/contradictions.py effects` and `transitions.py` (EM, F1, abstention, wrong-answer rate, transitions, token counts), paired bootstrap 95 % CIs, no multiplicity correction (exploratory).
 

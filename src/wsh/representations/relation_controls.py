@@ -31,7 +31,7 @@ from .evidence import topological_order
 
 NEUTRAL_LABEL = "RELATED_TO"
 # a non-relational line of about the same length as "E3 CONTRADICTS E7"; names no item
-FILLER_LINE = "(line intentionally left blank)"
+FILLER_LINE = "(this line is intentionally left blank)"  # 7 Qwen tokens; "E3 CONTRADICTS E7" is 8
 
 CONTROL_REPS: dict[str, dict[str, str]] = {
     "R4P_FO": {"order": "derived", "relations": "predicted"},
