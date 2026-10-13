@@ -1,0 +1,9 @@
+# Confirmatory protocol 2 sample (docs/CONFIRMATORY_PROTOCOL_2.md §3). Drawn only after that protocol was
+# committed and pushed. Disjoint from smoke, pilot, prompt-development, confirm_v1 and retr_v1. Produce with:
+#   wsh questions freeze --spec configs/question_sets/confirm2_v1.spec.yaml --out configs/question_sets/confirm2_v1.json
+seed: 5
+split: dev
+excluded: configs/excluded_confirm2.json
+datasets:
+  2wikimultihopqa: {n: 2600, stratify_by: question_type}
+  hotpotqa: {n: 3800, stratify_by: question_type}

@@ -45,7 +45,7 @@ class ModelConfig(Strict):
     batch_size: int = Field(1, ge=1, le=256)  # answer generation; claim extraction stays one prompt at a time
     do_sample: Literal[False] = False  # greedy decoding only; sampling would need seeds per run
     # revision-1: a separate prompt factor; qa-v2 is the frozen prompt of every original run
-    prompt_variant: Literal["qa-v2", "qa-v2-noabst"] = "qa-v2"
+    prompt_variant: Literal["qa-v2", "qa-v2-noabst", "qa-v2-conservative"] = "qa-v2"
 
     @model_validator(mode="after")
     def _resolve_pinned(self) -> "ModelConfig":

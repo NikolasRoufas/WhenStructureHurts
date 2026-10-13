@@ -125,3 +125,40 @@ def test_noabst_prompt_variant_only_drops_the_abstention_line(toy_question):
     assert_prompt_composition(toy_question, b, "[E1] x", "qa-v2-noabst")
     with pytest.raises(Exception):
         assert_prompt_composition(toy_question, b, "[E1] x")  # a variant prompt never passes as qa-v2
+
+
+def test_targeted_relabel_changes_only_contradiction_labels(toy_question):
+    """R4P_FO_CN: same pairs and lines as R4P_FO; only CONTRADICTS becomes the neutral label."""
+    derived, pred = _bundles(toy_question)
+    full = _layout("R4P_FO", derived, pred).relations
+    cn = _layout("R4P_FO_CN", derived, pred).relations
+    assert [(a, b) for a, b, _ in full] == [(a, b) for a, b, _ in cn]
+    assert [lab if lab != "CONTRADICTS" else NEUTRAL_LABEL for _, _, lab in full] == [lab for _, _, lab in cn]
+    t_full, t_cn = (render(_layout(r, derived, pred)).text for r in ("R4P_FO", "R4P_FO_CN"))
+    assert t_full.replace("CONTRADICTS", NEUTRAL_LABEL) == t_cn
+
+
+def test_filler_replaces_contradiction_lines_in_place(toy_question):
+    """R4P_FO_NCPAD: every CONTRADICTS line becomes the same non-relational filler at its position."""
+    from wsh.representations.relation_controls import FILLER_LINE
+    derived, pred = _bundles(toy_question)
+    full = render(_layout("R4P_FO", derived, pred)).text.splitlines()
+    pad = render(_layout("R4P_FO_NCPAD", derived, pred)).text.splitlines()
+    nc = render(_layout("R4P_FO_NC", derived, pred)).text.splitlines()
+    assert len(full) == len(pad)
+    for a, b in zip(full, pad):
+        assert b == (FILLER_LINE if "CONTRADICTS" in a else a)
+    assert [x for x in pad if x != FILLER_LINE] == nc
+    assert sum(x == FILLER_LINE for x in pad) == 2
+    assert "CONTRADICTS" not in "\n".join(pad)
+
+
+def test_conservative_prompt_variant_only_replaces_the_abstention_line(toy_question):
+    from wsh.models.prompts import assert_prompt_composition
+    a = build_request(toy_question, "[E1] x", 64)
+    c = build_request(toy_question, "[E1] x", 64, "qa-v2-conservative")
+    head = a.user.rsplit("\n", 1)[0]
+    assert c.user.startswith(head + "\n") and c.user.endswith("Do not guess.")
+    assert "insufficient evidence" in c.user.rsplit("\n", 1)[1]
+    assert (a.system, a.prefill) == (c.system, c.prefill)
+    assert_prompt_composition(toy_question, c, "[E1] x", "qa-v2-conservative")

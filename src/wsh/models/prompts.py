@@ -37,12 +37,16 @@ ANSWER_PREFILL = "Answer:"
 
 
 _ABSTENTION_LINE = '\nIf the evidence is not sufficient, reply "Answer: insufficient evidence".'
-PROMPT_VARIANTS = ("qa-v2", "qa-v2-noabst")
+# revision-2: stricter abstention guidance; replaces only the last line
+_CONSERVATIVE_LINE = ('\nIf the evidence does not fully establish the answer, reply "Answer: insufficient evidence". '
+                      'Do not guess.')
+PROMPT_VARIANTS = ("qa-v2", "qa-v2-noabst", "qa-v2-conservative")
 
 
 def build_request(question, evidence_text: str, max_new_tokens: int, variant: str = "qa-v2") -> GenerationRequest:
     """`variant` qa-v2 = the frozen prompt; qa-v2-noabst (revision-1, separate factor) = the same prompt
-    without its last line offering 'insufficient evidence' (QA only)."""
+    without its last line offering 'insufficient evidence' (QA only); qa-v2-conservative (revision-2) = the
+    same prompt with that line replaced by stricter guidance (abstain unless fully established; do not guess)."""
     if variant not in PROMPT_VARIANTS:
         raise ValueError(f"unknown prompt variant {variant}")
     if question.task == "qa":
@@ -50,6 +54,9 @@ def build_request(question, evidence_text: str, max_new_tokens: int, variant: st
         if variant == "qa-v2-noabst":
             assert user.endswith(_ABSTENTION_LINE)
             user = user[: -len(_ABSTENTION_LINE)]
+        elif variant == "qa-v2-conservative":
+            assert user.endswith(_ABSTENTION_LINE)
+            user = user[: -len(_ABSTENTION_LINE)] + _CONSERVATIVE_LINE
     else:
         labels = ", ".join(lab.replace("_", " ") for lab in question.label_set)
         user = _VERIFY.format(evidence=evidence_text, question=question.question, labels=labels)

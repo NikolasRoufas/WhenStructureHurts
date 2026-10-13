@@ -13,6 +13,11 @@ the predicted graph. These controls change one factor at a time, on the identica
     R5P         predicted    none                                               order only (C6, vs R5)
     R4P_NC      predicted    predicted minus CONTRADICTS                        contradiction lines at R4P's order
     R4P         predicted    predicted                                          (existing)
+    R4P_FO_CN   derived      predicted; only CONTRADICTS relabelled neutral     targeted label intervention (A4)
+    R4P_FO_NCPAD derived     predicted; each CONTRADICTS line replaced by a     contradiction content at matched
+                             non-relational filler line at the same position    line count and length (A5)
+
+R4P_FO_CN and R4P_FO_NCPAD were added in revision-2 (exploratory).
 
 The neutral label asserts nothing about the pair ("RELATED_TO"), so R4N_FO has the same pairs, the same
 number of lines and nearly the same tokens as R4P_FO. An oracle-corrected variant (remove only
@@ -25,6 +30,8 @@ from ..data.schemas import EvidenceBundle, RelationType
 from .evidence import topological_order
 
 NEUTRAL_LABEL = "RELATED_TO"
+# a non-relational line of about the same length as "E3 CONTRADICTS E7"; names no item
+FILLER_LINE = "(line intentionally left blank)"
 
 CONTROL_REPS: dict[str, dict[str, str]] = {
     "R4P_FO": {"order": "derived", "relations": "predicted"},
@@ -32,6 +39,8 @@ CONTROL_REPS: dict[str, dict[str, str]] = {
     "R4N_FO": {"order": "derived", "relations": "predicted_pairs_neutral_label"},
     "R5P": {"order": "predicted", "relations": "none"},
     "R4P_NC": {"order": "predicted", "relations": "predicted_no_contradicts"},
+    "R4P_FO_CN": {"order": "derived", "relations": "predicted_contradicts_neutral_label"},
+    "R4P_FO_NCPAD": {"order": "derived", "relations": "predicted_contradicts_as_filler"},
 }
 PREDICTED_REPS = {"R4P", *CONTROL_REPS}
 
@@ -56,6 +65,10 @@ def control_bundle(rep: str, derived: EvidenceBundle, predicted: EvidenceBundle)
               "fixed_order": order, "n_predicted_edges": len(predicted.edges), "n_contradicts_removed": removed}
     if spec["relations"] == "predicted_pairs_neutral_label":
         origin["relation_label_override"] = NEUTRAL_LABEL
+    elif spec["relations"] == "predicted_contradicts_neutral_label":
+        origin["relation_label_map"] = {RelationType.CONTRADICTS.value: NEUTRAL_LABEL}
+    elif spec["relations"] == "predicted_contradicts_as_filler":
+        origin["relation_filler"] = {RelationType.CONTRADICTS.value: FILLER_LINE}
     b.origin = origin
     return b
 

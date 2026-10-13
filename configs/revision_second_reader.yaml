@@ -1,4 +1,4 @@
-# REVISION-1, PENDING AUTHORISATION: second reader (different family) on the confirmatory questions. Runs the six
+# REVISION-2, AUTHORISED 2026-10-13 (docs/REVISION2_PROTOCOL.md §3): second reader (different family) on the confirmatory questions. Runs the six
 # primary contrasts (R0,R1,R5,R4) and the fixed-order relation controls with the frozen prompt qa-v2. A protocol
 # must be committed before generation (docs/REVISION_PROTOCOL.md §4). Switch the reader with
 #   --set model.model_id=allenai/OLMo-2-1124-7B-Instruct
@@ -24,7 +24,7 @@ egrag: {token_budget: 450, max_claims: 12, selector: greedy_connected}
 excluded_questions: configs/excluded_confirmatory.json
 verified_annotations: null
 exp1:
-  representations: [R0, R1, R5, R4, R4P, R4P_FO, R4P_FO_NC, R4N_FO]
+  representations: [R0, R1, R5, R4, R4P_FO, R4P_FO_NC]
   evidence_source: gold
   evidence_scope: gold_passages
   protocols: [A]

@@ -75,7 +75,8 @@ def render(layout: Layout) -> SerializedEvidence:
         lines.append(f"[{did}] {src}{u.text}")
         id_map[did] = {"claim_ids": u.claim_ids, "passage_ids": u.passage_ids,
                        "spans": [s.model_dump() for s in u.spans], "corrupted": bool(u.meta.get("corrupted"))}
-    rel_lines = [f"E{s + 1} {lab} E{t + 1}" for s, t, lab in layout.relations]
+    # s < 0 marks a filler line (relation controls): the label up to '#' is rendered verbatim
+    rel_lines = [lab.split("#")[0] if s < 0 else f"E{s + 1} {lab} E{t + 1}" for s, t, lab in layout.relations]
     if rel_lines:
         lines.append("Relations:")
         lines += rel_lines

@@ -1,0 +1,32 @@
+# CONFIRMATORY PROTOCOL 2 (docs/CONFIRMATORY_PROTOCOL_2.md): predicted CONTRADICTS lines on vs off at a fixed
+# order (R5 order), on untouched questions. Primary analysis: scripts/revision/confirm2_analysis.py.
+stage: full
+name: confirm2-contradictions-v1
+seed: 0
+datasets:
+  - {name: 2wikimultihopqa, split: dev, qids_file: configs/question_sets/confirm2_v1.json}
+  - {name: hotpotqa, split: dev, qids_file: configs/question_sets/confirm2_v1.json}
+model:
+  model_id: Qwen/Qwen2.5-7B-Instruct
+  revision: pinned
+  device: cuda
+  dtype: bfloat16
+  max_new_tokens: 64
+  max_input_tokens: 4096
+  max_time_s: 60
+  batch_size: 1
+retrieval: {method: bm25, top_k: 4, rerank_pool: 10, corpus_prefilter: 50}
+extraction: {method: llm, on_empty: drop, min_lexical_support: 0.6, max_new_tokens: 96}
+egrag: {token_budget: 450, max_claims: 12, selector: greedy_connected}
+excluded_questions: configs/excluded_confirm2.json
+verified_annotations: null
+exp1:
+  representations: [R4P_FO, R4P_FO_NC]
+  evidence_source: gold
+  evidence_scope: gold_passages
+  protocols: [A]
+  budgets: ["content:1.0"]        # unused with protocols [A]
+  selection: [relevance]
+  budget_policies: [shared]
+  shuffle_seeds: [0]
+max_generations: 200000

@@ -32,13 +32,20 @@ def layout(b: EvidenceBundle, rep: str = "R4", with_edges: bool = True, max_rela
     # under a budget (Protocol B) a control bundle keeps only some facts: keep the fixed order, restricted
     order = [c for c in fixed if c in cm] if fixed else topological_order(b)
     label_override = b.origin.get("relation_label_override")
+    label_map = b.origin.get("relation_label_map") or {}
+    filler = b.origin.get("relation_filler") or {}
     idx = {cid: i for i, cid in enumerate(order)}
     units = [claim_unit(cm[c], b.provenance_visible) for c in order]
     rels: list[tuple[int, int, str]] = []
     if with_edges:
         for e in b.edges:
             if e.source in idx and e.target in idx and len(rels) < max_relations:
-                r = (idx[e.source], idx[e.target], label_override or DIRECTED_LABEL[e.relation])
+                rv = e.relation.value
+                if rv in filler:
+                    # a non-relational line in place of the relation (source/target -1: rendered verbatim)
+                    r = (-1, -1, f"{filler[rv]}#{idx[e.source]}-{idx[e.target]}")
+                else:
+                    r = (idx[e.source], idx[e.target], label_override or label_map.get(rv) or DIRECTED_LABEL[e.relation])
                 if r not in rels:
                     rels.append(r)
     conflicts = []
