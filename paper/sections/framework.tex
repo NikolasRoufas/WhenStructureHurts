@@ -8,7 +8,7 @@ Figure~\ref{fig:pipeline} (Appendix~\ref{app:prompts}) shows the pipeline in the
 Questions come from frozen samples of the development splits, drawn with a fixed seed before any generation and stored with the hashes of the dataset files; the pipeline refuses to run on any question outside a frozen file or on the questions used during prompt development. The MuSiQue decomposition and the 2WikiMultiHopQA evidence triples give an order of reasoning steps, from which we \emph{derive} dependencies between facts by rule. Where a dependency can be anchored to a fact by an exact string match we call it \emph{exact-anchor derived}, otherwise \emph{fallback-anchor derived}. No edge in this study is human-verified.
 
 \paragraph{Retrieved-evidence baselines (Experiment~0, pilot).}
-Five systems answer from the top four passages of each question's own pool: BM25 (B0), reranked (B1), extracted claims of the reranked passages (B2), a predicted reasoning path over them (B3), and our reconstruction of the EG-RAG evidence-graph pipeline (B4; Appendix~\ref{app:reconstruction}). Their evidence budgets differ, so we report them as systems.
+Five systems answer from the top four passages of each question's pool: BM25 (B0), reranked (B1), claims extracted from them (B2), a predicted reasoning path (B3), and our reconstruction of the EG-RAG pipeline (B4; Appendix~\ref{app:reconstruction}). Their budgets differ, so we report them as systems.
 
 \paragraph{Representations (Experiments~1 and~2).}
 Table~\ref{tab:reps} defines the representations; Appendix~\ref{app:serialisation} shows examples. R5 orders the sentence items by a topological order of the derived dependency graph at passage level, and R4 adds a \texttt{Relations:} block listing the derived dependencies. R5$-$R1 therefore measures the effect of the graph-derived order without relation lines, and R4$-$R5 the effect of explicit relations at a fixed order. R4P renders the same facts with \emph{predicted} relations: typed relations (support, contradiction, duplication, supersession) from an NLI cross-encoder over candidate pairs, plus a title-mention dependency heuristic, with the order recomputed from the predicted graph.
@@ -16,22 +16,24 @@ Table~\ref{tab:reps} defines the representations; Appendix~\ref{app:serialisatio
 \begin{table}[t]
 \centering
 \small
-\begin{tabular}{@{}lp{0.73\columnwidth}@{}}
+\begin{tabular}{@{}lp{0.68\columnwidth}@{}}
 \toprule
 ID & Rendering of the same fact set\\
 \midrule
 R0 & one item per gold passage, dataset order\\
 R1 & one item per sentence, dataset order\\
-R2 & R1 shuffled (seeds 0, 1, 2; averaged per question)\\
-R3 & R1 grouped under \texttt{Step $k$:} in reasoning order\\
+R2 & R1 shuffled (3 seeds, averaged)\\
+R3 & R1 grouped by reasoning step\\
 R5 & R1 in graph-derived (topological) order\\
-R4 & R5 plus a \texttt{Relations:} block of derived dependencies\\
-R4P & R4 with model-predicted relations and order\\
+R4 & R5 + derived relation lines\\
+R4P & predicted relation lines and order\\
 \midrule
 \multicolumn{2}{@{}l}{\emph{Fixed-order controls (exploratory)}}\\
 R4P\_FO & R5 order + predicted relation lines\\
 R4P\_FO\_NC & R4P\_FO without \texttt{CONTRADICTS} lines\\
-R4N\_FO & R4P\_FO pairs, neutral label \texttt{RELATED\_TO}\\
+R4P\_FO\_CN & R4P\_FO, \texttt{CONTRADICTS}$\to$\texttt{RELATED\_TO}\\
+R4P\_FO\_PAD & R4P\_FO, \texttt{CONTRADICTS} lines$\to$filler\\
+R4N\_FO & R4P\_FO, every label \texttt{RELATED\_TO}\\
 R5P & predicted order, no relation lines\\
 R4P\_NC & R4P without \texttt{CONTRADICTS} lines\\
 \bottomrule
@@ -44,13 +46,10 @@ R4P\_NC & R4P without \texttt{CONTRADICTS} lines\\
 Under Protocol~A every representation shows the complete fact set; under Protocol~B the budget is $\beta\in\{1.0, 0.5\}$ times the content tokens. A budget of $1.0\times$ the content tokens is already smaller than the full rendering of any representation that spends tokens on identifiers, titles or relation lines. The prompt (Appendix~\ref{app:prompts}) is identical for every representation, asks for an answer and the identifiers of the items used, and allows the answer \emph{insufficient evidence}. A guard checks for every record that the prompt equals the template filled with the evidence block and the question, so no gold answer can enter the prompt through another channel. Exact match (EM) after SQuAD normalisation \citep{rajpurkar2016squad}, maximised over aliases, is the primary metric for QA, and verdict accuracy for HoVer and FEVER. Secondary metrics are token F1, coverage (the fraction of questions with a parsed, non-abstaining answer), answer-in-evidence, and evidence and overhead tokens. Every attempted question stays in the denominator.
 
 \paragraph{Fixed-order relation controls (added after the confirmatory test).}
-R4P differs from R4 in three ways at once: its relation lines are predicted rather than derived, there are more of them, and its item order is recomputed from the predicted graph. To separate these factors we built five further representations of the same facts (Table~\ref{tab:reps}, lower part). R4P\_FO shows the predicted relation lines at the derived order of R5 and R4; R4P\_FO\_NC removes only the predicted \texttt{CONTRADICTS} lines from it; R4N\_FO keeps exactly the predicted pairs and number of lines but replaces every label with the neutral \texttt{RELATED\_TO}; R5P uses the predicted order without any lines; and R4P\_NC is R4P without its contradiction lines. Each pairwise contrast between these conditions changes one factor on identical facts and an identical prompt template. Because they were designed after the confirmatory result and run on the confirmatory questions, we treat them as exploratory interventions.
+R4P differs from R4 in three ways at once: its relation lines are predicted rather than derived, there are more of them, and its item order is recomputed from the predicted graph. To separate these factors we built further representations of the same facts (Table~\ref{tab:reps}, lower part). R4P\_FO shows the predicted relation lines at the derived order of R5 and R4. Against it, R4P\_FO\_NC removes only the predicted \texttt{CONTRADICTS} lines; R4P\_FO\_CN keeps every line, pair and position and changes only the word \texttt{CONTRADICTS} to the neutral \texttt{RELATED\_TO}; and R4P\_FO\_PAD replaces each contradiction line, in place, by the non-relational line \emph{(this line is intentionally left blank)}, which keeps the number of lines and almost their length (7 against 8--9 tokens). R4N\_FO relabels every predicted line as \texttt{RELATED\_TO}; R5P uses the predicted order without lines; and R4P\_NC is R4P without its contradiction lines. Each pairwise contrast changes one factor on identical facts and an identical prompt template; where a block has no contradiction line, the prompts of R4P\_FO, R4P\_FO\_NC, R4P\_FO\_CN and R4P\_FO\_PAD are byte-identical. Because these controls were designed after the confirmatory result, we treat them as exploratory interventions, and we then tested the central one prospectively (\S\ref{sec:setup}).
 
-\paragraph{Retrieved evidence (added after the confirmatory test).}
-To test whether the presentation effects persist when retrieval is imperfect, we drew a fresh sample of 500 MuSiQue and 500 2WikiMultiHopQA questions, disjoint from all earlier samples. For each question a shared, gold-free retrieval stage (BM25 over the question's pool, cross-encoder reranking of the top ten, top four kept) fixes the passages before any representation is built, and every representation renders exactly their sentences. R4 and R5 use the annotation-derived edges whose two endpoints were retrieved, so they test correct structure on incomplete evidence; R4P, R4P\_NC and R4P\_FO use predicted relations. Gold labels are used only afterwards, to stratify questions by whether retrieval returned all, some or none of the supporting sentences.
-
-\paragraph{Prompt factor (added after the confirmatory test).}
-Because the answer instruction offers \emph{insufficient evidence}, abstention may mediate representation effects. On a fixed random subset of 1{,}000 confirmatory 2WikiMultiHopQA questions we repeated R0, R1, R4 and R4P with the same prompt minus that sentence, and analyse the prompt as a separate factor.
+\paragraph{Further exploratory conditions.}
+For retrieved evidence, a shared, gold-free stage (BM25 over the question's pool, cross-encoder reranking, top four passages) fixes the passages before any representation is built; gold labels are used only afterwards, to stratify by retrieval outcome. Because the answer instruction offers \emph{insufficient evidence}, we also vary the abstention policy as a separate factor: the frozen prompt, the same prompt without that sentence, and the same prompt with stricter guidance (\emph{If the evidence does not fully establish the answer, reply ``Answer: insufficient evidence''. Do not guess.}). We also repeat the main contrasts with a second reader.
 
 \paragraph{Perturbations (Experiment~2, pilot).}
 Interventions on the R1 and R4 renderings remove required facts, retype relations, permute items, insert non-gold distractor sentences, strip titles, or corrupt a fact (Appendix~\ref{app:perturbations}). Experiment~3 (component attribution) requires human-verified structure and was not run, and we did not evaluate an adaptive representation selector.

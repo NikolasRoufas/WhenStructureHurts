@@ -1,6 +1,6 @@
 # Paper: "When Structure Hurts: Understanding Evidence Loss in Retrieval-Augmented Reasoning"
 
-This is an ACL-format draft in anonymous review mode, written from the 2026-10-12 GPU campaign and revised (revision-1, 2026-10-13) with exploratory fixed-order controls, a retrieved-evidence replication and a prompt factor.
+This is an ACL-format draft in anonymous review mode, written from the 2026-10-12 GPU campaign and revised (revision-1, 2026-10-13; revision-2, 2026-10-14) with fixed-order controls, a retrieved-evidence replication, abstention-policy variants, a second reader and a second confirmatory test.
 
 ## Files
 
@@ -12,7 +12,8 @@ This is an ACL-format draft in anonymous review mode, written from the 2026-10-1
 | `figures/*.pdf` | `fig_controls` by `scripts/revision/paper_assets.py`; the others by `scripts/analysis/build.py`; Fig. 1 (`fig1_pipeline.tex`) is a TikZ schematic with no numbers. |
 | `main.pdf` | Compiled draft. |
 | `CLAIMS_EVIDENCE_AUDIT.md` | Every empirical claim mapped to its source file and row. |
-| `REVIEWER_SELF_CRITIQUE.md` | Novelty, fairness, validity, power and main-track assessment. |
+| `REVIEWER_SELF_CRITIQUE.md` | Revision-1 reviewer simulation (historical). |
+| `INTERNAL_REVIEW_REPORT.md` | Revision-2 three-reviewer report and what was addressed. |
 | `SUBMISSION_READINESS.md` | Checklist and blocking issues. |
 
 ## Rebuild

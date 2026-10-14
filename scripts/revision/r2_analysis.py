@@ -7,7 +7,7 @@ wrong-answer rate, accuracy among questions answered under both, evidence tokens
 the number of byte-identical prompts. Paired percentile bootstrap over questions (2,000 resamples, seed 0).
 
     PYTHONPATH=src python scripts/revision/r2_analysis.py <out.csv> --runs <dir> [<dir> ...] --contrasts A>B [...]
-        [--datasets d1,d2] [--strata contra_lines]
+        [--datasets d1,d2] [--strata contra_lines] [--questions-from <run_dir>]
 
 Interactions: a contrast written `(A>B)-(C>D)` reports (B - A) - (D - C) over questions present in all four.
 """
@@ -138,8 +138,12 @@ def main() -> None:
     ap.add_argument("--contrasts", nargs="+", required=True)
     ap.add_argument("--datasets", default=None)
     ap.add_argument("--strata", default=None, choices=[None, "contra_lines"])
+    ap.add_argument("--questions-from", default=None, help="restrict every contrast to the questions of this run")
     a = ap.parse_args()
     recs = load([Path(p) for p in a.runs])
+    if a.questions_from:
+        keep = {k[4] for k in load([Path(a.questions_from)])}
+        recs = {k: v for k, v in recs.items() if k[4] in keep}
     dss = a.datasets.split(",") if a.datasets else sorted({k[3] for k in recs})
     rows = []
     for ds in dss:

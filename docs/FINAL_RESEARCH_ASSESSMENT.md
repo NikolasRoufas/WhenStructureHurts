@@ -1,77 +1,117 @@
-# Final research assessment (revision-1, 2026-10-13)
+# Final research assessment (revision-2, 2026-10-14)
 
-**Verdict: PROMISING_BUT_ADDITIONAL_VALIDATION_REQUIRED**
+**Verdict: FINDINGS_COMPETITIVE_BUT_MAIN_UNCERTAIN**
 
-The confirmatory test is valid, complete and fully reproduced by an independent audit. The revision added three exploratory experiments (about 2.5 GPU-hours) that turn the draft's most interesting secondary observation into a located, intervention-based finding: predicted *contradiction* relations, shown next to fixed and correct evidence, make Qwen2.5-7B-Instruct abstain, costing about 3 EM points; the order and the number of relation lines do not. The finding replicated on 1,000 fresh questions with real retrieval, and it shrank when the abstention option was removed. Two things keep this below READY_FOR_INTERNAL_REVIEW as a main-track paper: everything comes from **one reader**, and the claim that the contradictions are **false** rests on automatic triage, not human judgement. Both have prepared, ready-to-run remedies (a configured second reader; a blinded 240-pair annotation package).
+The central result now rests on a confirmatory test:
+- its protocol was frozen and published before sampling;
+- it ran on 6,400 untouched questions;
+- it was confirmed on both datasets, including one that played no role in forming the hypothesis.
 
-Sources: `paper/CLAIMS_EVIDENCE_AUDIT.md`, `docs/REPRODUCIBILITY_CHECKLIST.md`, `docs/REVISION_EXPERIMENT_LOG.md`, and the per-topic reports listed at the end.
+Intervention controls locate the effect precisely, and a second model family reproduces it. Main-track acceptance remains uncertain, because:
+- the structures tested are narrow (annotation-derived dependencies; a small NLI relation predictor);
+- both readers are 7B models;
+- no relation is human-verified, so the "false" in "false contradiction" rests on automatic triage.
+
+This is a qualitative judgement, not a prediction of acceptance.
+
+Evidence trail: `paper/CLAIMS_EVIDENCE_AUDIT.md`, `docs/REPRODUCIBILITY_CHECKLIST.md`, `docs/REVISION_EXPERIMENT_LOG.md`, `docs/STATISTICAL_VALIDITY_REVIEW.md`, `docs/FALSE_CONTRADICTION_ANALYSIS.md`, `docs/RETRIEVAL_EVIDENCE_STUDY.md`, `docs/ACL_NOVELTY_AUDIT.md`, `docs/ACL_REVISION_AUDIT.md`, `paper/INTERNAL_REVIEW_REPORT.md`.
 
 ---
 
-**1. What did we actually discover?**
+**1. Did we eliminate the major methodological confounds?**
 
-*Confirmatory* (six pre-specified tests, Qwen2.5-7B-Instruct, gold evidence, n = 1,744 MuSiQue / 3,232 2Wiki, Holm over 6):
-- Sentence items lower 2Wiki EM by 0.017 [−0.029, −0.005], p_Holm 0.018; on MuSiQue −0.001, equivalent to zero within ±0.02.
-- Graph-derived order and derived relation lines: not significant on either dataset; on 2Wiki equivalent to zero within ±0.02 (per-test rule and Holm-TOST agree).
+Largely, for the relation question.
+- R4P−R4 changed order, line count and labels together. The fixed-order controls change one factor at a time on identical facts:
+  - removal of contradiction lines;
+  - relabelling only the contradiction lines (same pairs, positions, count, other labels);
+  - a filler of the same count and nearly the same length (7 vs 8–9 tokens);
+  - all-neutral labels;
+  - order only.
+- Two small asymmetries remain in the code: the 40-line cap (19 questions) and duplicate merging under neutral relabelling (442 questions). They are quantified, and sensitivity analyses leave the estimates unchanged.
+- Remaining confounds:
+  - the relation *predictor* is fixed, so we cannot separate "a CONTRADICTS line" from "a CONTRADICTS line produced by this NLI model on these pairs";
+  - derived structure is unverified.
 
-*Exploratory, interventions on the confirmatory questions:*
-- The sentence-item cost is abstention: +5.2 points abstention, accuracy among questions answered under both formats unchanged (+0.002).
-- With order and line count fixed, showing predicted CONTRADICTS lines costs 3.3 EM points on both datasets (CIs exclude zero by ≥ 2.3 points) and raises abstention by 6 points. Replacing all labels with a neutral `RELATED_TO` at the same pairs and line count recovers a similar amount. Predicted order alone: +0.002 / +0.018. With no contradiction line in the block, relabelling changes nothing (−0.003).
+**2. Are false contradiction relationships causally associated with reduced accuracy under controlled interventions?**
 
-*Exploratory, fresh retrieved-evidence sample (500 + 500):* predicted relations −3.6 / −3.0 points, contradiction lines −2.2 / −2.4, largest when retrieval was complete; sentence items inconclusive (2Wiki −0.026 [−0.054, +0.002]).
+*Displayed* predicted contradictions causally reduce accuracy: interventions on identical facts and order, confirmed prospectively.
+- On `confirm_v1`, among questions with at least one contradiction line, showing them costs 5.3 points (2Wiki) and 5.6 points (MuSiQue).
+- Confirmatory test 2, on untouched questions: 2Wiki −7.7 points [−9.5, −6.1] and HotpotQA −5.3 points [−6.7, −3.9], p_Holm < 0.001 for both.
 
-*Exploratory, prompt factor (1,000 2Wiki):* removing the "insufficient evidence" line cuts abstention from 20–33 % to under 1 %, raises EM 8–13 points for every format, and shrinks R1−R0 to −0.004 and R4P−R4 to −0.017 (interactions +0.019, CIs touch or include 0).
+That the harmful lines are *false* is supported only by automatic triage: 40 % concern different entities and 20 % different dates. Human labels are pending. So the causal claim is about *asserting* a contradiction. Whether falsity is required is not established.
 
-**2. Did explicit graph structure improve reasoning?**
+**3. Does removing harmful relation information restore correct answers?**
 
-No. Derived relation lines at fixed order: +0.010 (MuSiQue), +0.006 (2Wiki, equivalent to zero). They slightly raise accuracy among answered questions (+0.014) but also abstention, and the two cancel. Predicted relations hurt.
+Yes.
+- Removing or relabelling the contradiction lines recovers 3.3–4.2 points (all questions) on both datasets.
+- Relabelling restored 141 correct 2Wiki answers (80 from abstentions, 61 from wrong answers) and lost 21. On MuSiQue it restored 62 and lost 4.
+- Relabelling the remaining (non-contradiction) labels adds nothing.
 
-**3. Did ordered claims perform differently from graphs?**
+**4. Do the findings replicate with a second model?**
 
-No detectable difference. R5−R1 −0.011 / −0.008; R3−R5 −0.007 / −0.004; R4−R5 +0.010 / +0.006, none significant. Shuffling hurt on 2Wiki only (R2−R1 −0.024). Predicted order (R5P−R5) +0.002 / +0.018.
+Partly, and informatively. Mistral-7B-Instruct-v0.3 was run on the same 4,976 questions.
 
-**4. How much evidence was lost through representation transformations?**
+| finding | Qwen2.5-7B (EM) | Mistral-7B (EM) | Mistral (lenient) | replicates? |
+|---|---|---|---|---|
+| contradiction lines on − off | −3.3 / −3.3 | −3.4 [−4.3, −2.5] / −1.5 [−2.3, −0.7] | −5.0 / −3.3 | yes, with 5–6 points more abstention |
+| predicted − derived lines (fixed order) | −3.6 / −5.5 | −4.1 / −2.5 | — | yes |
+| derived order and derived relation lines | null | null | — | yes (null both) |
+| sentence items (R1−R0) | −1.7 (2Wiki, confirmed) / −0.1 | −0.1 / **+2.2** [+1.2, +3.3] | — | **no**: reader-specific |
 
-None under Protocol A (verified per question, 0 violations in all runs). Under a 1.0× content-token budget (pilot), passages keep 0.81–0.83 of the facts against 0.62–0.65 for itemised formats; answer string present 0.85 vs 0.64–0.66 (2Wiki). On fresh retrieved evidence, R0 keeps 0.82–0.84 vs 0.67–0.68 for R1. In Exp0, B2–B4 cost about 15 extraction calls and about 24 s per question, and budgets are unequal, so no architectural conclusion is drawn.
+Pairs are 2Wiki / MuSiQue. Two readers do not establish model-family generality.
 
-**5. Which perturbations caused the largest failures?**
+**5. Does the effect hold with realistically retrieved evidence?**
 
-Pilot, rate 0.4, label-preserving: hard distractors (P4, up to −0.16 EM, negative in every QA cell) and relation corruption on 2Wiki R4 (−0.10). Removing required facts (P1) produced the largest behavioural change (abstention 0.43 → 0.72 MuSiQue). Among the revision interventions, asserting contradictions is the largest presentation-only harm (−3.3, up to −13 points with 6+ lines on MuSiQue).
+Yes, exploratory. On 1,000 fresh questions where every format renders the same four reranked passages:
+- predicted relations cost 3.6 / 3.0 points;
+- contradiction lines cost 2.2 / 2.4 points;
+- the cost is largest when retrieval returned all supporting sentences (R4P−R4: −9.4 / −4.2) and zero when it returned none.
 
-**6. Which results were statistically inconclusive?**
+Correct (derived) structure on incomplete evidence could not be tested, because annotation edges rarely survive top-4 retrieval.
 
-- Confirmatory: R5−R1 and R4−R5 on MuSiQue.
-- Revision: retrieved-evidence R1−R0 on both datasets; both prompt × representation interactions; noabst R4P−R4 (upper bound 0.000); small strata (e.g. 6+ lines on 2Wiki, −0.020 [−0.043, +0.002]).
-- Pilot: almost all Protocol B and Exp2 cells, Exp0 B2/B3 vs B1, HoVer and FEVER throughout.
-- The revision contrasts are not multiplicity-corrected; only the main contradiction contrast is robust to any reasonable correction.
+**6. Are the results statistically credible?**
 
-**7. What do our results establish beyond existing GraphRAG studies?**
+Yes, for the claims made.
+- **Confirmatory 1:** six pre-specified tests with Holm and equivalence (Holm-TOST agrees). It was reproduced byte-identically by an independent re-execution.
+- **Confirmatory 2:** frozen, published before sampling, Holm over two datasets.
+  - Realised power for half the exploratory effect was about 0.75–0.88, and the observed effects are 2–3 times larger.
+  - A cluster bootstrap by source title leaves the intervals unchanged.
+- **Exploratory analyses** are labelled, uncorrected, and never pooled with confirmatory ones. Only patterns that recur across datasets and readers are emphasised.
 
-Nishida et al. (TACL 2026) show that noisy extracted triples hurt GraphRAG *through retrieval and clustering*. GraphRAG-Bench, Han et al. and Zhou et al. compare whole pipelines. We add: (i) a fact-identical, pre-specified null for derived order and relation lines with a 7B reader; (ii) intervention evidence that incorrect relations hurt even when merely *displayed* next to fixed correct evidence, located in the contradiction label, not in order or line count; (iii) the channel: abstention under an instruction that permits it; (iv) formatting overhead quantified as evidence loss. The increment is clear but narrow; see `docs/NOVELTY_AND_RELATED_WORK_AUDIT.md`.
+**7. Is the contribution novel relative to the closest GraphRAG papers?**
 
-**8. Which experiments remain incomplete?**
+Moderately, and in a well-defined way (`docs/ACL_NOVELTY_AUDIT.md`).
+- Nishida et al. (TACL 2026) show that noisy triples hurt GraphRAG *through retrieval*. Their study uses one answering model (GPT-4o), point estimates and no presentation-only controls.
+- GraphRAG-Bench, Han et al. and Zhou et al. compare whole systems.
+- We isolate presentation with content verified identical, show that one asserted label carries the cost, separate abstention from wrong answers, and confirm prospectively.
+- We do not claim to be first to show that structure can hurt, or that noisy relations hurt.
 
-| item | status | what unblocks it |
-|---|---|---|
-| Second reader (cross-family replication) | configured, not run | your authorisation to download Mistral-7B-Instruct-v0.3 (or OLMo-2-1124-7B-Instruct); about 5.5 GPU-h, ≈ 12 h remain |
-| Human labels for 240 contradiction pairs | package ready, no labels | 2–3 annotator-hours; importer validates |
-| Human structure verification; Exp3; control C4 | not run | the 50-question verification package |
-| LLM-extracted relations instead of NLI | not designed | new protocol |
-| Confirmatory test of the contradiction effect | not run | fresh sample + new pre-specified protocol |
-| Protocol B / Exp0 / Exp2 at scale | pilot only | compute |
+**8. What are the strongest remaining rejection risks?**
 
-**9. How strong is the paper for an ACL/EMNLP main conference?**
+1. "Unsurprising": telling a model that sources conflict makes it cautious.
+2. Narrow structures: annotation-derived dependencies and a small NLI predictor, not deployed LLM-extracted graphs.
+3. Two 7B readers only.
+4. "False contradiction" not human-verified.
+5. Gold evidence for all confirmatory results.
+6. The sentence-item result does not generalise across readers, which a reviewer may read as weakening the first confirmatory test.
 
-Borderline. Soundness is above the norm for the area (pre-specification, verification, audit, interventions); excitement is moderate. Simulated reviewers (`paper/REVIEWER_SELF_CRITIQUE.md`) give soundness 3.5–4 and excitement 2.5–3; the likely outcome today is Findings. A second reader that reproduces the contradiction effect, plus human labels showing the contradictions are false, would move it to a competitive main-track submission.
+**9. Which studies or human annotations remain incomplete?**
 
-**10. What additional work would most improve its scientific contribution?**
+- Human labels: package v2 (300 pairs, two independent annotators, sentence-only and with-context labels) and the 50-question structure-verification package.
+- The verified-false-only removal intervention (C4); component attribution (Exp3).
+- LLM-extracted relations as the predictor; a larger third reader (not authorised; about 4.4 GPU-hours remain).
+- Protocol B, Exp0 and Exp2 at scale (pilot only).
+- Matched-budget B2–B4 (not run; the matched comparison is the retrieved-evidence study).
+- Authorship, the AI-use disclosure text, licence verification and the Responsible NLP checklist (`docs/ACL_2027_SUBMISSION_CHECKLIST.md`).
 
-1. Second reader on the confirmatory questions with the fixed-order controls (needs your authorisation; about 5.5 GPU-h; fits the ceiling).
-2. Human labels for the 240 blinded contradiction pairs (no compute).
-3. A fresh-sample, pre-specified test of contradiction lines on vs off (about 1 GPU-h), making the main finding confirmatory.
-4. LLM-extracted relations as the predictor, to show the effect is not an artefact of a small NLI model.
-5. Human-verified structure, enabling Exp3 and control C4.
+**10. Is the paper scientifically ready for internal submission review?**
 
-## Reports written in this revision
+Yes.
+- The manuscript compiles cleanly (22 pages; the main text ends on page 8; no overfull boxes or undefined references), and every page was inspected.
+- Every number is traced to a run with prediction hashes.
+- Exploratory and confirmatory evidence are separated throughout.
 
-`docs/REVISION_BASELINE_AUDIT.md`, `docs/CONTRADICTION_MECHANISM_AUDIT.md`, `docs/RETRIEVAL_GENERALIZATION_REPORT.md`, `docs/STATISTICAL_REVIEW.md`, `docs/NOVELTY_AND_RELATED_WORK_AUDIT.md`, `docs/REVISION_EXPERIMENT_LOG.md`, `docs/REMAINING_HUMAN_VERIFICATION.md`, `docs/REPRODUCIBILITY_CHECKLIST.md`, `docs/REVISION_PROTOCOL.md`; `paper/CLAIMS_EVIDENCE_AUDIT.md`, `paper/REVIEWER_SELF_CRITIQUE.md`, `paper/SUBMISSION_READINESS.md`.
+It is not yet ready for external submission. The authors must:
+- fill in authorship;
+- verify licences and complete the AI-assistance disclosure;
+- decide whether to collect the human labels before the 4 January 2027 ARR deadline. Those labels are the single highest-value addition.

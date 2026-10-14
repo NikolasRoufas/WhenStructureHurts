@@ -1,0 +1,16 @@
+\begin{table*}[t]
+\centering
+\footnotesize
+\begin{adjustbox}{max width=\linewidth}
+\begin{tabular}{@{}lrrlrrlrrr@{}}
+\toprule
+Data & $n$ (lines/all) & $\Delta$EM & 95\% CI & $p_{\text{Holm}}$ & $\Delta$Abst. & 95\% CI & $\Delta$EM all & $\Delta$Acc$\mid$both & C$\to$A/C$\to$W/A$\to$C/W$\to$C \\
+\midrule
+2Wiki & 1,490/2,600 & -0.077 & [-0.095, -0.061] & $<$0.001 & +0.089 & [+0.072, +0.104] & -0.044 & -0.055 & 67/73/4/21 \\
+HotpotQA & 1,295/3,800 & -0.053 & [-0.067, -0.039] & $<$0.001 & +0.076 & [+0.061, +0.092] & -0.018 & -0.023 & 46/37/1/13 \\
+\bottomrule
+\end{tabular}
+\end{adjustbox}
+\caption{Confirmatory test 2 (protocol frozen and published before sampling): showing the predicted \texttt{CONTRADICTS} lines (R4P\_FO) vs.\ the same block without them (R4P\_FO\_NC), fixed order, on untouched questions. Primary population: questions with at least one rendered contradiction line (an input property); Holm over the two datasets. $\Delta$EM all: secondary estimand over all questions (identical prompts contribute 0). $\Delta$Acc$\mid$both and transitions are descriptive. Source: \texttt{revision2/\allowbreak confirm2/\allowbreak confirm2\_summary.json}.}
+\label{tab:confirm2}
+\end{table*}

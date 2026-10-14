@@ -1,0 +1,9 @@
+Data,Edge stratum,Contrast,$n$,Ident.,$\Delta$EM,95\% CI,$\Delta$Abst.
+2Wiki,exact anchor,R4$-$R5,1685,0,+0.008,"[-0.005, +0.021]",+0.017
+2Wiki,exact anchor,R5$-$R1,1685,693,-0.013,"[-0.029, +0.003]",+0.015
+2Wiki,fallback anchor,R4$-$R5,668,0,+0.007,"[-0.015, +0.031]",+0.009
+2Wiki,fallback anchor,R5$-$R1,668,286,-0.006,"[-0.033, +0.021]",+0.021
+MuSiQue,exact anchor,R4$-$R5,1224,0,+0.007,"[-0.007, +0.023]",+0.002
+MuSiQue,exact anchor,R5$-$R1,1224,386,+0.001,"[-0.015, +0.016]",-0.017
+MuSiQue,fallback anchor,R4$-$R5,520,0,+0.017,"[-0.006, +0.042]",-0.017
+MuSiQue,fallback anchor,R5$-$R1,520,136,-0.040,"[-0.067, -0.012]",+0.029

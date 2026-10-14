@@ -1,6 +1,8 @@
 Factor changed (first $-$ second),2Wiki $\Delta$EM,95\% CI,$\Delta$Abst.,Ident.,MuSiQue $\Delta$EM,95\% CI,$\Delta$Abst.,Ident.
 "contradiction lines (on vs.\ off), derived order",-0.033,"[-0.042, -0.025]",+0.061,1198,-0.033,"[-0.043, -0.023]",+0.062,734
-"typed vs.\ neutral labels, same pairs and line count",-0.037,"[-0.045, -0.029]",+0.056,530,-0.030,"[-0.040, -0.020]",+0.048,410
+"contradiction label vs.\ neutral label, those lines only",-0.037,"[-0.045, -0.029]",+0.058,1198,-0.033,"[-0.042, -0.025]",+0.054,734
+contradiction lines vs.\ equal-count filler lines,-0.042,"[-0.050, -0.034]",+0.067,1198,-0.037,"[-0.047, -0.028]",+0.070,734
+"typed vs.\ neutral labels for all lines, same pairs",-0.037,"[-0.045, -0.029]",+0.056,530,-0.030,"[-0.040, -0.020]",+0.048,410
 neutral lines vs.\ none (count/overhead only),+0.007,"[-0.003, +0.017]",+0.019,530,-0.015,"[-0.026, -0.004]",+0.038,410
 "predicted vs.\ derived order, no lines",+0.002,"[-0.001, +0.005]",-0.003,3057,+0.018,"[+0.006, +0.031]",+0.003,704
 "predicted vs.\ derived order, predicted lines",+0.000,"[-0.003, +0.003]",-0.003,3057,+0.010,"[-0.002, +0.023]",-0.001,704

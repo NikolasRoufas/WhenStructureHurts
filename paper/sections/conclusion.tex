@@ -1,4 +1,4 @@
 \section{Conclusion}
 \label{sec:conclusion}
 
-Holding the evidence fixed, we found no detectable effect of graph-derived order or derived relation lines for Qwen2.5-7B-Instruct on 4{,}976 held-out questions, and a small, abstention-driven cost of sentence items on 2WikiMultiHopQA. Exploratory fixed-order controls located where structure hurts: predicted contradiction relations cost about three exact-match points by making the reader abstain, an effect that replicated with real retrieval and largely vanished when abstention was not offered.
+With the evidence fixed, we found no detectable effect of graph-derived order or derived relation lines on 4{,}976 held-out questions, and a small, reader-specific cost of sentence items. What hurt was an asserted contradiction: with facts and order fixed, showing NLI-predicted \texttt{CONTRADICTS} lines lowered exact match by 5--8 points among the affected questions in a pre-specified test on untouched questions, mainly through abstention, and the cost vanished when only the label was changed. Evidence structure should be judged by what its annotations make a reader do.

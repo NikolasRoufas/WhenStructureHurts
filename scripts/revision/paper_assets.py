@@ -11,11 +11,17 @@ R = Path(sys.argv[1])
 P = Path(sys.argv[2])
 (P / "tables").mkdir(parents=True, exist_ok=True)
 (P / "figures").mkdir(parents=True, exist_ok=True)
-DSN = {"musique": "MuSiQue", "2wikimultihopqa": "2Wiki"}
+DSN = {"musique": "MuSiQue", "2wikimultihopqa": "2Wiki", "hotpotqa": "HotpotQA"}
+R2 = R.parent / "revision2"  # revision-2 outputs
 
 
 def rows(p):
     p = R / p
+    return list(csv.DictReader(open(p))) if p.exists() and p.stat().st_size else []
+
+
+def rows2(p):
+    p = R2 / p
     return list(csv.DictReader(open(p))) if p.exists() and p.stat().st_size else []
 
 
@@ -50,7 +56,7 @@ def emit(name, header, body, caption, label, colspec, star=True, size="\\footnot
 
 # ------------------------------------------------------------------ fixed-order relation controls
 CTRL = [("R4P_FO-R4P_FO_NC", "contradiction lines (on vs.\\ off), derived order"),
-        ("R4P_FO-R4N_FO", "typed vs.\\ neutral labels, same pairs and line count"),
+        ("R4P_FO-R4N_FO", "typed vs.\\ neutral labels for all lines, same pairs"),
         ("R4N_FO-R5", "neutral lines vs.\\ none (count/overhead only)"),
         ("R5P-R5", "predicted vs.\\ derived order, no lines"),
         ("R4P-R4P_FO", "predicted vs.\\ derived order, predicted lines"),
@@ -64,11 +70,23 @@ if ctrl:
             r = ctrl.get((ds, con))
             cells += ([f(r["d_em"]), ci(r["d_em_ci"]), f(r["d_abst"]), r["n_identical_prompts"]] if r else ["--"] * 4)
         body.append(cells)
+        if con == "R4P_FO-R4P_FO_NC":
+            # revision-2 targeted controls (B - A of an r2 contrast "A>B" = first minus second)
+            c2 = {(r["dataset"], r["contrast"]): r for r in rows2("r2/controls2.csv") if r["stratum"] == "all"}
+            for key, desc2 in (("R4P_FO_CN>R4P_FO", "contradiction label vs.\\ neutral label, those lines only"),
+                               ("R4P_FO_NCPAD>R4P_FO", "contradiction lines vs.\\ equal-count filler lines")):
+                cells2 = [desc2]
+                for ds in ("2wikimultihopqa", "musique"):
+                    r = c2.get((ds, key))
+                    cells2 += ([f(r["d_em"]), ci(r["d_em_ci"]), f(r["d_abst"]), r["n_identical_prompts"]] if r else ["--"] * 4)
+                if c2:
+                    body.append(cells2)
     emit("tab_controls", ["Factor changed (first $-$ second)", "2Wiki $\\Delta$EM", "95\\% CI", "$\\Delta$Abst.", "Ident.",
                           "MuSiQue $\\Delta$EM", "95\\% CI", "$\\Delta$Abst.", "Ident."], body,
          "Fixed-order relation controls on the confirmatory questions (exploratory interventions designed after the confirmatory "
          "result; $n$=3{,}232 2Wiki, 1{,}744 MuSiQue). Each row changes one factor on identical facts. $\\Delta$Abst.: paired change in "
-         "the abstention rate; Ident.: byte-identical prompt pairs. Source: \\texttt{revision/controls/relation\\_control\\_effects.csv}.",
+         "the abstention rate; Ident.: byte-identical prompt pairs (questions without contradiction lines for rows 1--3). Sources: "
+         "\\texttt{revision/controls/relation\\_control\\_effects.csv}, \\texttt{revision2/r2/controls2.csv}.",
          "tab:controls", "@{}lrlrrrlrr@{}")
     strata = [r for r in rows("controls/relation_control_strata.csv")
               if r["contrast"] == "R4P_FO-R4P_FO_NC" and r["stratum"].startswith("n_contra_lines")]
@@ -87,7 +105,7 @@ if ctrl:
     matplotlib.use("Agg")
     import matplotlib.pyplot as plt
     plt.rcParams.update({"font.size": 8, "font.family": "serif", "axes.spines.top": False, "axes.spines.right": False, "pdf.fonttype": 42})
-    labels = ["contradiction lines on vs. off", "typed vs. neutral labels\n(same pairs, same count)", "neutral lines vs. none",
+    labels = ["contradiction lines on vs. off", "typed vs. neutral labels\n(all lines, same pairs)", "neutral lines vs. none",
               "predicted vs. derived order\n(no lines)", "predicted vs. derived order\n(predicted lines)", "R4P − R4 (original)"]
     fig, axes = plt.subplots(1, 2, figsize=(6.6, 2.5), sharey=True)
     for ax, (metric, title) in zip(axes, (("d_em", "Δ EM"), ("d_abst", "Δ abstention rate"))):
@@ -164,7 +182,7 @@ if rc:
     emit("tab_retrieval_main", ["Data", "Contrast", "Ident.", "$\\Delta$EM", "95\\% CI", "$\\Delta$Abst."], body[:-1],
          "Retrieved evidence, Protocol~A (exploratory; fresh disjoint sample, $n$=500 per dataset; all representations render the "
          "same four reranked passages). Ident.: byte-identical prompt pairs. Full table with Protocol~B in Appendix~\\ref{app:revision}. "
-         "Source: \\texttt{revision/retrieval/retrieval\\_contrasts.csv}.", "tab:retrieval-main", "@{}llrrlr@{}", star=False)
+         "Source: \\texttt{revision/retrieval/retrieval\\_contrasts.csv}.", "tab:retrieval-main", "@{}llrrlr@{}", star=True)
     body = []
     for ds in ("musique", "2wikimultihopqa"):
         for con in ("R1-R0", "R4P-R4P_NC"):
@@ -229,3 +247,115 @@ if cs.exists():
          f"{d['n_edges_shown_to_reader']:,} rendered, {d['n_questions_with_contradicts']:,} questions). NLI confidence $\\geq$0.90 "
          f"(median {d['nli_confidence_quartiles']['median']:.3f}). Categories are heuristic triage for prioritising human "
          "verification. Source: \\texttt{revision/contradictions/contradictions\\_summary.json}.", "tab:contra-triage", "@{}lrr@{}", star=True)
+
+
+# ------------------------------------------------------------------ confirmatory protocol 2 (frozen; untouched questions)
+c2 = R2 / "confirm2/confirm2_summary.json"
+if c2.exists():
+    d = json.loads(c2.read_text())["datasets"]
+    body = []
+    for ds in ("2wikimultihopqa", "hotpotqa"):
+        x = d[ds]
+        pe, ab, al, ac = x["primary_em"], x["secondary_abstention"], x["secondary_em_all_questions"], x["acc_given_both_answered"]
+        t = x["transitions_primary (off->on)"]
+        p = lambda v: "$<$0.001" if v == 0 else f"{v:.3f}"  # noqa: E731
+        body.append([DSN[ds], f"{x['n_primary_population']:,}/{x['n_questions']:,}", f(pe["delta"]), ci(pe["ci"]), p(pe["p_holm"]),
+                     f(ab["delta"]), ci(ab["ci"]), f(al["delta"]), f(ac["delta"]),
+                     f"{t.get('C->A', 0)}/{t.get('C->W', 0)}/{t.get('A->C', 0)}/{t.get('W->C', 0)}"])
+    emit("tab_confirm2", ["Data", "$n$ (lines/all)", "$\\Delta$EM", "95\\% CI", "$p_{\\text{Holm}}$", "$\\Delta$Abst.", "95\\% CI",
+                          "$\\Delta$EM all", "$\\Delta$Acc$\\mid$both", "C$\\to$A/C$\\to$W/A$\\to$C/W$\\to$C"], body,
+         "Confirmatory test 2 (protocol frozen and published before sampling): showing the predicted \\texttt{CONTRADICTS} lines "
+         "(R4P\\_FO) vs.\\ the same block without them (R4P\\_FO\\_NC), fixed order, on untouched questions. Primary population: "
+         "questions with at least one rendered contradiction line (an input property); Holm over the two datasets. "
+         "$\\Delta$EM all: secondary estimand over all questions (identical prompts contribute 0). "
+         "$\\Delta$Acc$\\mid$both and transitions are descriptive. Source: \\texttt{revision2/confirm2/confirm2\\_summary.json}.",
+         "tab:confirm2", "@{}lrrlrrlrrr@{}")
+
+# ------------------------------------------------------------------ second reader (Mistral) vs Qwen, same questions
+rd = {(r["dataset"], r["contrast"]): r for r in rows2("r2/reader2.csv") if r["stratum"] == "all"}
+if rd:
+    M = "@qa-v2@mistral"
+    RC = [("R0>R1", "sentence items $-$ passages (R1$-$R0)"), ("R1>R5", "derived order (R5$-$R1)"),
+          ("R5>R4", "derived relation lines (R4$-$R5)"), ("R4>R4P_FO", "predicted $-$ derived lines, fixed order"),
+          ("R4P_FO_NC>R4P_FO", "contradiction lines on $-$ off")]
+    body = []
+    for ds in ("2wikimultihopqa", "musique"):
+        for con, desc in RC:
+            a, b = con.split(">")
+            q, m = rd.get((ds, con)), rd.get((ds, f"{a}{M}>{b}{M}"))
+            if not (q and m):
+                continue
+            body.append([DSN[ds], desc, f(q["d_em"]), ci(q["d_em_ci"]), f(q["d_abst"]),
+                         f(m["d_em"]), ci(m["d_em_ci"]), f(m["d_abst"]), f(m["d_lenient"]), ci(m["d_lenient_ci"])])
+        body.append("MID")
+    base = {ds: rd.get((ds, f"R0{M}>R1{M}")) for ds in ("2wikimultihopqa", "musique")}
+    lv = "; ".join(f"{DSN[ds]} R0: EM {float(r['em_a']):.2f}, lenient {float(r['lenient_a']):.2f}, abstained {float(r['abst_a']):.2f}"
+                   for ds, r in base.items() if r)
+    emit("tab_reader2", ["Data", "Contrast", "Qwen $\\Delta$EM", "95\\% CI", "$\\Delta$Abst.", "Mistral $\\Delta$EM", "95\\% CI",
+                         "$\\Delta$Abst.", "$\\Delta$Lenient", "95\\% CI"], body[:-1],
+         "Second reader (exploratory cross-model replication on the confirmatory questions; $n$=3{,}232 2Wiki, 1{,}744 MuSiQue): "
+         "Qwen2.5-7B-Instruct and Mistral-7B-Instruct-v0.3 with the same prompt and evidence. Lenient: gold alias contained in the "
+         f"answer (pre-specified before the Mistral run, because Mistral often answers in full sentences). Mistral levels: {lv}. "
+         "Source: \\texttt{revision2/r2/reader2.csv}.", "tab:reader2", "@{}llrlrrlrrl@{}")
+
+# ------------------------------------------------------------------ abstention policy: three prompts
+pr = {r["contrast"]: r for r in rows2("r2/prompt3.csv") if r["stratum"] == "all"}
+if pr:
+    C, N = "@qa-v2-conservative", "@qa-v2-noabst"
+    body = []
+    for rep in ("R0", "R1", "R4", "R4P"):
+        c, n = pr.get(f"{rep}>{rep}{C}"), pr.get(f"{rep}>{rep}{N}")
+        if not (c and n):
+            continue
+        cell = lambda r, side: f"{float(r['em_' + side]):.3f} / {float(r['abst_' + side]):.3f} / {float(r['wrong_' + side]):.3f}"  # noqa: E731
+        body.append([rep, cell(c, "a"), cell(c, "b"), cell(n, "b")])
+    body.append("MID")
+    for con, desc in (("R0>R1", "R1$-$R0"), ("R4>R4P", "R4P$-$R4")):
+        cells = [desc]
+        for suf in ("", C, N):
+            a, b = con.split(">")
+            r = pr.get(f"{a}{suf}>{b}{suf}")
+            cells.append(f"{f(r['d_em'])} {ci(r['d_em_ci'])}" if r else "--")
+        body.append(cells)
+    for con, desc in (("R0>R1", "R1$-$R0"), ("R4>R4P", "R4P$-$R4")):
+        a, b = con.split(">")
+        rc, rn = pr.get(f"({con})-({a}{C}>{b}{C})"), pr.get(f"({con})-({a}{N}>{b}{N})")
+        body.append([f"interaction, {desc}", "(qa-v2 $-$ variant)", f"{f(rc['d_em'])} {ci(rc['d_em_ci'])}" if rc else "--",
+                     f"{f(rn['d_em'])} {ci(rn['d_em_ci'])}" if rn else "--"])
+    emit("tab_prompt3", ["", "\\texttt{qa-v2} (frozen)", "conservative", "no abstention option"], body,
+         "Abstention policy (exploratory; the same 1{,}000 confirmatory 2Wiki questions and evidence). Top: EM / abstention / "
+         "wrong-answer rate per representation. Middle: within-prompt contrasts ($\\Delta$EM, 95\\% CI). Bottom: prompt $\\times$ "
+         "representation interaction, (contrast under \\texttt{qa-v2}) $-$ (contrast under the variant). Conservative: the last line "
+         "replaced by \\emph{If the evidence does not fully establish the answer, reply ``Answer: insufficient evidence''. Do not guess.} "
+         "Source: \\texttt{revision2/r2/prompt3.csv}.", "tab:prompt3", "@{}llll@{}")
+
+# ------------------------------------------------------------------ serialisation accounting and anchor strata
+sa = rows2("serialization/serialization_accounting.csv")
+if sa:
+    order = ["R0", "R1", "R5", "R4", "R4P", "R4P_FO", "R4P_FO_NC", "R4N_FO"]
+    body = []
+    for ds in ("2wikimultihopqa", "musique"):
+        for rep in order:
+            r = next((x for x in sa if x["dataset"] == ds and x["representation"] == rep), None)
+            if r:
+                body.append([DSN[ds], rep.replace("_", "\\_"), r["input_tokens"], r["content_tokens"], r["overhead_tokens"],
+                             r["facts"], r["relation_lines"], r["source_mentions"], r["identical_to_R1"], f(r["em"], 3, False),
+                             f(r["abstained"], 3, False)])
+        body.append("MID")
+    emit("tab_serialisation", ["Data", "Rep.", "Input tok.", "Content tok.", "Overhead tok.", "Facts", "Rel.\\ lines",
+                               "Titles shown", "$=$R1", "EM", "Abst."], body[:-1],
+         "Serialisation accounting on the confirmatory questions (Protocol A, means per question). Content tokens are identical "
+         "across representations by construction; overhead is identifiers, titles, headers and relation lines. Titles shown: source "
+         "titles per prompt (once per passage in R0, once per item otherwise). $=$R1: questions whose evidence block is "
+         "byte-identical to R1. Source: \\texttt{revision2/serialization/serialization\\_accounting.csv}.", "tab:serialisation",
+         "@{}llrrrrrrrrr@{}")
+an = rows2("serialization/anchor_strata.csv")
+if an:
+    body = [[DSN[r["dataset"]], r["edge_stratum"].replace("_", " ").replace("B derived ", "").replace("C derived ", ""),
+             r["contrast"].replace("-", "$-$"), r["n"], r["n_identical"], f(r["d_em"]), ci(r["d_em_ci"]), f(r["d_abst"])]
+            for r in an if r["edge_stratum"] != "no_edges"]
+    emit("tab_anchor", ["Data", "Edge stratum", "Contrast", "$n$", "Ident.", "$\\Delta$EM", "95\\% CI", "$\\Delta$Abst."], body,
+         "Derived structure by anchor quality (confirmatory questions; exploratory stratification by an input property). Exact anchor: "
+         "every derived dependency is anchored to a sentence by exact string match; fallback: at least one endpoint is a fallback "
+         "guess. Questions without derived edges (identical prompts) are omitted. Source: "
+         "\\texttt{revision2/serialization/anchor\\_strata.csv}.", "tab:anchor", "@{}lllrrrlr@{}", star=True)

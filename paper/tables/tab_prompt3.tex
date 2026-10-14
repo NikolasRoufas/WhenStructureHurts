@@ -1,0 +1,23 @@
+\begin{table*}[t]
+\centering
+\footnotesize
+\begin{adjustbox}{max width=\linewidth}
+\begin{tabular}{@{}llll@{}}
+\toprule
+ & \texttt{qa-v2} (frozen) & conservative & no abstention option \\
+\midrule
+R0 & 0.395 / 0.202 / 0.403 & 0.330 / 0.307 / 0.363 & 0.473 / 0.006 / 0.521 \\
+R1 & 0.372 / 0.261 / 0.367 & 0.298 / 0.395 / 0.307 & 0.469 / 0.008 / 0.523 \\
+R4 & 0.378 / 0.274 / 0.348 & 0.314 / 0.422 / 0.264 & 0.487 / 0.006 / 0.507 \\
+R4P & 0.342 / 0.328 / 0.330 & 0.281 / 0.473 / 0.246 & 0.470 / 0.009 / 0.521 \\
+\midrule
+R1$-$R0 & -0.023 [-0.044, -0.003] & -0.032 [-0.052, -0.012] & -0.004 [-0.026, +0.017] \\
+R4P$-$R4 & -0.036 [-0.052, -0.019] & -0.033 [-0.047, -0.019] & -0.017 [-0.034, +0.000] \\
+interaction, R1$-$R0 & (qa-v2 $-$ variant) & +0.009 [-0.014, +0.030] & -0.019 [-0.046, +0.007] \\
+interaction, R4P$-$R4 & (qa-v2 $-$ variant) & -0.003 [-0.020, +0.014] & -0.019 [-0.039, +0.002] \\
+\bottomrule
+\end{tabular}
+\end{adjustbox}
+\caption{Abstention policy (exploratory; the same 1{,}000 confirmatory 2Wiki questions and evidence). Top: EM / abstention / wrong-answer rate per representation. Middle: within-prompt contrasts ($\Delta$EM, 95\% CI). Bottom: prompt $\times$ representation interaction, (contrast under \texttt{qa-v2}) $-$ (contrast under the variant). Conservative: the last line replaced by \emph{If the evidence does not fully establish the answer, reply ``Answer: insufficient evidence''. Do not guess.} Source: \texttt{revision2/\allowbreak r2/\allowbreak prompt3.csv}.}
+\label{tab:prompt3}
+\end{table*}
