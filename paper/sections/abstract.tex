@@ -1,9 +1,0 @@
-\begin{abstract}
-Retrieval-augmented systems increasingly transform retrieved passages into claims, reasoning paths and graphs before generation, but such transformations can also lose facts or add misleading relations. Because system-level comparisons change retrieval, content and formatting at once, the effect of the representation itself is rarely measured.
-
-We present the same gold supporting evidence for multi-hop questions in seven representations, under an information-controlled protocol that verifies identical facts per question and a budget-controlled protocol that records which facts each format can afford. We complement this with retrieved-evidence baselines and controlled perturbations. After an exploratory pilot, we tested six pre-registered contrasts on a disjoint sample of 4{,}976 MuSiQue and 2WikiMultiHopQA questions with Qwen2.5-7B-Instruct.
-
-Neither graph-derived ordering nor explicit derived relations changed exact match detectably; on 2WikiMultiHopQA both effects are equivalent to zero within two points. Splitting passages into sentence items lowered 2WikiMultiHopQA exact match by 1.7 points (95\% CI $[-2.9, -0.5]$), almost entirely through more frequent abstention. Structure hurt when it was noisy: predicted relations lowered exact match by 3.6 and 4.5 points, a loss concentrated in prompts where the predictor marked compatible facts as contradictory. Under a token budget, structured formats kept 15--20 percentage points fewer facts than passages.
-
-These results suggest that the value of structured evidence lies less in its relations than in what a pipeline keeps or loses, and that the reliability of relation extraction should be measured as carefully as its benefits.
-\end{abstract}

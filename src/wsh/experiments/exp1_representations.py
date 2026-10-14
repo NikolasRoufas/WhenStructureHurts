@@ -38,8 +38,21 @@ def _retrieved_bundle(q: Question, runner: Runner) -> EvidenceBundle:
     passages = [r.passage for r in got]
     claims, _ = SentenceClaimExtractor().extract(passages, gold_units(q))
     b = bundle_from_passages(q, passages, claims, {"evidence_source": "retrieved", "retrieval": "bm25+rerank",
-                                                    "claims": "sentence units"})
-    b.edges = heuristic_depends_on(claims, q.question)
+                                                    "claims": "sentence units",
+                                                    "retrieved_passage_ids": [p.passage_id for p in passages]})
+    if cfg.exp1.retrieved_edges == "annotation_restricted":
+        # oracle STRUCTURE on real retrieval: annotation-derived edges whose two endpoints were retrieved
+        ids = {c.claim_id for c in claims}
+        try:
+            gold = gold_bundle(q, cfg.exp1.evidence_scope)
+            b.edges = [e for e in gold.edges if e.source in ids and e.target in ids]
+            n_gold_edges = len(gold.edges)
+        except EvidenceUnavailable:
+            b.edges, n_gold_edges = [], 0
+        b.origin = {**b.origin, "edges": "annotation_derived_restricted_to_retrieved",
+                    "n_annotation_edges_total": n_gold_edges, "n_annotation_edges_kept": len(b.edges)}
+    else:
+        b.edges = heuristic_depends_on(claims, q.question)
     predicted_path(b, q.question)
     return b
 
@@ -54,15 +67,21 @@ def bundles_for(q: Question, runner: Runner) -> dict[str, EvidenceBundle | Excep
             base = _retrieved_bundle(q, runner)
     except EvidenceUnavailable as e:
         return {r: e for r in e1.representations}
+    from ..representations.relation_controls import CONTROL_REPS, control_bundle
+
     out: dict[str, EvidenceBundle | Exception] = {}
+    pred = None
+    if any(r == "R4P" or r in CONTROL_REPS for r in e1.representations):
+        pred = base.model_copy(deep=True)
+        pred.edges, stats = runner.res.relation_classifier().classify(pred.claims, q.question)
+        pred.origin = {**pred.origin, "edges": "model_predicted", "relation_stats": stats}
     for rep in e1.representations:
         if rep == "R3" and not base.path:
             out[rep] = PathUnavailable(f"{q.uid}: reasoning path unavailable ({base.path_status.value})")
         elif rep == "R4P":
-            pred = base.model_copy(deep=True)
-            pred.edges, stats = runner.res.relation_classifier().classify(pred.claims, q.question)
-            pred.origin = {**pred.origin, "edges": "model_predicted", "relation_stats": stats}
             out[rep] = pred
+        elif rep in CONTROL_REPS:
+            out[rep] = control_bundle(rep, base, pred)
         else:
             out[rep] = base
     return out
@@ -90,7 +109,8 @@ def body(runner: Runner, questions) -> None:
         for q in qs:
             bundles = bundles_for(q, runner)
             ok, bad = _variants(bundles, e1.shuffle_seeds)
-            first = next((v[2] for v in ok.values() if v[0] != "R4P"), None)
+            from ..representations.relation_controls import PREDICTED_REPS
+            first = next((v[2] for v in ok.values() if v[0] not in PREDICTED_REPS), None)
             stratum = bundle_edge_stratum(first) if first is not None else None
             settings = []
             if "A" in e1.protocols:

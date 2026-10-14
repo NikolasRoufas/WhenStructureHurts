@@ -3,7 +3,7 @@
 RECONSTRUCTED BASELINE. Stage structure, equations and relation set follow the paper.
 Everything the paper leaves unspecified (retriever/reranker/NLI/extractor checkpoints,
 feature definitions, weights, budgets, prompt) is our choice and listed in
-docs/NOVELTY_AND_BASELINES.md ("Reconstruction ledger"). This is not the original code.
+docs/EGRAG_RECONSTRUCTION.md. This is not the original code.
 """
 
 from __future__ import annotations

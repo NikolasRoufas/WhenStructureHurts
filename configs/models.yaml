@@ -17,6 +17,7 @@ policy:
     smoke:     {max_params: 1.0e9, requires_authorization: false}
     pilot:     {max_params: 1.0e9, requires_authorization: false}
     gpu_pilot: {max_params: 1.0e11, requires_authorization: true}
+    revision:  {max_params: 1.0e11, requires_authorization: true}   # post-hoc exploratory (revision-1)
     full:      {max_params: 1.0e11, requires_authorization: true}
   forbidden_name_patterns_unauthorized_stages:
     - "(?i)(^|[^0-9.])(1\\.5|3|4|7|8|9|13|14|32|70|72)b"
@@ -44,7 +45,7 @@ generators:
     precision: bfloat16
     license: apache-2.0
     architecture: Qwen2ForCausalLM (qwen2; supported by transformers 5.12.1 AutoModelForCausalLM)
-    stages: [gpu_pilot, full]
+    stages: [gpu_pilot, revision, full]
   Qwen/Qwen2.5-3B-Instruct:
     revision: aa8e72537993ba99e69dfaafa59ed015b17504d1
     n_params: 3085938688
@@ -69,6 +70,26 @@ generators:
     architecture: qwen3_5 (Qwen3_5ForConditionalGeneration checkpoint, loaded as Qwen3_5ForCausalLM)
     chat_template_kwargs: {enable_thinking: false}   # default template opens a <think> block
     stages: [gpu_pilot, full]
+
+  # Revision-1 second-reader candidates (different model families). Registered with Hub-verified revisions and
+  # parameter counts (2026-10-13). Mistral was downloaded on 2026-10-13 after explicit investigator authorisation
+  # (sharded safetensors only); OLMo-2 is NOT downloaded. Running requires WSH_COMPUTE_AUTHORIZED=1 and --authorized-compute.
+  mistralai/Mistral-7B-Instruct-v0.3:
+    revision: c170c708c41dac9275d15a8fff4eca08d52bab71
+    n_params: 7248023552
+    weight_bytes: 14496047104      # bf16
+    precision: bfloat16
+    license: apache-2.0 (ungated)
+    architecture: MistralForCausalLM; chat template folds the system message into the first user turn
+    stages: [revision]
+  allenai/OLMo-2-1124-7B-Instruct:
+    revision: 470b1fba1ae01581f270116362ee4aa1b97f4c84
+    n_params: 7298617344
+    weight_bytes: 14597234688      # bf16
+    precision: bfloat16
+    license: apache-2.0 (ungated)
+    architecture: Olmo2ForCausalLM; native system role in the chat template
+    stages: [revision]
 
 encoders:   # auxiliary models (retrieval, reranking, NLI); also capped at 1e9 params
   BAAI/bge-small-en-v1.5:

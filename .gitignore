@@ -51,3 +51,10 @@ secrets/
 
 # large derived outputs: regenerate with scripts/analysis/build.py (kept on the server)
 research_outputs/analysis/F_exp1_discordant_examples.json
+
+# run outputs and the research record (the manuscript, reports and analysis outputs are preserved
+# in the `revision-1` branch and the `research-record-revision2` tag, not in the code release)
+/results/
+/research_outputs/
+/paper/
+/annotations/

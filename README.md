@@ -1,78 +1,110 @@
-# When Structure Hurts: Understanding Evidence Loss in Retrieval-Augmented Reasoning
+# When Structure Hurts
 
-Research framework for studying how evidence transformations (passages → atomic claims → reasoning paths → evidence graphs) affect retrieval-augmented reasoning, and when the errors they introduce outweigh their benefits.
+Research code for controlled experiments on **evidence representations in retrieval-augmented question answering**. The framework presents the same supporting facts to a language model in different formats — passages, sentence items, ordered items, items with derived or predicted relation lines — and measures how each change affects answers, abstention and evidence retention.
 
-**Status (2026-10-11, pre-GPU preflight complete):** 156/156 tests passing. Exp1 redesigned into Protocol A (information-controlled) and Protocol B (budget-controlled). Pilot design frozen ([docs/PILOT_PROTOCOL.md](docs/PILOT_PROTOCOL.md)). Frozen pilot question set; human-verification package prepared, not yet annotated. Corrected pipeline smoke-tested on the 0.5B model. **No scientific results yet**: smoke scores are pipeline checks, not evidence for any hypothesis. Readiness verdict: [docs/FINAL_SERVER_HANDOFF.md](docs/FINAL_SERVER_HANDOFF.md) (2026-10-11 final audit; supersedes PRE_GPU_READINESS.md). Batched generation and an authorised exploratory `gpu_pilot` stage (Qwen2.5-3B/7B, Qwen3.5-9B) are prepared; no GPU run has happened.
+## What it implements
 
-## Documents
+- **Representations of identical evidence** (`src/wsh/representations/`): R0 passages, R1 sentence items, R2 shuffled, R3 step-grouped, R5 graph-ordered, R4 with derived relation lines, R4P with predicted relations, and fixed-order relation controls. The controls are:
+  - R4P_FO: predicted lines at the derived order;
+  - R4P_FO_NC: without CONTRADICTS lines;
+  - R4P_FO_CN: CONTRADICTS relabelled neutral;
+  - R4P_FO_NCPAD: CONTRADICTS lines replaced by length-matched filler;
+  - R4N_FO: all labels neutral;
+  - R5P: predicted order only.
+- **Two evaluation protocols**:
+  - *Protocol A* verifies per question that every representation shows the same fact set (identifier and text digests).
+  - *Protocol B* applies a representation-independent fact ranking and a token budget, and records which facts each format keeps.
+- **Gold or retrieved evidence**: BM25, dense retrieval and cross-encoder reranking (`retrieval/`), with optional relation edges derived from annotations.
+- **Relation prediction** with an NLI cross-encoder and a title-mention heuristic (`extraction/`).
+- **Baselines B0–B4**, including a documented reconstruction of the EG-RAG evidence-graph pipeline (`egrag/`, [docs/EGRAG_RECONSTRUCTION.md](docs/EGRAG_RECONSTRUCTION.md)).
+- **Controlled perturbations** P1–P7 with change records (`interventions/`).
+- **Evaluation** (`evaluation/`): exact match, token F1, abstention parsing, citations, coverage, outcome transitions, paired bootstrap statistics with Holm correction and equivalence tests.
+- **Prompt variants**: the frozen `qa-v2` prompt, a variant without the abstention option, and a stricter-abstention variant.
+- **Run management**: frozen question sets, per-run manifests (code commit, config hash, package versions, dataset hashes), resumable runs and a generation cache.
 
-| | |
-|---|---|
-| [docs/RESEARCH_PLAN.md](docs/RESEARCH_PLAN.md) | questions, hypotheses H1–H4, falsification criteria, phasing |
-| [docs/EXPERIMENT_SPEC.md](docs/EXPERIMENT_SPEC.md) | every condition, control, metric, contrast; preregistration checklist |
-| [docs/NOVELTY_AND_BASELINES.md](docs/NOVELTY_AND_BASELINES.md) | related work, baselines, EG-RAG reconstruction ledger |
-| [docs/EXPERIMENT_LOG.md](docs/EXPERIMENT_LOG.md) | what was actually executed, results of the smoke test, problems found |
-| [docs/PILOT_PROTOCOL.md](docs/PILOT_PROTOCOL.md) | frozen pilot design: primary question, comparisons, metric, statistics, expansion rules |
-| [docs/METHODOLOGICAL_AUDIT.md](docs/METHODOLOGICAL_AUDIT.md) | every validity risk: fixed / controlled / needs human verification / needs stronger model / unresolved |
-| [docs/SERVER_SETUP.md](docs/SERVER_SETUP.md) | GPU server installation, preflight, pilot command templates, resumption, artefacts |
-| [docs/FINAL_SERVER_HANDOFF.md](docs/FINAL_SERVER_HANDOFF.md) | **final audit, verdict, model status, server execution plan** |
-| [docs/PRE_GPU_READINESS.md](docs/PRE_GPU_READINESS.md) | earlier readiness gate (superseded) |
-| [annotations/verification_v1/GUIDE.md](annotations/verification_v1/GUIDE.md) | human verification package (50 questions) and annotation guide |
-| [docs/REPRODUCIBILITY.md](docs/REPRODUCIBILITY.md) | versions, seeds, commands, artefacts |
-| [docs/COMPUTE_HANDOFF.md](docs/COMPUTE_HANDOFF.md) | what is needed for pilot/full runs and the prepared commands |
+## Installation
 
-## Architecture
-
-```
-src/wsh/
-  data/            schemas (annotation status + span provenance), loaders (5 datasets), validation, provenance ids
-  retrieval/       BM25, dense (bge-small) + Eq.2 fusion, cross-encoder reranking
-  extraction/      claim extractors (sentence / rule / LLM), relation classifier (NLI + heuristics)
-  representations/ gold/retrieved evidence bundles, R0-R5 layouts, serialization, Exp1 protocols A/B (protocols.py)
-  egrag/           reconstructed EG-RAG: belief (Eq.5-8), conflicts, subgraph selection (Eq.9-10), pipeline
-  interventions/   P1-P7 controlled perturbations with change records and label effects
-  models/          generator protocol, local HF generator, encoders, prompts, size policy
-  evaluation/      parsing, answer metrics, citations/coverage/groundedness, failure taxonomy, statistics, reports
-  experiments/     exp0 baselines, exp1 representations, exp2 perturbations, exp3 components, exp4 (gated scaffold)
-  systems.py       B0-B4; artifacts.py run dirs/manifests/resume; cache.py; config.py; cli.py; preflight.py
-configs/           smoke / pilot / full configs; question_sets/ (frozen samples); excluded_questions.json; models.yaml (allowlist + policy)
-annotations/       human verification package(s); src/wsh/annotations.py exports/imports/applies them
-tests/             156 unit/integration tests (the mock generator lives only here)
-scripts/run_smoke.sh
-results/<stage>/<exp>/<run_id>/   per-run artefacts (never overwritten)
-```
-
-Layers are kept separate: data → retrieval → evidence transformation → serialization → generation → evaluation → orchestration. Each experiment is runnable on its own.
-
-## Quick start
+Python ≥ 3.11.
 
 ```bash
-uv venv --python python3 --system-site-packages .venv && uv pip install --python .venv/bin/python -e .
+python -m venv .venv
+.venv/bin/pip install -e ".[dev]"
+# exact versions used for the reported runs:
+.venv/bin/pip install -r requirements-pinned.txt
+```
+
+Datasets (MuSiQue, 2WikiMultiHopQA, HotpotQA, HoVer, FEVER; development splits) and models are fetched at pinned revisions, and their hashes are checked against `data/raw/MANIFEST.json` and `configs/models.yaml`:
+
+```bash
 for d in musique 2wikimultihopqa hotpotqa hover fever; do .venv/bin/wsh data fetch --dataset $d; done
-.venv/bin/wsh models fetch Qwen/Qwen2.5-0.5B-Instruct --stage smoke      # policy + disk/RAM checks first
-.venv/bin/python -m pytest -q
-scripts/run_smoke.sh
+.venv/bin/wsh models fetch Qwen/Qwen2.5-0.5B-Instruct --stage smoke
 ```
 
-Individual experiments:
+Model downloads go through an allowlist with size and resource checks. The `smoke` and `pilot` stages are capped at 1B parameters; the `gpu_pilot`, `revision` and `full` stages require `WSH_COMPUTE_AUTHORIZED=1` and `--authorized-compute`. Paths can be redirected with `WSH_DATA_ROOT`, `WSH_RESULTS_ROOT`, `WSH_CACHE_PATH` and `HF_HOME`.
+
+## Running experiments
 
 ```bash
-.venv/bin/wsh run exp0 --config configs/smoke.yaml   # B0-B4 baselines (retrieved evidence)
-.venv/bin/wsh run exp1 --config configs/smoke.yaml   # R0-R5, Protocol A (same facts) and B (token budget)
-.venv/bin/wsh run exp2 --config configs/smoke.yaml   # P1-P7 perturbations
-.venv/bin/wsh run exp3 --config configs/smoke.yaml   # oracle vs C1-C4 component substitution
-.venv/bin/wsh exp4 --config configs/smoke.yaml --source-run <exp1 run> --plumbing-check
-.venv/bin/wsh report <run_dir>                       # recompute aggregates
-.venv/bin/wsh data inspect --dataset musique --n 2   # look at parsed questions and annotation statuses
-.venv/bin/wsh preflight --config configs/pilot.yaml  # machine/data/model checks; no experiment is run
-.venv/bin/wsh questions freeze --spec <spec.yaml> --out <frozen.json>
-.venv/bin/wsh annotations export|import ...         # human verification package
+.venv/bin/python -m pytest -q                         # test suite
+scripts/run_smoke.sh                                  # bounded end-to-end check with a 0.5B model
+
+.venv/bin/wsh run exp0 --config configs/smoke.yaml    # retrieved-evidence baselines B0–B4
+.venv/bin/wsh run exp1 --config configs/smoke.yaml    # representations, Protocols A and B
+.venv/bin/wsh run exp2 --config configs/smoke.yaml    # perturbations
+.venv/bin/wsh run exp1 --config <cfg> --resume <run_dir>
+.venv/bin/wsh report <run_dir>                        # recompute aggregates from predictions
+.venv/bin/wsh preflight --config <cfg>                # machine, data and model checks; runs nothing
+.venv/bin/wsh questions freeze --spec <spec.yaml> --out <set.json>
 ```
 
-## Execution safeguards
+Each run writes a new directory `results/<stage>/<experiment>/<timestamp>_<confighash>/` with `config.resolved.yaml`, `manifest.json`, `predictions.jsonl` (one self-contained record per question and condition), `metrics.json`, `summary.csv` and `report.md`. Existing run directories are never overwritten.
 
-- Model allowlist with pinned revisions; smoke/pilot capped at 1B parameters (checked before download and again after load). The `full` stage needs `WSH_COMPUTE_AUTHORIZED=1` **and** `--authorized-compute`.
-- Stage limits on examples and generations; a wall-clock cap; per-call `max_new_tokens` and `max_time`.
-- Test splits are refused. Pilot/full runs use only frozen question files and refuse smoke/prompt-development questions. New runs never overwrite existing directories; `--resume` checks the config hash.
-- Every prompt is checked to be exactly template + evidence + question (no hidden gold content).
-- No annotation is fabricated. Every claim, edge and path carries a status (`dataset_supplied`, `deterministic_derived`, `human_verified`, `model_predicted`, `corrupted`, `unavailable`). Conditions that would need missing annotations are recorded as `unavailable`.
+### Configurations of the reported runs
+
+All runs use Qwen2.5-7B-Instruct (pinned revision, bf16, greedy decoding, batch size 1) unless stated. Question sets are frozen in `configs/question_sets/`, and the exclusion lists in `configs/excluded_*.json` keep the samples disjoint.
+
+| config | experiment |
+|---|---|
+| `gpu_pilot_focused.yaml`, `gpu_pilot.yaml` | exploratory pilot (Exp0–Exp2), `pilot_v1` |
+| `confirm.yaml` | confirmatory test 1: six pre-specified contrasts, `confirm_v1` ([protocol](docs/CONFIRMATORY_PROTOCOL.md)) |
+| `revision_relation_controls.yaml`, `revision2_controls.yaml` | fixed-order relation controls on `confirm_v1` |
+| `confirm2.yaml` | confirmatory test 2: contradiction lines on vs. off, `confirm2_v1` ([protocol](docs/CONFIRMATORY_PROTOCOL_2.md)) |
+| `revision_retrieval.yaml` | retrieved-evidence experiment, `retr_v1` |
+| `revision_noabst.yaml`, `revision2_conservative.yaml` | abstention-policy prompt variants |
+| `revision_second_reader.yaml` | second reader (Mistral-7B-Instruct-v0.3) |
+
+`scripts/campaign/run.sh <exp> <config>` is the GPU launcher used for these runs. It is specific to our single-GPU server (physical-device and idle checks, MPS bypass, status log), so adapt it to your machine.
+
+### Analysis
+
+Analysis scripts read only `predictions.jsonl` files:
+
+| script | output |
+|---|---|
+| `scripts/analysis/build.py` | per-run tables, paired contrasts with bootstrap CIs and Holm correction, figures |
+| `scripts/revision/confirm2_analysis.py` | the pre-specified analysis of confirmatory test 2 |
+| `scripts/revision/r2_analysis.py` | generic paired contrasts across conditions, prompts and readers (EM, F1, lenient match, abstention, wrong answers, transitions) |
+| `scripts/revision/transitions.py`, `contradictions.py`, `false_contradictions.py`, `retrieval_analysis.py`, `serialization_audit.py`, `exp0_costs.py` | outcome transitions, relation-control effects and annotation packages, retrieval strata, token accounting, baseline costs |
+| `scripts/audit/verify_claims.py` | independent re-derivation of the confirmatory statistics |
+
+## Repository layout
+
+```
+src/wsh/        data, retrieval, extraction, representations, egrag, interventions, models, evaluation, experiments, cli
+configs/        experiment configs, frozen question sets, exclusion lists, dataset and model pins
+scripts/        launcher, smoke test, preflight, analysis and audit scripts
+tests/          unit and integration tests (mock generator; data-dependent tests skip without datasets)
+docs/           experiment specification, methodological guards, frozen protocols, baseline reconstruction
+data/raw/       MANIFEST.json only (datasets are fetched, not committed)
+```
+
+## Safeguards
+
+- Test splits are refused. Larger runs use only frozen question files and refuse smoke and prompt-development questions.
+- Every prompt is checked to equal the template filled with the evidence and question, so no gold content can enter through another channel.
+- Every claim, edge and path carries a status (`dataset_supplied`, `deterministic_derived`, `human_verified`, `model_predicted`, `corrupted`, `unavailable`). Conditions that need missing annotations are recorded as unavailable, never imputed.
+- Deterministic seeds (`derive_seed`), greedy decoding, and a cache keyed by model, revision, full prompt and decoding parameters.
+
+## License
+
+Apache-2.0 (see `LICENSE`).

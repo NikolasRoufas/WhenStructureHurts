@@ -1,0 +1,35 @@
+# REVISION-1, EXPLORATORY: retrieved-evidence experiment (docs/REVISION_PROTOCOL.md §2) on the fresh retr_v1 sample.
+# Shared gold-free retrieval (BM25 -> cross-encoder top-4) fixed before any representation; annotation-derived
+# edges restricted to retrieved sentence pairs (oracle structure on real retrieval) for R4/R5; predicted
+# relations for R4P/R4P_NC/R4P_FO. Protocol A and Protocol B (content:1.0, per-representation).
+stage: revision
+name: rev-retrieval-v1
+seed: 0
+datasets:
+  - {name: musique, split: dev, qids_file: configs/question_sets/retr_v1.json}
+  - {name: 2wikimultihopqa, split: dev, qids_file: configs/question_sets/retr_v1.json}
+model:
+  model_id: Qwen/Qwen2.5-7B-Instruct
+  revision: pinned
+  device: cuda
+  dtype: bfloat16
+  max_new_tokens: 64
+  max_input_tokens: 4096
+  max_time_s: 60
+  batch_size: 1
+retrieval: {method: bm25, top_k: 4, rerank_pool: 10, corpus_prefilter: 50}
+extraction: {method: llm, on_empty: drop, min_lexical_support: 0.6, max_new_tokens: 96}
+egrag: {token_budget: 450, max_claims: 12, selector: greedy_connected}
+excluded_questions: configs/excluded_revision.json
+verified_annotations: null
+exp1:
+  representations: [R0, R1, R5, R4, R4P, R4P_NC, R4P_FO]
+  evidence_source: retrieved
+  retrieved_edges: annotation_restricted
+  evidence_scope: gold_passages
+  protocols: [A, B]
+  budgets: ["content:1.0"]
+  selection: [relevance]
+  budget_policies: [per_representation]
+  shuffle_seeds: [0]
+max_generations: 200000

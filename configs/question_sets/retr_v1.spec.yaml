@@ -1,0 +1,9 @@
+# Revision-1 retrieved-evidence sample (docs/REVISION_PROTOCOL.md §2). Exploratory; disjoint from smoke, pilot
+# and confirmatory questions. Produce with:
+#   wsh questions freeze --spec configs/question_sets/retr_v1.spec.yaml --out configs/question_sets/retr_v1.json
+seed: 3
+split: dev
+excluded: configs/excluded_revision.json
+datasets:
+  musique: {n: 500, stratify_by: hop_count}
+  2wikimultihopqa: {n: 500, stratify_by: question_type}

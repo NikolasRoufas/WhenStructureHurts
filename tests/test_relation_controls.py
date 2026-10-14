@@ -1,0 +1,164 @@
+"""Fixed-order relation controls (revision-1): fact preservation, order control, edge substitution."""
+import pytest
+
+from wsh.data.schemas import AnnotationStatus, Edge, RelationType
+from wsh.experiments.common import make_layout
+from wsh.models.prompts import build_request
+from wsh.representations.evidence import gold_bundle, topological_order
+from wsh.representations.protocols import check_equivalence, information_profile, layout_facts
+from wsh.representations.relation_controls import CONTROL_REPS, NEUTRAL_LABEL, control_bundle
+from wsh.representations.serialization import render
+
+
+def _bundles(q):
+    derived = gold_bundle(q)
+    pred = derived.model_copy(deep=True)
+    c = [x.claim_id for x in pred.claims]
+    mk = lambda s, t, r: Edge(source=s, target=t, relation=r, confidence=0.9,  # noqa: E731
+                              status=AnnotationStatus.MODEL_PREDICTED, method="test")
+    # predicted graph: reversed dependency (so its order differs), a contradiction pair, a support edge
+    pred.edges = [mk(c[0], c[-1], RelationType.DEPENDS_ON), mk(c[1], c[2], RelationType.CONTRADICTS),
+                  mk(c[2], c[1], RelationType.CONTRADICTS), mk(c[0], c[1], RelationType.SUPPORTS)]
+    return derived, pred
+
+
+def _layout(rep, derived, pred):
+    if rep in CONTROL_REPS:
+        return make_layout(rep, control_bundle(rep, derived, pred))
+    return make_layout(rep, pred if rep == "R4P" else derived)
+
+
+def test_all_controls_show_identical_facts(toy_question):
+    derived, pred = _bundles(toy_question)
+    facts = {rep: layout_facts(_layout(rep, derived, pred)) for rep in ["R1", "R4", "R5", "R4P", *CONTROL_REPS]}
+    ref = facts["R1"]
+    assert all(f == ref for f in facts.values())
+
+
+def test_order_is_controlled(toy_question):
+    derived, pred = _bundles(toy_question)
+    order = lambda rep: [u.claim_ids[0] for u in _layout(rep, derived, pred).units]  # noqa: E731
+    assert topological_order(derived) != topological_order(pred)  # the fixture really changes order
+    assert order("R4P_FO") == order("R4P_FO_NC") == order("R4N_FO") == order("R5") == order("R4")
+    assert order("R5P") == order("R4P_NC") == order("R4P")
+
+
+def test_contradiction_removal_changes_only_contradiction_lines(toy_question):
+    derived, pred = _bundles(toy_question)
+    full = _layout("R4P_FO", derived, pred).relations
+    nc = _layout("R4P_FO_NC", derived, pred).relations
+    assert [r for r in full if r[2] != "CONTRADICTS"] == nc
+    assert sum(r[2] == "CONTRADICTS" for r in full) == 2
+    b = control_bundle("R4P_FO_NC", derived, pred)
+    assert b.origin["n_contradicts_removed"] == 2 and b.origin["n_predicted_edges"] == 4
+
+
+def test_neutral_label_keeps_pairs_and_count(toy_question):
+    derived, pred = _bundles(toy_question)
+    full = _layout("R4P_FO", derived, pred).relations
+    neu = _layout("R4N_FO", derived, pred).relations
+    assert [(a, b) for a, b, _ in full] == [(a, b) for a, b, _ in neu]
+    assert {lab for _, _, lab in neu} == {NEUTRAL_LABEL}
+
+
+def test_existing_representations_unchanged(toy_question):
+    """Bundles without control keys render exactly as before (order from their own edges)."""
+    derived, pred = _bundles(toy_question)
+    for rep, b in (("R4", derived), ("R4P", pred), ("R5", derived)):
+        lay = make_layout(rep, b)
+        assert [u.claim_ids[0] for u in lay.units] == topological_order(b)
+        assert "fixed_order" not in b.origin
+    assert {lab for _, _, lab in make_layout("R4P", pred).relations} <= {"DEPENDS_ON", "CONTRADICTS", "SUPPORTS"}
+
+
+def test_prompts_differ_only_in_relation_labels(toy_question):
+    derived, pred = _bundles(toy_question)
+    t_full = render(_layout("R4P_FO", derived, pred)).text
+    t_neu = render(_layout("R4N_FO", derived, pred)).text
+    for lab in ("CONTRADICTS", "SUPPORTS", "DEPENDS_ON"):
+        t_full = t_full.replace(lab, NEUTRAL_LABEL)
+    assert t_full == t_neu
+    r1 = build_request(toy_question, render(_layout("R4P_FO", derived, pred)).text, 64)
+    r2 = build_request(toy_question, render(_layout("R4N_FO", derived, pred)).text, 64)
+    assert (r1.system, r1.prefill) == (r2.system, r2.prefill)
+
+
+def test_information_equivalence_holds_across_controls(toy_question):
+    derived, pred = _bundles(toy_question)
+    count = lambda t: len(t.split())  # noqa: E731
+    prof = {}
+    for rep in ["R0", "R1", "R4", "R5", "R4P", *CONTROL_REPS]:
+        b = control_bundle(rep, derived, pred) if rep in CONTROL_REPS else (pred if rep == "R4P" else derived)
+        lay = make_layout(rep, b)
+        ser = render(lay)
+        prof[rep] = information_profile(rep, lay, ser, b, toy_question, count)
+    check_equivalence(prof)  # raises on any fact-set difference
+    assert prof["R4N_FO"]["added_information"][1].startswith("explicit_relations:predicted_pairs_neutral_label")
+
+
+def test_control_bundle_refuses_different_facts(toy_question):
+    derived, pred = _bundles(toy_question)
+    pred.claims = pred.claims[:-1]
+    with pytest.raises(ValueError):
+        control_bundle("R4P_FO", derived, pred)
+
+
+def test_fixed_order_survives_budget_restriction(toy_question):
+    """Protocol B drops facts; the fixed order must be kept for the remaining facts only."""
+    from wsh.representations.protocols import restrict_bundle
+    derived, pred = _bundles(toy_question)
+    b = control_bundle("R4P_FO", derived, pred)
+    keep = [c.claim_id for c in b.claims][1:-1]
+    sub = restrict_bundle(b, set(keep))
+    lay = make_layout("R4P_FO", sub)
+    full_order = b.origin["fixed_order"]
+    assert [u.claim_ids[0] for u in lay.units] == [c for c in full_order if c in set(keep)]
+
+
+def test_noabst_prompt_variant_only_drops_the_abstention_line(toy_question):
+    from wsh.models.prompts import assert_prompt_composition
+    a = build_request(toy_question, "[E1] x", 64)
+    b = build_request(toy_question, "[E1] x", 64, "qa-v2-noabst")
+    assert a.user.startswith(b.user) and a.user != b.user
+    assert a.user[len(b.user):] == '\nIf the evidence is not sufficient, reply "Answer: insufficient evidence".'
+    assert (a.system, a.prefill) == (b.system, b.prefill)
+    assert_prompt_composition(toy_question, b, "[E1] x", "qa-v2-noabst")
+    with pytest.raises(Exception):
+        assert_prompt_composition(toy_question, b, "[E1] x")  # a variant prompt never passes as qa-v2
+
+
+def test_targeted_relabel_changes_only_contradiction_labels(toy_question):
+    """R4P_FO_CN: same pairs and lines as R4P_FO; only CONTRADICTS becomes the neutral label."""
+    derived, pred = _bundles(toy_question)
+    full = _layout("R4P_FO", derived, pred).relations
+    cn = _layout("R4P_FO_CN", derived, pred).relations
+    assert [(a, b) for a, b, _ in full] == [(a, b) for a, b, _ in cn]
+    assert [lab if lab != "CONTRADICTS" else NEUTRAL_LABEL for _, _, lab in full] == [lab for _, _, lab in cn]
+    t_full, t_cn = (render(_layout(r, derived, pred)).text for r in ("R4P_FO", "R4P_FO_CN"))
+    assert t_full.replace("CONTRADICTS", NEUTRAL_LABEL) == t_cn
+
+
+def test_filler_replaces_contradiction_lines_in_place(toy_question):
+    """R4P_FO_NCPAD: every CONTRADICTS line becomes the same non-relational filler at its position."""
+    from wsh.representations.relation_controls import FILLER_LINE
+    derived, pred = _bundles(toy_question)
+    full = render(_layout("R4P_FO", derived, pred)).text.splitlines()
+    pad = render(_layout("R4P_FO_NCPAD", derived, pred)).text.splitlines()
+    nc = render(_layout("R4P_FO_NC", derived, pred)).text.splitlines()
+    assert len(full) == len(pad)
+    for a, b in zip(full, pad):
+        assert b == (FILLER_LINE if "CONTRADICTS" in a else a)
+    assert [x for x in pad if x != FILLER_LINE] == nc
+    assert sum(x == FILLER_LINE for x in pad) == 2
+    assert "CONTRADICTS" not in "\n".join(pad)
+
+
+def test_conservative_prompt_variant_only_replaces_the_abstention_line(toy_question):
+    from wsh.models.prompts import assert_prompt_composition
+    a = build_request(toy_question, "[E1] x", 64)
+    c = build_request(toy_question, "[E1] x", 64, "qa-v2-conservative")
+    head = a.user.rsplit("\n", 1)[0]
+    assert c.user.startswith(head + "\n") and c.user.endswith("Do not guess.")
+    assert "insufficient evidence" in c.user.rsplit("\n", 1)[1]
+    assert (a.system, a.prefill) == (c.system, c.prefill)
+    assert_prompt_composition(toy_question, c, "[E1] x", "qa-v2-conservative")
