@@ -1,0 +1,21 @@
+{
+ "model": "allenai/OLMo-2-1124-7B-Instruct@470b1fba1ae01581f270116362ee4aa1b97f4c84",
+ "max_input_tokens": 4032,
+ "max_position_embeddings": 1000000000000000019884624838656,
+ "R4P_FO": {
+  "n": 6400,
+  "max": 3329,
+  "p99": 1608,
+  "mean": 558.9759375,
+  "n_overflow": 0
+ },
+ "R4P_FO_NC": {
+  "n": 6400,
+  "max": 3113,
+  "p99": 1515,
+  "mean": 547.0065625,
+  "n_overflow": 0
+ },
+ "n_questions_any_overflow": 0,
+ "n_questions_condition_dependent_overflow": 0
+}

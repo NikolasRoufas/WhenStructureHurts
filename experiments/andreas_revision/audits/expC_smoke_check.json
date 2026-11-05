@@ -1,0 +1,100 @@
+{
+ "n_records": [
+  80,
+  80
+ ],
+ "same_keys": true,
+ "cached_in_run2": 19,
+ "identical_generation_text": 80,
+ "identical_user_prompt_vs_qwen_confirm2": 80,
+ "n_with_qwen_counterpart": 80,
+ "finish_reasons": {
+  "length": 11,
+  "eos": 69
+ },
+ "errors": 0,
+ "answered": 71,
+ "em_defined": 80,
+ "format_ok": {
+  "None": 80
+ },
+ "loaded_models": {
+  "nli_relations": "cross-encoder/nli-deberta-v3-xsmall@a1508764",
+  "generator": "allenai/OLMo-2-1124-7B-Instruct@470b1fba1ae01581f270116362ee4aa1b97f4c84 (7298617344 params, cuda)",
+  "nli_grounding": "cross-encoder/nli-deberta-v3-small@fa280487"
+ },
+ "determinism": {
+  "torch_manual_seed": 0,
+  "cudnn_deterministic": true,
+  "deterministic_algorithms": "warn_only",
+  "CUBLAS_WORKSPACE_CONFIG": ":4096:8"
+ },
+ "examples": [
+  {
+   "key": [
+    "2wikimultihopqa",
+    "2wikimultihopqa/0458640a0bdd11eba7f7acde48001122",
+    "R4P_FO"
+   ],
+   "output": "Answer: Peter Matthiessen died of acute leukemia. Evidence: [E11]",
+   "gold": [
+    "leukemia"
+   ]
+  },
+  {
+   "key": [
+    "2wikimultihopqa",
+    "2wikimultihopqa/0458640a0bdd11eba7f7acde48001122",
+    "R4P_FO_NC"
+   ],
+   "output": "Answer: Peter Matthiessen died of acute leukemia. Evidence: [E11]",
+   "gold": [
+    "leukemia"
+   ]
+  },
+  {
+   "key": [
+    "2wikimultihopqa",
+    "2wikimultihopqa/0fc0e6ac08bb11ebbd88ac1f6bf848b6",
+    "R4P_FO"
+   ],
+   "output": "Answer: Tom Shadyac (born December 11, 1958) is younger than Fred McLeod Wilcox (December 22, 1907 \u2013 September 23, 1964). E2, E17",
+   "gold": [
+    "Evan Almighty"
+   ]
+  },
+  {
+   "key": [
+    "2wikimultihopqa",
+    "2wikimultihopqa/0fc0e6ac08bb11ebbd88ac1f6bf848b6",
+    "R4P_FO_NC"
+   ],
+   "output": "Answer: Tom Shadyac is younger than Fred M. Wilcox; born in 1958 compared to Wilcox's birth in 1907. (E20, E17) Insufficient evidence",
+   "gold": [
+    "Evan Almighty"
+   ]
+  },
+  {
+   "key": [
+    "2wikimultihopqa",
+    "2wikimultihopqa/122f7ba408a411ebbd7cac1f6bf848b6",
+    "R4P_FO"
+   ],
+   "output": "Answer: Lenny Abrahamson, born November 30, 1966, directed \"Room\" and \"Adam & Paul\" in 2004, while Rudy Soedjarwo, born November 9, 1971, directed \"Ada Apa Deng",
+   "gold": [
+    "Ada Apa Dengan Cinta?"
+   ]
+  },
+  {
+   "key": [
+    "2wikimultihopqa",
+    "2wikimultihopqa/122f7ba408a411ebbd7cac1f6bf848b6",
+    "R4P_FO_NC"
+   ],
+   "output": "Answer: Lenny Abrahamson, born November 30, 1966.  No",
+   "gold": [
+    "Ada Apa Dengan Cinta?"
+   ]
+  }
+ ]
+}

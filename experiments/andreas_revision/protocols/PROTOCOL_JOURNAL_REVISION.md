@@ -204,4 +204,26 @@ new retrieval inference.
 
 ## 7. Changes after freezing
 
-(none)
+- **2026-11-05, Experiment C: after the preflight, before the full run.**
+
+  *What the preflight showed* (`audits/expC_smoke_check.json`; 40 questions × 2 conditions; mechanics only, no
+  contrast between conditions computed):
+  - two independent runs are byte-identical (80/80);
+  - the user prompts equal those of the Qwen confirm2 run (80/80);
+  - there are no errors.
+
+  *The problem.* OLMo-2 often ignores the two-line answer format. It writes full sentences and puts `Evidence:` on
+  the answer line, and 11/80 outputs reach the 64-token limit. The frozen parser therefore scores many correct
+  answers as EM = 0: pooled over both conditions, EM was 9/80 and the pre-specified lenient match 47/80. EM is
+  near its floor for this reader for reasons unrelated to the contradiction lines.
+
+  *Change.*
+  - The EM analysis stays exactly as specified (frozen parser, `confirm2_analysis.py` unchanged).
+  - **Lenient match** (definition unchanged from `scripts/revision/r2_analysis.py`, pre-specified in revision-2) is
+    added as a **second primary family**: paired difference R4P_FO − R4P_FO_NC on affected questions, Holm over
+    the two datasets, same decision rule.
+  - Both families are reported. If they disagree, the disagreement is reported, and no conclusion is drawn from
+    the more favourable one.
+  - Answers stopped by the 64-token limit are reported per condition.
+
+  Prompt, parser, token limits and sample are unchanged.
