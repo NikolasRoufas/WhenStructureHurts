@@ -1,0 +1,33 @@
+# JOURNAL REVISION, Experiment C (experiments/andreas_revision/protocols/PROTOCOL_JOURNAL_REVISION.md):
+# third reader (OLMo-2-1124-7B-Instruct) on the unchanged confirm2_v1 questions, R4P_FO vs R4P_FO_NC.
+# Identical to configs/confirm2.yaml except: stage, name, model_id, max_input_tokens (4096 positions - 64 new tokens)
+stage: revision
+name: olmo2-confirm2-contradictions-v1
+seed: 0
+datasets:
+  - {name: 2wikimultihopqa, split: dev, qids_file: configs/question_sets/confirm2_v1.json}
+  - {name: hotpotqa, split: dev, qids_file: configs/question_sets/confirm2_v1.json}
+model:
+  model_id: allenai/OLMo-2-1124-7B-Instruct
+  revision: pinned
+  device: cuda
+  dtype: bfloat16
+  max_new_tokens: 64
+  max_input_tokens: 4032
+  max_time_s: 60
+  batch_size: 1
+retrieval: {method: bm25, top_k: 4, rerank_pool: 10, corpus_prefilter: 50}
+extraction: {method: llm, on_empty: drop, min_lexical_support: 0.6, max_new_tokens: 96}
+egrag: {token_budget: 450, max_claims: 12, selector: greedy_connected}
+excluded_questions: configs/excluded_confirm2.json
+verified_annotations: null
+exp1:
+  representations: [R4P_FO, R4P_FO_NC]
+  evidence_source: gold
+  evidence_scope: gold_passages
+  protocols: [A]
+  budgets: ["content:1.0"]        # unused with protocols [A]
+  selection: [relevance]
+  budget_policies: [shared]
+  shuffle_seeds: [0]
+max_generations: 200000

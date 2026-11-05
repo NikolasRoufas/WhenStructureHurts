@@ -1,0 +1,192 @@
+{
+ "run_dirs": {
+  "confirm_v1_qwen_controls": "results/revision/exp1/20261012-200925_a2e6e3a8",
+  "confirm_v1_mistral": "results/revision/exp1/20261013-033400_145ae2a1",
+  "confirm2_qwen": "results/full/exp1/20261013-005305_1ded82bb"
+ },
+ "predictions_sha256": {
+  "confirm_v1_qwen_controls": "43c2ae29fe4e241ee83284ccad66e682580a3fa03663305f163fae205e3bef46",
+  "confirm_v1_mistral": "49c9801f524ba9fd8796f1f735c70b33268b22eb025117c9e3c3997d1a7d6a27",
+  "confirm2_qwen": "55589124fa5023f7cdef358177a405679b55da64a73c5424ce8e56e35a4dd764"
+ },
+ "package_v2": {
+  "package_dir": "/data/roufas/wsh_revision/false_contra/human_package_v2",
+  "key_sha256": "626855cd6b9a7ebfe5a1939e2248ef166130c62c723df7f60b97cd4ab88e8842",
+  "csv_sha256_match_summary": {
+   "pairs_annotator1.csv": true,
+   "pairs_annotator2.csv": true
+  },
+  "n_rows": {
+   "1": 300,
+   "2": 300
+  },
+  "same_pair_set_in_both_files": true,
+  "duplicate_pair_ids": {
+   "1": 0,
+   "2": 0
+  },
+  "labels_filled": {
+   "1": 0,
+   "2": 0
+  },
+  "empty_passage_A": 0,
+  "empty_passage_B": 0,
+  "fact_not_in_its_passage": 3,
+  "identical_fact_texts": 0,
+  "duplicate_text_pairs_across_questions": 33,
+  "n_questions": 252,
+  "pairs_per_question": {
+   "1": 217,
+   "2": 27,
+   "3": 5,
+   "4": 1,
+   "5": 2
+  },
+  "by_dataset": {
+   "2wikimultihopqa": 150,
+   "musique": 150
+  },
+  "by_stratum": {
+   "restored": 60,
+   "abstained_other": 60,
+   "high_confidence": 60,
+   "low_confidence": 60,
+   "no_failure_control": 60
+  },
+  "same_passage_pairs": 179,
+  "population": {
+   "n_pairs": 7721,
+   "matches_summary_n": true,
+   "q25": 0.958,
+   "q75": 0.9935,
+   "q_match_summary": true,
+   "n_in_no_stratum": 1181,
+   "n_in_no_stratum_by_dataset": {
+    "2wikimultihopqa": 1099,
+    "musique": 82
+   },
+   "by_dataset": {
+    "2wikimultihopqa": 6820,
+    "musique": 901
+   },
+   "n_questions": 2425
+  },
+  "sampler_reproduces_package_exactly": true,
+  "inclusion_probability_simulations": 2000,
+  "pi_hat_sampled_pairs": {
+   "min": 0.005,
+   "max": 0.5965,
+   "n_zero": 0
+  },
+  "population_file_sha256": "89389290ab655730c81fc581987cb6b94ec9f5c315960cccf0fc7ff10131ec29"
+ },
+ "expB_pool_confirm2": {
+  "2wikimultihopqa": {
+   "n_questions": 2600,
+   "n_affected": 1490,
+   "n_affected_cap_binding": 9,
+   "n_eligible": 1481,
+   "eligible_pairs_per_question": {
+    "1": 666,
+    "2": 328,
+    "3": 175,
+    "4": 94,
+    "5": 56,
+    "6": 46,
+    "7": 27,
+    "8": 21,
+    "9": 15,
+    "10": 17,
+    "11": 6,
+    "12": 4,
+    "13": 2,
+    "14": 1,
+    "15": 2,
+    "16": 4,
+    "17": 5,
+    "18": 1,
+    "19": 2,
+    "20": 1,
+    "24": 5,
+    "25": 1,
+    "27": 1,
+    "30": 1
+   },
+   "eligible_total_pairs": 4052,
+   "rendered_lines_equal_edges_when_uncapped": true
+  },
+  "hotpotqa": {
+   "n_questions": 3800,
+   "n_affected": 1295,
+   "n_affected_cap_binding": 0,
+   "n_eligible": 1295,
+   "eligible_pairs_per_question": {
+    "1": 939,
+    "2": 236,
+    "3": 83,
+    "4": 16,
+    "5": 8,
+    "6": 7,
+    "7": 2,
+    "8": 2,
+    "9": 2
+   },
+   "eligible_total_pairs": 1854,
+   "rendered_lines_equal_edges_when_uncapped": true
+  }
+ },
+ "relation_prediction_reproducibility": {
+  "runs": [
+   "results/revision/exp1/20261012-200925_a2e6e3a8",
+   "results/revision/exp1/20261013-033400_145ae2a1"
+  ],
+  "n_common": 4976,
+  "n_identical_R4P_FO_user_prompt": 4976
+ },
+ "prompt_lengths": {
+  "confirm2_qwen": {
+   "R4P_FO": {
+    "n": 6400,
+    "max_input_tokens": 3366,
+    "p99": 1618,
+    "finish_reasons": {
+     "eos": 6398,
+     "length": 2
+    },
+    "max_new_tokens_hit": 2
+   },
+   "R4P_FO_NC": {
+    "n": 6400,
+    "max_input_tokens": 3113,
+    "p99": 1506,
+    "finish_reasons": {
+     "eos": 6400
+    },
+    "max_new_tokens_hit": 0
+   }
+  },
+  "confirm_v1_mistral": {
+   "R4P_FO": {
+    "n": 4976,
+    "max_input_tokens": 4401,
+    "p99": 2130,
+    "finish_reasons": {
+     "eos": 4836,
+     "length": 139,
+     "skipped_overflow": 1
+    },
+    "max_new_tokens_hit": 139
+   },
+   "R4P_FO_NC": {
+    "n": 4976,
+    "max_input_tokens": 4011,
+    "p99": 1969,
+    "finish_reasons": {
+     "eos": 4819,
+     "length": 157
+    },
+    "max_new_tokens_hit": 157
+   }
+  }
+ }
+}

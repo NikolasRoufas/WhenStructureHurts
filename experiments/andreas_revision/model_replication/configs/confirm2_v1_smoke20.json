@@ -1,0 +1,52 @@
+{
+ "created_at": "2026-11-05",
+ "split": "dev",
+ "derived_from": "configs/question_sets/confirm2_v1.json",
+ "rule": "first 20 qids per dataset in the frozen list order; preflight only, outputs never analysed",
+ "datasets": {
+  "2wikimultihopqa": [
+   "122f7ba408a411ebbd7cac1f6bf848b6",
+   "12a9249c089d11ebbd78ac1f6bf848b6",
+   "0458640a0bdd11eba7f7acde48001122",
+   "8140e36c0baf11ebab90acde48001122",
+   "0fc0e6ac08bb11ebbd88ac1f6bf848b6",
+   "98c2d5f0086811ebbd5eac1f6bf848b6",
+   "2189c22c0bdc11eba7f7acde48001122",
+   "27ded5940bb011ebab90acde48001122",
+   "1f752267087511ebbd67ac1f6bf848b6",
+   "c2d8bc6f084911ebbd55ac1f6bf848b6",
+   "73c0065c0bda11eba7f7acde48001122",
+   "619580300bb011ebab90acde48001122",
+   "d26888eb08a211ebbd7bac1f6bf848b6",
+   "3cddcc46086511ebbd5eac1f6bf848b6",
+   "36960bb00bde11eba7f7acde48001122",
+   "59a1aeae0baf11ebab90acde48001122",
+   "284da54a08a511ebbd7dac1f6bf848b6",
+   "d54f1d01090911ebbdadac1f6bf848b6",
+   "416d82040bdc11eba7f7acde48001122",
+   "aac82ae20baf11ebab90acde48001122"
+  ],
+  "hotpotqa": [
+   "5a855ca15542992a431d1b12",
+   "5a84be845542991dd0999dcf",
+   "5a8eb63455429917b4a5bdb7",
+   "5a8c87aa554299653c1aa0ac",
+   "5ae29d8a5542996483e64a0f",
+   "5a8fa2955542992414482b11",
+   "5a793b5b55429970f5fffe82",
+   "5abd455c55429924427fcf5a",
+   "5a873ec75542996432c57244",
+   "5ae2979a554299495565dade",
+   "5abeebe25542993fe9a41d9c",
+   "5a808afb5542992bc0c4a76b",
+   "5ac17c865542994ab5c67d6a",
+   "5ae1054055429920d5234284",
+   "5ae2c6bf554299492dc91c6c",
+   "5ab9cfb455429970cfb8ebae",
+   "5a77372b554299373536021c",
+   "5ae249925542994d89d5b3c1",
+   "5ab480715542991751b4d798",
+   "5a7d2afd5542995f4f402221"
+  ]
+ }
+}
