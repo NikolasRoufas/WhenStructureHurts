@@ -67,11 +67,12 @@ def bundles_for(q: Question, runner: Runner) -> dict[str, EvidenceBundle | Excep
             base = _retrieved_bundle(q, runner)
     except EvidenceUnavailable as e:
         return {r: e for r in e1.representations}
-    from ..representations.relation_controls import CONTROL_REPS, control_bundle
+    from ..representations.relation_controls import (CONTROL_REPS, LABEL_REPS, IncompleteContradictionLabels,
+                                                     control_bundle)
 
     out: dict[str, EvidenceBundle | Exception] = {}
     pred = None
-    if any(r == "R4P" or r in CONTROL_REPS for r in e1.representations):
+    if any(r == "R4P" or r in CONTROL_REPS or r in LABEL_REPS for r in e1.representations):
         pred = base.model_copy(deep=True)
         pred.edges, stats = runner.res.relation_classifier().classify(pred.claims, q.question)
         pred.origin = {**pred.origin, "edges": "model_predicted", "relation_stats": stats}
@@ -80,11 +81,35 @@ def bundles_for(q: Question, runner: Runner) -> dict[str, EvidenceBundle | Excep
             out[rep] = PathUnavailable(f"{q.uid}: reasoning path unavailable ({base.path_status.value})")
         elif rep == "R4P":
             out[rep] = pred
+        elif rep in LABEL_REPS:
+            try:
+                out[rep] = control_bundle(rep, base, pred, _human_labels(e1.contradiction_labels).get(q.uid))
+            except IncompleteContradictionLabels as err:
+                out[rep] = err  # recorded as a pipeline error for this condition, never imputed
         elif rep in CONTROL_REPS:
             out[rep] = control_bundle(rep, base, pred)
         else:
             out[rep] = base
     return out
+
+
+_LABELS_CACHE: dict[str, dict] = {}
+
+
+def _human_labels(path: str | None) -> dict[str, dict[str, str]]:
+    """question_uid -> {pair_id: genuine|false|ambiguous} from a frozen human-label file (Experiment B)."""
+    if path is None:
+        return {}
+    if path not in _LABELS_CACHE:
+        import json
+
+        from ..config import repo_path
+
+        d = json.loads(repo_path(path).read_text())
+        if d.get("label_source") != "human_adjudicated":
+            raise ValueError(f"{path}: label_source must be 'human_adjudicated'")
+        _LABELS_CACHE[path] = d["questions"]
+    return _LABELS_CACHE[path]
 
 
 def _variants(bundles: dict, seeds: list[int]) -> tuple[dict, dict]:

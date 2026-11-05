@@ -34,6 +34,7 @@ def layout(b: EvidenceBundle, rep: str = "R4", with_edges: bool = True, max_rela
     label_override = b.origin.get("relation_label_override")
     label_map = b.origin.get("relation_label_map") or {}
     filler = b.origin.get("relation_filler") or {}
+    edge_override = b.origin.get("relation_label_edge_override") or {}  # per-edge relabel (R4P_FO_SN only)
     idx = {cid: i for i, cid in enumerate(order)}
     units = [claim_unit(cm[c], b.provenance_visible) for c in order]
     rels: list[tuple[int, int, str]] = []
@@ -45,7 +46,8 @@ def layout(b: EvidenceBundle, rep: str = "R4", with_edges: bool = True, max_rela
                     # a non-relational line in place of the relation (source/target -1: rendered verbatim)
                     r = (-1, -1, f"{filler[rv]}#{idx[e.source]}-{idx[e.target]}")
                 else:
-                    r = (idx[e.source], idx[e.target], label_override or label_map.get(rv) or DIRECTED_LABEL[e.relation])
+                    r = (idx[e.source], idx[e.target], label_override or edge_override.get(f"{e.source}|{e.target}")
+                         or label_map.get(rv) or DIRECTED_LABEL[e.relation])
                 if r not in rels:
                     rels.append(r)
     conflicts = []

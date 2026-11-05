@@ -81,9 +81,9 @@ def added_information(rep: str, b: EvidenceBundle) -> list[str]:
         return [f"passage_order_from_edges:{'+'.join(edge_st)}"]
     if rep in ("R4", "R4P"):
         return [f"passage_order_from_edges:{'+'.join(edge_st)}", f"explicit_relations:{'+'.join(edge_st)}"]
-    from .relation_controls import CONTROL_REPS
-    if rep in CONTROL_REPS:
-        spec = CONTROL_REPS[rep]
+    from .relation_controls import ALL_CONTROL_REPS
+    if rep in ALL_CONTROL_REPS:
+        spec = ALL_CONTROL_REPS[rep]
         out = [f"order_from_{spec['order']}_graph"]
         if spec["relations"] != "none":
             out.append(f"explicit_relations:{spec['relations']}:{'+'.join(edge_st)}")

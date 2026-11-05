@@ -161,6 +161,9 @@ class Exp1Config(Strict):
     selection: list[Literal["relevance", "support_first"]] = ["relevance"]
     budget_policies: list[Literal["shared", "per_representation"]] = ["shared"]
     shuffle_seeds: list[int] = [0]
+    # journal revision, Experiment B: frozen JSON of HUMAN-adjudicated labels for predicted CONTRADICTS pairs,
+    # {"questions": {question_uid: {pair_id: "genuine"|"false"|"ambiguous"}}}; needed only by R4P_FO_SC/R4P_FO_SN
+    contradiction_labels: str | None = None
 
 
 class PerturbationSpec(Strict):
