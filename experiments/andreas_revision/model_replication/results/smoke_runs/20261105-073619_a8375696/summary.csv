@@ -1,0 +1,5 @@
+group,n_records,n_unavailable,n_questions,coverage,em,f1,verdict_acc,citation_validity,citation_recall,support_coverage,content_recall,evidence_sufficient,grounded_nli,input_tokens_mean,output_tokens_mean,evidence_tokens_mean,latency_s_mean
+"2wikimultihopqa | evidence_source=gold,protocol=A,representation=R4P_FO,scope=gold_passages",20,0,20,0.85,0.05,0.171713787799268,,1.0,0.35,1.0,1.0,0.95,0.29411764705882354,663.3,37.9,500.35,1.2866684447973966
+"2wikimultihopqa | evidence_source=gold,protocol=A,representation=R4P_FO_NC,scope=gold_passages",20,0,20,0.8,0.0,0.17995017308636235,,1.0,0.25,1.0,1.0,0.95,0.0625,638.55,28.75,475.6,0.9789145039860159
+"hotpotqa | evidence_source=gold,protocol=A,representation=R4P_FO,scope=gold_passages",20,0,20,0.9,0.2,0.39548687896211115,,1.0,0.4916666666666667,1.0,1.0,1.0,0.2222222222222222,462.65,31.75,298.4,1.0468960992526264
+"hotpotqa | evidence_source=gold,protocol=A,representation=R4P_FO_NC,scope=gold_passages",20,0,20,1.0,0.2,0.42440500761708194,,1.0,0.5083333333333333,1.0,1.0,1.0,0.15,458.0,31.7,293.75,1.0447101807687431

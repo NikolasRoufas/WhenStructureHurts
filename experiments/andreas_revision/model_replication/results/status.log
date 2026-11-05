@@ -1,0 +1,6 @@
+2026-11-05T07:34:43+00:00 START exp1 experiments/andreas_revision/model_replication/configs/olmo2_confirm2_smoke.yaml  commit=54a1c73 log=/data/roufas/wsh_andreas/logs/exp1_olmo2_confirm2_smoke_20261105-073443.log
+2026-11-05T07:36:13+00:00 END   exp1 rc=0 wall_s=90 run_dir=/data/roufas/wsh_andreas/results/revision/exp1/20261105-073448_a8375696
+2026-11-05T07:36:14+00:00 START exp1 experiments/andreas_revision/model_replication/configs/olmo2_confirm2_smoke.yaml  commit=54a1c73 log=/data/roufas/wsh_andreas/logs/exp1_olmo2_confirm2_smoke_20261105-073614.log
+2026-11-05T07:37:43+00:00 END   exp1 rc=0 wall_s=89 run_dir=/data/roufas/wsh_andreas/results/revision/exp1/20261105-073619_a8375696
+2026-11-05T07:38:40+00:00 START exp1 experiments/andreas_revision/model_replication/configs/olmo2_confirm2_full.yaml  commit=54a1c73 log=/data/roufas/wsh_andreas/logs/exp1_olmo2_confirm2_full_20261105-073840.log
+2026-11-05T11:02:01+00:00 END   exp1 rc=0 wall_s=12201 run_dir=/data/roufas/wsh_andreas/results/revision/exp1/20261105-073845_99c9a978

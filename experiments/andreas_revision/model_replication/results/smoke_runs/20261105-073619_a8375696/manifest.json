@@ -1,0 +1,181 @@
+{
+  "experiment": "exp1",
+  "run_id": "20261105-073619_a8375696",
+  "stage": "revision",
+  "config_name": "olmo2-confirm2-smoke",
+  "config_hash": "a8375696d672a3ce533cc9696b8b3dcecd6f752d994fafcf3ed0b1ceb2daef1d",
+  "git_commit": "54a1c73e4f883f9e49cd3e3d6eb2bbf2cc68ed23",
+  "source_tree_sha256": "bce1a4a2ed533d3d23f85b506fa7f548e37567b7481010f1c27432640b840697",
+  "started_at": "2026-11-05T07:36:19+0000",
+  "argv": [
+    "/data/roufas/wsh_andreas/repo/src/wsh/cli.py",
+    "run",
+    "exp1",
+    "--config",
+    "experiments/andreas_revision/model_replication/configs/olmo2_confirm2_smoke.yaml",
+    "--authorized-compute"
+  ],
+  "seed": 0,
+  "environment": {
+    "python": "3.12.3",
+    "platform": "Linux-6.8.0-138-generic-x86_64-with-glibc2.39",
+    "machine": "x86_64",
+    "processor": "x86_64",
+    "cpu_count": 48,
+    "packages": {
+      "torch": "2.12.1",
+      "transformers": "5.12.1",
+      "sentence-transformers": "5.5.1",
+      "numpy": "2.4.6",
+      "pydantic": "2.13.4",
+      "rank-bm25": "0.2.2",
+      "pandas": "3.0.3",
+      "huggingface-hub": "1.19.0",
+      "tokenizers": "0.22.2"
+    },
+    "torch_devices": {
+      "cuda": true,
+      "mps": false
+    },
+    "cuda": {
+      "torch_cuda_version": "13.0",
+      "cudnn": 92000,
+      "devices": [
+        {
+          "name": "NVIDIA RTX 5000 Ada Generation",
+          "capability": [
+            8,
+            9
+          ],
+          "total_mem_bytes": 33824571392,
+          "pci_bus_id": 2
+        }
+      ],
+      "CUDA_VISIBLE_DEVICES": "0",
+      "CUDA_DEVICE_ORDER": null,
+      "mps_control_pipe": "/tmp/nvidia-mps",
+      "nvidia_smi": "0, 00000000:01:00.0, NVIDIA RTX 5000 Ada Generation, 610.57.04, 32760 MiB, Default\n1, 00000000:02:00.0, NVIDIA RTX 5000 Ada Generation, 610.57.04, 32760 MiB, Exclusive_Process"
+    },
+    "paths": {
+      "WSH_DATA_ROOT": null,
+      "WSH_RESULTS_ROOT": "/data/roufas/wsh_andreas/results",
+      "WSH_CACHE_PATH": "/data/roufas/wsh_andreas/cache/smoke2.sqlite",
+      "HF_HOME": "/data/roufas/hf_cache"
+    },
+    "total_mem_bytes": 202579775488
+  },
+  "status": "completed",
+  "model": {
+    "model_id": "allenai/OLMo-2-1124-7B-Instruct",
+    "revision": "470b1fba1ae01581f270116362ee4aa1b97f4c84"
+  },
+  "datasets": {
+    "2wikimultihopqa": {
+      "split": "dev",
+      "qids": [
+        "122f7ba408a411ebbd7cac1f6bf848b6",
+        "12a9249c089d11ebbd78ac1f6bf848b6",
+        "0458640a0bdd11eba7f7acde48001122",
+        "8140e36c0baf11ebab90acde48001122",
+        "0fc0e6ac08bb11ebbd88ac1f6bf848b6",
+        "98c2d5f0086811ebbd5eac1f6bf848b6",
+        "2189c22c0bdc11eba7f7acde48001122",
+        "27ded5940bb011ebab90acde48001122",
+        "1f752267087511ebbd67ac1f6bf848b6",
+        "c2d8bc6f084911ebbd55ac1f6bf848b6",
+        "73c0065c0bda11eba7f7acde48001122",
+        "619580300bb011ebab90acde48001122",
+        "d26888eb08a211ebbd7bac1f6bf848b6",
+        "3cddcc46086511ebbd5eac1f6bf848b6",
+        "36960bb00bde11eba7f7acde48001122",
+        "59a1aeae0baf11ebab90acde48001122",
+        "284da54a08a511ebbd7dac1f6bf848b6",
+        "d54f1d01090911ebbdadac1f6bf848b6",
+        "416d82040bdc11eba7f7acde48001122",
+        "aac82ae20baf11ebab90acde48001122"
+      ],
+      "source": {
+        "bytes": 29505064,
+        "fetched_at": "2026-10-10T12:24:39+0300",
+        "file": "framolfese__2WikiMultihopQA/data/validation-00000-of-00001.parquet",
+        "license": "Apache-2.0 (per official repository)",
+        "official_split": "dev (12,576 q)",
+        "sha256": "408e2dbb28edc6c8b9ca3ba0c94d4fc7bf17ffb923766593a3a7f546ab4cba59",
+        "source": {
+          "kind": "hf_dataset",
+          "repo": "framolfese/2WikiMultihopQA",
+          "revision": "fe713bfbd1afbca1a65246741a75890405d56a3a"
+        }
+      }
+    },
+    "hotpotqa": {
+      "split": "dev",
+      "qids": [
+        "5a855ca15542992a431d1b12",
+        "5a84be845542991dd0999dcf",
+        "5a8eb63455429917b4a5bdb7",
+        "5a8c87aa554299653c1aa0ac",
+        "5ae29d8a5542996483e64a0f",
+        "5a8fa2955542992414482b11",
+        "5a793b5b55429970f5fffe82",
+        "5abd455c55429924427fcf5a",
+        "5a873ec75542996432c57244",
+        "5ae2979a554299495565dade",
+        "5abeebe25542993fe9a41d9c",
+        "5a808afb5542992bc0c4a76b",
+        "5ac17c865542994ab5c67d6a",
+        "5ae1054055429920d5234284",
+        "5ae2c6bf554299492dc91c6c",
+        "5ab9cfb455429970cfb8ebae",
+        "5a77372b554299373536021c",
+        "5ae249925542994d89d5b3c1",
+        "5ab480715542991751b4d798",
+        "5a7d2afd5542995f4f402221"
+      ],
+      "source": {
+        "bytes": 27452575,
+        "fetched_at": "2026-10-10T12:24:39+0300",
+        "file": "hotpotqa__hotpot_qa/distractor/validation-00000-of-00001.parquet",
+        "license": "CC BY-SA 4.0",
+        "official_split": "dev distractor (7,405 q)",
+        "sha256": "c20b638ca82b21d04fe12e14ff417ad05153d4d215a65de54497fca4e972f7c6",
+        "source": {
+          "kind": "hf_dataset",
+          "repo": "hotpotqa/hotpot_qa",
+          "revision": "1908d6afbbead072334abe2965f91bd2709910ab"
+        }
+      }
+    }
+  },
+  "finished_at": "2026-11-05T07:37:42+0000",
+  "wall_clock_s": 82.49,
+  "n_generated_uncached": 61,
+  "n_model_calls_uncached_incl_extraction": 61,
+  "n_records_written": 80,
+  "n_records_skipped_already_done": 0,
+  "loaded_models": {
+    "nli_relations": "cross-encoder/nli-deberta-v3-xsmall@a1508764",
+    "generator": "allenai/OLMo-2-1124-7B-Instruct@470b1fba1ae01581f270116362ee4aa1b97f4c84 (7298617344 params, cuda)",
+    "nli_grounding": "cross-encoder/nli-deberta-v3-small@fa280487"
+  },
+  "cache_hits": 35,
+  "cache_misses": 2394,
+  "determinism": {
+    "torch_manual_seed": 0,
+    "cudnn_deterministic": true,
+    "deterministic_algorithms": "warn_only",
+    "CUBLAS_WORKSPACE_CONFIG": ":4096:8"
+  },
+  "device": "cuda",
+  "generation_batch_size": 1,
+  "n_records_unflushed": 0,
+  "generator_stats": {
+    "n_batches": 61,
+    "n_batched_prompts": 61,
+    "n_oom_splits": 0,
+    "n_oom_failures": 0,
+    "peak_gpu_mem_bytes": 16264147968,
+    "n_dedup_in_batch": 0,
+    "gpu_mem_reserved_bytes": 16619929600
+  }
+}
