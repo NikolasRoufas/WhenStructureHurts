@@ -1,0 +1,28 @@
+{
+ "musique": {
+  "n_dev": 2417,
+  "n_used_by_earlier_samples": 2347,
+  "n_unused_eligible": 70,
+  "unused_eligible_by_type": {
+   "2hop": 70
+  }
+ },
+ "2wikimultihopqa": {
+  "n_dev": 12576,
+  "n_used_by_earlier_samples": 6435,
+  "n_unused_eligible": 5057,
+  "unused_eligible_by_type": {
+   "compositional": 2771,
+   "comparison": 1288,
+   "bridge_comparison": 998
+  }
+ },
+ "hotpotqa": {
+  "n_dev": 7405,
+  "n_used_by_earlier_samples": 3853,
+  "n_unused_eligible": 2193,
+  "unused_eligible_by_type": {
+   "bridge": 2193
+  }
+ }
+}

@@ -217,3 +217,8 @@ def test_passage_reconstruction_from_rendered_evidence():
                       "id_map": {"E1": {"claim_ids": ["p1#1"]}, "E2": {"claim_ids": ["p1#0"]}, "E3": {"claim_ids": ["p2#0"]}}}}
     facts, passages = sel._facts_and_passages(r)
     assert facts["p1#1"] == ("T1", "S two.") and passages == {"p1": "S one. S two.", "p2": "X."}
+    # real claim ids carry an 's' prefix and must sort numerically, not alphabetically
+    r = {"evidence": {"text": "[E1] (source: T) Zeta first.\n[E2] (source: T) Alpha second.\n[E3] (source: T) Mid tenth.",
+                      "id_map": {"E1": {"claim_ids": ["d/q/p00#s00"]}, "E2": {"claim_ids": ["d/q/p00#s01"]},
+                                 "E3": {"claim_ids": ["d/q/p00#s10"]}}}}
+    assert sel._facts_and_passages(r)[1] == {"d/q/p00": "Zeta first. Alpha second. Mid tenth."}

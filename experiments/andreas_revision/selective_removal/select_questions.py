@@ -96,20 +96,41 @@ def _facts_and_passages(r: dict) -> tuple[dict, dict]:
     by_p: dict = {}
     for c, (title, text) in facts.items():
         pid, _, idx = c.rpartition("#")
-        by_p.setdefault(pid, []).append((int(idx) if idx.isdigit() else 0, text))
+        digits = re.sub(r"\D", "", idx)  # claim ids end in '#s03' (sentence index 3)
+        if not digits:
+            raise ValueError(f"claim id {c!r} has no sentence index")
+        by_p.setdefault(pid, []).append((int(digits), text))
     for pid, sents in by_p.items():
         passages[pid] = " ".join(t for _, t in sorted(sents))
     return facts, passages
 
 
+def dataset_passages(tier_file: Path) -> dict[str, dict[str, tuple[str, str]]]:
+    """question uid -> passage id -> (title, full dataset passage text), as package v2's context (whole passages)."""
+    from wsh.config import load_config
+    from wsh.experiments.common import load_questions
+
+    cfg = load_config(Path(__file__).resolve().parent / "configs/expB_tier1_qwen.yaml",
+                      {"datasets": [{"name": d, "split": "dev", "qids_file": str(tier_file)}
+                                    for d in ("2wikimultihopqa", "hotpotqa")]})
+    out = {}
+    for qs in load_questions(cfg).values():
+        for q in qs:
+            out[q.uid] = {p.passage_id: (p.title, " ".join(p.sentence(i) for i in range(len(p.sentence_spans))))
+                          for p in q.passages}
+    return out
+
+
 def cmd_package(run: Path, tier_file: Path, out: Path, v2_key: Path | None = None) -> None:
     recs = r4p_fo(run)
     tier = json.loads(tier_file.read_text())
+    ds_pass = dataset_passages(tier_file)
     rows, key = [], {}
     for ds, qs in sorted(tier["question_uids"].items()):
         for q in qs:
             r = recs[q]
-            facts, passages = _facts_and_passages(r)
+            facts, _ = _facts_and_passages(r)
+            passages = {pid: text for pid, (_, text) in ds_pass[q].items()}
             for pid, (s, t) in sorted(contra_pairs(r).items()):
                 if pid in key:
                     raise ValueError(f"pair id collision {pid}")

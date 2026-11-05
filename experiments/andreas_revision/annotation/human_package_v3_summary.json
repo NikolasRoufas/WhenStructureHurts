@@ -1,0 +1,16 @@
+{
+ "tier_file": "/data/roufas/wsh_andreas/expB/expB_tier1_qids.json",
+ "tier_file_sha256": "4467650627e566c722b8c55d6ea8c1376fb3ef950666578a96ad0c0a27643067",
+ "n_pairs": 666,
+ "n_questions": 300,
+ "by_dataset": {
+  "2wikimultihopqa": 441,
+  "hotpotqa": 225
+ },
+ "same_passage_pairs": 364,
+ "csv_sha256": {
+  "1": "827310af674c8d3eed90a3e50eb5ffec26efc8e1126d490f9bd4d3f534de29b3",
+  "2": "10845f6982ae64e8858b98c2f03800e075adfd4b00235863c7dd061874de2f4e"
+ },
+ "key_sha256": "b06c064a528bf2f735643ab624ce65fb5a66a5f40777f20487384073670ef6db"
+}

@@ -1,0 +1,34 @@
+{
+ "n_pairs_rendered_in_R4P_FO": 7721,
+ "nli_confidence_q25": 0.958,
+ "nli_confidence_q75": 0.9935,
+ "n_items": 300,
+ "by_stratum_dataset": {
+  "2wikimultihopqa:restored": 30,
+  "2wikimultihopqa:abstained_other": 30,
+  "2wikimultihopqa:high_confidence": 30,
+  "2wikimultihopqa:low_confidence": 30,
+  "2wikimultihopqa:no_failure_control": 30,
+  "musique:restored": 30,
+  "musique:abstained_other": 30,
+  "musique:high_confidence": 30,
+  "musique:low_confidence": 30,
+  "musique:no_failure_control": 30
+ },
+ "available_by_stratum_dataset": {
+  "2wikimultihopqa:abstained_other": 3077,
+  "2wikimultihopqa:low_confidence": 1659,
+  "2wikimultihopqa:restored": 237,
+  "2wikimultihopqa:high_confidence": 1750,
+  "2wikimultihopqa:no_failure_control": 1261,
+  "musique:restored": 52,
+  "musique:low_confidence": 273,
+  "musique:no_failure_control": 144,
+  "musique:abstained_other": 536,
+  "musique:high_confidence": 193
+ },
+ "sha256": {
+  "pairs_annotator1.csv": "2278363bd657a7cce063524e47b1930f76aebffb8e315b5b57fbc67f5bda9bbf",
+  "pairs_annotator2.csv": "344b5d20503ecf3db5f166ae39618a31d48e23e7217957839e4e6dbb29ede8b4"
+ }
+}

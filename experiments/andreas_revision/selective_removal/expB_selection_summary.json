@@ -1,0 +1,24 @@
+{
+ "seed": 11,
+ "tier_size_per_dataset": 150,
+ "source_run": "/data/roufas/wsh_campaign/results/full/exp1/20261013-005305_1ded82bb",
+ "source_predictions_sha256": "55589124fa5023f7cdef358177a405679b55da64a73c5424ce8e56e35a4dd764",
+ "datasets": {
+  "2wikimultihopqa": {
+   "n_eligible": 1481,
+   "tier1_n_questions": 150,
+   "tier2_n_questions": 150,
+   "tier1_n_pairs": 441,
+   "tier2_n_pairs": 476,
+   "permutation_sha256": "3779a7e56df471caeb8146731215f9c455fc6ed4aa2db4ced4c4296c6b9d0950"
+  },
+  "hotpotqa": {
+   "n_eligible": 1295,
+   "tier1_n_questions": 150,
+   "tier2_n_questions": 150,
+   "tier1_n_pairs": 225,
+   "tier2_n_pairs": 207,
+   "permutation_sha256": "738798e25188782b3a85af770d2f1055797e8aece00c15007cd270fd029c5cb5"
+  }
+ }
+}
